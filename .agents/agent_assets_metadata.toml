@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "GOM25yifDjO06373oh4ZD"
+uri = "file://.conversation/design-inventory.md"
+type = "text"
+title = "Videofolio design inventory"
+description = "Phase 1 Playwright extraction for the Videofolio Next.js rebuild, with responsive measurements, typography, media, sections, and animation notes."
+logical_id = "bbce65ad-f66b-4d90-9d89-1c1a07da6a60"
+content_hash = "sha256:429588baa1e29508ea4318085f4a8f3eb735f08c4e0c2002cf3c87e9299dfa8e"
+size = 10133
+mtime_ms = 1787312953316
+storage_uri = "gcs://replit-rams-assets-sisko/rams/assets/conversation:89fe1e79-f77f-426c-8519-38497b9f985b/bbce65ad-f66b-4d90-9d89-1c1a07da6a60/baa5697a-77b1-4935-a033-d892278bda37"
+storage_version_token = "1787312960867625"
+content_type = "text/markdown"

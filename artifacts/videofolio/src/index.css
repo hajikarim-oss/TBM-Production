@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+@font-face {
+  font-family: "TASA Orbiter";
+  src: url("https://fonts.gstatic.com/s/tasaorbiter/v2/3XF4Erw3860rsdSUVZx78hPcTvQoDGHxaFGfVKAF8pm095IuGcc.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TASA Orbiter";
+  src: url("https://fonts.gstatic.com/s/tasaorbiter/v2/3XF4Erw3860rsdSUVZx78hPcTvQoDGHxaFGfVJkF8pm095IuGcc.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: "TASA Orbiter";
+  src: url("https://fonts.gstatic.com/s/tasaorbiter/v2/3XF4Erw3860rsdSUVZx78hPcTvQoDGHxaFGfVP4F8pm095IuGcc.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+}
+
+:root {
+  --red: #c20000;
+  --red-hot: #e80000;
+  --red-deep: #9e0000;
+  --ink: #090b0e;
+  --ink-soft: #111419;
+  --paper: #f5f3ef;
+  --white: #fff;
+  --line: rgba(255,255,255,.17);
+  --line-dark: rgba(17,20,25,.16);
+  --display: "TASA Orbiter", "Inter Display", Inter, sans-serif;
+  --body: Inter, sans-serif;
+  --mono: "Space Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body {
+  margin: 0;
+  background: #0a0a0a;
+  color: var(--white);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+button, a { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { text-decoration: none; }
+::selection { background: var(--white); color: var(--red); }
+
+.vf-app { min-width: 320px; background: #0a0a0a; }
+.vf-section { position: relative; border-top: 1px solid var(--line); }
+.vf-grid {
+  background-image: linear-gradient(to right, transparent calc(25% - .5px), var(--line) 25%, transparent calc(25% + .5px), transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px), transparent calc(75% - .5px), var(--line) 75%, transparent calc(75% + .5px));
+}
+.vf-container { width: calc(100% - 100px); margin: 0 auto; }
+.vf-display { font-family: var(--display); letter-spacing: -.055em; }
+.vf-mono { font-family: var(--mono); letter-spacing: -.04em; }
+.vf-eyebrow { font: 11px/1 var(--mono); letter-spacing: .02em; text-transform: uppercase; }
+.vf-noise:after {
+  content: "";
+  pointer-events: none;
+  position: fixed;
+  z-index: 30;
+  inset: 0;
+  opacity: .055;
+  mix-blend-mode: screen;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+}
+
+@media (max-width: 900px) {
+  .vf-container { width: calc(100% - 100px); }
+}
+@media (max-width: 600px) {
+  .vf-container { width: calc(100% - 40px); }
+  .vf-grid { background-image: linear-gradient(to right, transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px)); }
+}

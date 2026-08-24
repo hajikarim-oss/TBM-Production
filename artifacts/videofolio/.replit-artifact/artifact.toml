@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Videofolio"
+description = "A pixel-accurate static video production portfolio rebuilt from the licensed Videofolio reference, with responsive sections, showreel media, work highlights, services, testimonials, pricing, FAQ, insights, and contact CTA."
+version = "1.0.0"
+id = "artifacts/videofolio"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25811
+
+[services.development]
+run = "pnpm --filter @workspace/videofolio run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/videofolio", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/videofolio/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25811"
+BASE_PATH = "/"
