@@ -7,9 +7,20 @@ const reveal = { hidden: { opacity: 0, y: 26 }, show: { opacity: 1, y: 0, transi
 const viewport = { once: true, amount: .2 };
 
 function Video({ src, className = '', posterLabel }: { src: string; className?: string; posterLabel?: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setInView(true); obs.disconnect(); } }, { rootMargin: '200px' });
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <div className={`vf-video ${className}`} data-testid={`media-video-${posterLabel ?? 'loop'}`}>
-      <video src={src} autoPlay muted loop playsInline aria-label={posterLabel ?? content.ui.videoLabel} />
+    <div ref={ref} className={`vf-video ${className}`} data-testid={`media-video-${posterLabel ?? 'loop'}`}>
+      {inView && <video src={src} autoPlay muted loop playsInline preload="none" aria-label={posterLabel ?? content.ui.videoLabel} />}
       {posterLabel ? <span className="vf-video-label vf-mono">{posterLabel}</span> : null}
     </div>
   );
@@ -30,24 +41,25 @@ export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => v
         <motion.div className="vf-menu-overlay" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="dialog" aria-modal="true">
           <div className="vf-menu-top">
             <BrandMark />
-            <button className="vf-menu-toggle vf-close" onClick={onClose} data-testid="button-close-menu" aria-label={content.ui.close}>
+            <button className="vf-menu-close-btn" onClick={onClose} data-testid="button-close-menu" aria-label={content.ui.close}>
               <span>{content.ui.close}</span>
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 2l14 14M16 2L2 16" stroke="#fff" strokeWidth="2" strokeLinecap="round"/></svg>
             </button>
           </div>
-          <nav className="vf-menu-list">
+          <nav className="vf-menu-grid">
             {content.nav.map((item, index) => (
               <motion.a
                 key={item.label}
                 href={item.href}
                 onClick={onClose}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.06 }}
+                className="vf-menu-tile"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.05 }}
                 data-testid={`link-menu-${item.label.toLowerCase().replaceAll(' ', '-')}`}
               >
                 <span className="vf-menu-num">[{String(index + 1).padStart(2, '0')}]</span>
-                <strong className="vf-menu-label">{item.label}</strong>
+                <span className="vf-menu-label">{item.label}</span>
               </motion.a>
             ))}
           </nav>
@@ -65,16 +77,95 @@ export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => v
   );
 }
 
+import { useMotionValueEvent } from 'framer-motion';
+
 export function Header({ onMenu }: { onMenu: () => void }) {
-  return <header className="vf-header"><BrandMark /><button className="vf-menu-toggle" onClick={onMenu} data-testid="button-open-menu" aria-label={content.ui.menu}><span>{content.ui.menu}</span><svg width="18" height="14" viewBox="0 0 18 14" fill="currentColor"><line x1="0" y1="1" x2="18" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="0" y1="7" x2="18" y2="7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="0" y1="13" x2="18" y2="13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg></button></header>;
+  const { scrollY } = useScroll();
+  const [hidden, setHidden] = useState(false);
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = scrollY.getPrevious() ?? 0;
+    if (latest > previous && latest > 150) {
+      setHidden(true);
+    } else {
+      setHidden(false);
+    }
+  });
+
+  return (
+    <header className={`vf-header ${hidden ? 'is-hidden' : ''}`}>
+      <BrandMark />
+      <button className="vf-menu-toggle" onClick={onMenu} data-testid="button-open-menu" aria-label={content.ui.menu}>
+        <span>{content.ui.menu}</span>
+        <svg width="22" height="10" viewBox="0 0 22 10" fill="none">
+          <line x1="0" y1="1" x2="22" y2="1" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/>
+          <line x1="0" y1="9" x2="22" y2="9" stroke="currentColor" strokeWidth="2" strokeLinecap="square"/>
+        </svg>
+      </button>
+    </header>
+  );
 }
 
 export function Hero() {
-  const [showWidget, setShowWidget] = useState(true);
+  const videos = [
+    media.hero, media.meet, media.workA, media.workB,
+    media.workC, media.workD, media.workE, media.workF,
+  ];
+
+  const [activeLayer, setActiveLayer] = useState(0);
+  const [layer0Video, setLayer0Video] = useState(videos[0]);
+  const [layer1Video, setLayer1Video] = useState(videos[1]);
+  
+  const currentRef = useRef<HTMLVideoElement>(null);
+  const nextRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveLayer(prev => prev === 0 ? 1 : 0);
+    }, 5500);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (activeLayer === 0) {
+        setLayer1Video(videos[(videos.indexOf(layer0Video) + 1) % videos.length]);
+      } else {
+        setLayer0Video(videos[(videos.indexOf(layer1Video) + 1) % videos.length]);
+      }
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, [activeLayer]);
+
+  useEffect(() => {
+    if (activeLayer === 0) {
+      currentRef.current?.play().catch(() => {});
+      nextRef.current?.pause();
+    } else {
+      nextRef.current?.play().catch(() => {});
+      currentRef.current?.pause();
+    }
+  }, [activeLayer]);
+
   return (
     <section className="vf-hero" id="home">
       <div className="vf-hero-video-bg">
-        <video src={media.hero} autoPlay muted loop playsInline />
+        <video
+          ref={currentRef}
+          src={layer0Video}
+          muted
+          playsInline
+          preload="auto"
+          style={{ opacity: activeLayer === 0 ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+        <video
+          ref={nextRef}
+          src={layer1Video}
+          muted
+          playsInline
+          preload="auto"
+          style={{ opacity: activeLayer === 1 ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+        />
       </div>
       <div className="vf-hero-overlay" />
       <div className="vf-hero-grid-overlay" />
@@ -82,19 +173,10 @@ export function Hero() {
         <div className="vf-hero-inner">
           <h1 className="vf-hero-title">WE MAKE<br />VIDEOS PEOPLE<br />REMEMBER</h1>
           <div className="vf-hero-bottom-row">
-            <div className="vf-hero-rating-block">
-              <span className="vf-clutch-label">Clutch</span>
-              <span className="vf-rating-value">4.9/5.0</span>
-              <div className="vf-rating-dots">{[1,2,3,4,5].map(i => <span key={i} />)}</div>
-              <span className="vf-rating-text">RATING FROM 480+ VERIFIED REVIEWS</span>
-            </div>
-            <div className="vf-hero-info-block">
-              <p className="vf-hero-summary">EVERY FRAME HAS A JOB. EVERY CUT HAS A PURPOSE. EVERY PROJECT GETS THE KIND OF ENERGY THAT MAKES PEOPLE WATCH, REMEMBER,<br />AND HIT REPLAY.</p>
-              <a className="vf-red-button vf-view-works" href="#works">
-                <svg width="22" height="16" viewBox="0 0 22 16" fill="currentColor"><rect x="0" y="0" width="3" height="16" rx="1"/><rect x="5" y="0" width="3" height="16" rx="1"/><rect x="10" y="0" width="3" height="16" rx="1"/><rect x="15" y="0" width="3" height="16" rx="1"/><rect x="19" y="2" width="3" height="12" rx="1"/><polygon points="20,5 20,11 23,8" fill="#fff"/></svg>
-                VIEW WORKS
-              </a>
-            </div>
+            <a className="vf-red-button vf-view-works" href="#works">
+              <svg width="22" height="16" viewBox="0 0 22 16" fill="currentColor"><rect x="0" y="0" width="3" height="16" rx="1"/><rect x="5" y="0" width="3" height="16" rx="1"/><rect x="10" y="0" width="3" height="16" rx="1"/><rect x="15" y="0" width="3" height="16" rx="1"/><rect x="19" y="2" width="3" height="12" rx="1"/><polygon points="20,5 20,11 23,8" fill="#fff"/></svg>
+              VIEW WORKS
+            </a>
           </div>
         </div>
         <div className="vf-hero-footer">
@@ -104,21 +186,6 @@ export function Hero() {
           <span className="vf-clock"><b />{content.hero.clock}</span>
         </div>
       </div>
-      {showWidget && (
-        <div className="vf-remix-widget">
-          <div className="vf-remix-card">
-            <button className="vf-remix-close" onClick={() => setShowWidget(false)} aria-label="Close">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
-            </button>
-            <div className="vf-remix-thumb">
-              <div className="vf-remix-thumb-img" />
-              <span className="vf-remix-thumb-text">Capturing Life's Best<br />Moments</span>
-            </div>
-            <p className="vf-remix-label">Free photography portfolio template</p>
-            <a href="#" className="vf-remix-btn">Remix Template <span>›</span></a>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
@@ -174,7 +241,8 @@ export function BrandCarousel() {
                   muted
                   loop
                   playsInline
-                  autoPlay={index === active}
+                  preload="auto"
+                  autoPlay
                 />
               </div>
               <div className="vf-carousel-card-info">
@@ -224,7 +292,7 @@ export function BrandCarousel() {
               <button className="vf-carousel-player-close" onClick={() => setPlayer(null)} aria-label="Close">
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4l10 10M14 4L4 14" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
               </button>
-              <video src={films[player].media} autoPlay controls playsInline />
+              <video src={films[player].media} autoPlay controls playsInline preload="none" />
               <div className="vf-carousel-player-meta">
                 <span className="vf-carousel-player-brand">{films[player].brand}</span>
                 <span className="vf-carousel-player-type">{films[player].type}</span>
@@ -254,7 +322,7 @@ const tagIn = {
 
 export function TheRoom() {
   return (
-    <section className="vf-room">
+    <section className="vf-room" id="about">
       <motion.div
         className="vf-room-header"
         initial={{ opacity: 0, y: 20 }}
@@ -281,7 +349,7 @@ export function TheRoom() {
             whileHover="hover"
           >
             <div className="vf-room-filmmaker-media">
-              <video src={member.media} muted loop playsInline autoPlay={index === 0} />
+              <img src={member.image} alt={member.name} loading="lazy" />
               <div className="vf-room-filmmaker-overlay" />
             </div>
             <div className="vf-room-filmmaker-info">
@@ -394,7 +462,7 @@ export function OurServices() {
   }, [scrollYProgress]);
 
   return (
-    <section className="vf-services-section" ref={sectionRef}>
+    <section className="vf-services-section" ref={sectionRef} id="services">
       <div className="vf-services-sticky">
         <div className={`vf-services-phase ${phase === 'intro' ? 'is-active' : ''}`}>
           <motion.h2
@@ -468,7 +536,7 @@ export function OurServices() {
                   transition={{ duration: 0.5, delay: 0.1 + i * 0.08 }}
                 >
                   <div className="vf-service-row-thumb">
-                    <video src={item.media} muted loop playsInline />
+                    <video src={item.media} muted loop playsInline preload="none" />
                   </div>
                   <div className="vf-service-row-info">
                     <span className="vf-service-row-name">{item.name}</span>
@@ -491,7 +559,7 @@ export function OurServices() {
 
 export function Stats() {
   return (
-    <section className="vf-stats vf-section">
+    <section className="vf-stats vf-section" id="stats">
       <div className="vf-container">
         <div className="vf-stats-top">
           <motion.div
@@ -847,6 +915,7 @@ export function BrandGrid() {
                   muted
                   loop
                   playsInline
+                  preload="none"
                   data-testid={`brand-video-${index}`}
                 />
                 <div className="vf-brand-card-overlay">
@@ -897,6 +966,7 @@ export function BrandGrid() {
                 autoPlay
                 controls
                 playsInline
+                preload="none"
                 data-testid="brand-player-video"
               />
               <div className="vf-brand-player-meta">
