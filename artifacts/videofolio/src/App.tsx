@@ -1,18 +1,14 @@
 import { useState } from 'react';
 import {
   BrandCarousel,
-  CTA,
-  FAQ,
+  Contact,
   Footer,
   Header,
   Hero,
   HorizontalGallery,
-  Insights,
   MenuOverlay,
   OurServices,
-  Packages,
   Stats,
-  Testimonials,
   TheRoom,
   TrustedBy,
 } from './videofolio-sections';
@@ -31,11 +27,7 @@ function App() {
       <TheRoom />
       <OurServices />
       <Stats />
-      <Testimonials />
-      <Packages />
-      <FAQ />
-      <Insights />
-      <CTA />
+      <Contact />
       <Footer />
     </main>
   );
