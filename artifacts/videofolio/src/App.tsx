@@ -9,10 +9,12 @@ import {
   HorizontalGallery,
   Insights,
   MenuOverlay,
+  OurServices,
   Packages,
-  Playground,
   Stats,
   Testimonials,
+  TheRoom,
+  TrustedBy,
 } from './videofolio-sections';
 import './index.css';
 
@@ -24,8 +26,10 @@ function App() {
       <MenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Hero />
       <HorizontalGallery />
+      <TrustedBy />
       <BrandCarousel />
-      <Playground />
+      <TheRoom />
+      <OurServices />
       <Stats />
       <Testimonials />
       <Packages />

@@ -144,12 +144,12 @@ export function BrandCarousel() {
     const diff = ((index - active + total) % total);
     const centered = diff > total / 2 ? diff - total : diff;
 
-    if (centered === 0) return { transform: 'translateX(0) scale(1) rotate(0deg)', zIndex: 5, opacity: 1 };
-    if (centered === -1) return { transform: 'translateX(-110%) scale(0.78) rotate(-5deg)', zIndex: 3, opacity: 0.5 };
-    if (centered === 1) return { transform: 'translateX(110%) scale(0.78) rotate(5deg)', zIndex: 3, opacity: 0.5 };
-    if (centered === -2) return { transform: 'translateX(-180%) scale(0.65) rotate(-8deg)', zIndex: 2, opacity: 0.2 };
-    if (centered === 2) return { transform: 'translateX(180%) scale(0.65) rotate(8deg)', zIndex: 2, opacity: 0.2 };
-    return { transform: 'translateX(0) scale(0.5)', zIndex: 1, opacity: 0 };
+    if (centered === 0) return { transform: 'translateX(0) scale(1) translateY(0) rotate(0deg)', zIndex: 5, opacity: 1 };
+    if (centered === -1) return { transform: 'translateX(-85%) scale(0.75) translateY(12px) rotate(-4deg)', zIndex: 3, opacity: 0.55 };
+    if (centered === 1) return { transform: 'translateX(85%) scale(0.75) translateY(12px) rotate(4deg)', zIndex: 3, opacity: 0.55 };
+    if (centered === -2) return { transform: 'translateX(-140%) scale(0.6) translateY(24px) rotate(-6deg)', zIndex: 2, opacity: 0.25 };
+    if (centered === 2) return { transform: 'translateX(140%) scale(0.6) translateY(24px) rotate(6deg)', zIndex: 2, opacity: 0.25 };
+    return { transform: 'translateX(0) scale(0.45) translateY(30px)', zIndex: 1, opacity: 0 };
   };
 
   return (
@@ -232,10 +232,117 @@ export function BrandCarousel() {
                 <span className="vf-carousel-player-credit">{films[player].credit}</span>
               </div>
             </motion.div>
-          </motion.div>
+           </motion.div>
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+const stagger = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+const cardIn = {
+  hidden: { opacity: 0, y: 40, scale: 0.95 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+const tagIn = {
+  hidden: { opacity: 0, y: 8 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+};
+
+export function TheRoom() {
+  return (
+    <section className="vf-room">
+      <motion.div
+        className="vf-room-header"
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={viewport}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <span className="vf-room-eyebrow vf-mono">{content.theRoom.eyebrow}</span>
+        <h2 className="vf-display vf-room-title">{content.theRoom.title}</h2>
+      </motion.div>
+      <motion.div
+        className="vf-room-grid"
+        variants={stagger}
+        initial="hidden"
+        whileInView="show"
+        viewport={viewport}
+      >
+        {content.theRoom.members.map((member, index) => (
+          <motion.div
+            key={member.name}
+            className="vf-room-filmmaker"
+            variants={cardIn}
+            data-testid={`room-member-${index}`}
+            whileHover="hover"
+          >
+            <div className="vf-room-filmmaker-media">
+              <video src={member.media} muted loop playsInline autoPlay={index === 0} />
+              <div className="vf-room-filmmaker-overlay" />
+            </div>
+            <div className="vf-room-filmmaker-info">
+              <h3 className="vf-room-filmmaker-name">{member.name}</h3>
+              <span className="vf-room-filmmaker-role">{member.role}</span>
+              <motion.div
+                className="vf-room-filmmaker-brands"
+                variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.3 } } }}
+              >
+                {member.brands.map((brand) => (
+                  <motion.span key={brand} className="vf-room-filmmaker-brand" variants={tagIn}>
+                    {brand}
+                  </motion.span>
+                ))}
+              </motion.div>
+            </div>
+          </motion.div>
+        ))}
+      </motion.div>
+    </section>
+  );
+}
+
+export function TrustedBy() {
+  const logos = content.trustedBy.logos;
+  const row1 = logos.slice(0, 4);
+  const row2 = logos.slice(4);
+
+  const renderCard = (logo: string, i: number) => (
+    <div key={i} className="vf-trusted-card">
+      <div className="vf-trusted-card-front">
+        <span className="vf-trusted-card-logo">{logo}</span>
+      </div>
+      <div className="vf-trusted-card-back">
+        <span className="vf-trusted-card-logo">{logo}</span>
+      </div>
+    </div>
+  );
+
+  return (
+    <section className="vf-trusted">
+      <div className="vf-trusted-header">
+        <div>
+          <span className="vf-trusted-eyebrow vf-mono">{content.trustedBy.label}</span>
+          <h2 className="vf-display vf-trusted-title">Trusted By</h2>
+        </div>
+        <div className="vf-trusted-tags">
+          {content.trustedBy.tags.map((tag, i) => (
+            <span key={i} className="vf-trusted-tag vf-mono">{tag}</span>
+          ))}
+        </div>
+      </div>
+      <div className="vf-trusted-grid">
+        <div className="vf-trusted-row">
+          {row1.map(renderCard)}
+        </div>
+        <div className="vf-trusted-row vf-trusted-row-offset">
+          {row2.map(renderCard)}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -271,18 +378,238 @@ export function Expertise() {
   return <section className="vf-expertise vf-section"><div className="vf-container vf-expertise-grid"><div><span className="vf-eyebrow">{content.expertise.eyebrow}</span><span className="vf-file-label vf-mono">{content.expertise.file}</span><h2 className="vf-display">{content.expertise.title}</h2></div><div><p>{content.expertise.copy}</p><Video src={media.workC} /></div></div></section>;
 }
 
-export function Playground() {
-  const [active, setActive] = useState(0);
-  useEffect(() => { const timer = window.setInterval(() => setActive((value) => (value + 1) % content.playground.categories.length), 2600); return () => window.clearInterval(timer); }, []);
-  return <section className="vf-playground vf-section"><div className="vf-container vf-playground-grid"><h2 className="vf-display">{content.playground.title}</h2><div className="vf-play-slideshow" aria-live="polite">{content.playground.categories.map((category, index) => <motion.span key={category} className={index === active ? 'is-active vf-display' : 'vf-display'} animate={{ opacity: index === active ? 1 : .16, y: (index - active) * 48 }} transition={{ duration: .5 }}>{category}</motion.span>)}</div></div></section>;
+const servicePositions = [
+  { top: '32%', left: '26%' },
+  { top: '12%', left: '50%' },
+  { top: '32%', left: '74%' },
+  { top: '66%', left: '26%' },
+  { top: '66%', left: '74%' },
+];
+
+export function OurServices() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const [phase, setPhase] = useState<'intro' | 'services'>('intro');
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
+
+  useEffect(() => {
+    return scrollYProgress.on('change', (v) => {
+      setPhase(v > 0.5 ? 'services' : 'intro');
+    });
+  }, [scrollYProgress]);
+
+  return (
+    <section className="vf-services-section" ref={sectionRef}>
+      <div className="vf-services-sticky">
+        <div className={`vf-services-phase ${phase === 'intro' ? 'is-active' : ''}`}>
+          <motion.h2
+            className="vf-services-intro"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {content.ourServices.intro.split('Mumbai').map((part, i) =>
+              i === 0 ? <>{part}<span className="vf-gold">Mumbai</span></> : <>{part}</>
+            )}
+          </motion.h2>
+        </div>
+        <div className={`vf-services-phase ${phase === 'services' ? 'is-active' : ''}`}>
+          <div className="vf-services-center">
+            <h2 className="vf-services-title">Our services</h2>
+          </div>
+          {content.ourServices.items.map((item, i) => (
+            <motion.div
+              key={item.name}
+              className="vf-service-tile"
+              initial={{ opacity: 0, scale: 0.7, y: 20 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                position: 'absolute',
+                top: servicePositions[i].top,
+                left: servicePositions[i].left,
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <div className="vf-service-tile-media">
+                <video src={item.media} muted loop playsInline />
+              </div>
+              <span className="vf-service-tile-label">{item.name}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 export function Stats() {
-  return <section className="vf-stats vf-section"><div className="vf-container"><h2 className="vf-display">{content.stats.title}</h2><div className="vf-stat-grid">{content.stats.items.map((stat, index) => <motion.div className="vf-stat" key={stat.label} initial="hidden" whileInView="show" viewport={viewport} variants={reveal} data-testid={`stat-${index}`}><strong className="vf-display">{stat.number}</strong><h3 className="vf-display">{stat.label}</h3><p>{stat.copy}</p></motion.div>)}</div></div></section>;
+  return (
+    <section className="vf-stats vf-section">
+      <div className="vf-container">
+        <div className="vf-stats-top">
+          <motion.div
+            className="vf-stats-label"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={viewport}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="vf-dot" />
+            <span>{content.stats.eyebrow}</span>
+          </motion.div>
+          <motion.p
+            className="vf-stats-copy"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.6, delay: 0.1 }}
+          >
+            {content.stats.introParts.map((part, i) =>
+              part.highlight ? (
+                <span key={i} className="vf-gold">{part.text}</span>
+              ) : (
+                <span key={i}>{part.text}</span>
+              )
+            )}
+          </motion.p>
+        </div>
+        <div className="vf-stats-row">
+          {content.stats.items.map((stat, i) => (
+            <motion.div
+              className="vf-stat-card"
+              key={stat.label}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.5, delay: 0.2 + i * 0.08 }}
+            >
+              <span className="vf-stat-num">{stat.number}</span>
+              <span className="vf-stat-label">{stat.label}</span>
+              <span className="vf-stat-desc">{stat.copy}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
+const quoteReveal = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+};
+
 export function Testimonials() {
-  return <section className="vf-testimonials vf-section"><div className="vf-container vf-section-header"><div><span className="vf-eyebrow">{content.testimonials.eyebrow}</span><span className="vf-file-label vf-mono">{content.testimonials.file}</span></div><h2 className="vf-display">{content.testimonials.title}</h2><p>{content.testimonials.copy}</p></div><div className="vf-rating-large vf-container"><strong className="vf-display">{content.testimonials.rating}<small>{content.testimonials.ratingSuffix}</small></strong><span>{content.testimonials.ratingLabel}</span><div className="vf-platforms">{content.testimonials.platforms.map((platform) => <span key={platform}>{platform}</span>)}</div></div><div className="vf-quotes vf-container">{content.testimonials.quotes.map((quote, index) => <motion.blockquote key={quote.name} initial="hidden" whileInView="show" viewport={viewport} variants={reveal} data-testid={`quote-${index}`}><span className="vf-mono">{String(index + 1).padStart(2, '0')}</span><div><p>{quote.quote}</p><cite className="vf-display">{quote.name}</cite><small>{quote.role}</small></div></motion.blockquote>)}</div></section>;
+  return (
+    <section className="vf-testimonials vf-section">
+      <div className="vf-container vf-section-header">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <span className="vf-eyebrow">{content.testimonials.eyebrow}</span>
+          <span className="vf-file-label vf-mono">{content.testimonials.file}</span>
+        </motion.div>
+        <motion.h2
+          className="vf-display"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {content.testimonials.title}
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {content.testimonials.copy}
+        </motion.p>
+      </div>
+      <motion.div
+        className="vf-rating-large vf-container"
+        initial={{ opacity: 0, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={viewport}
+        transition={{ duration: 0.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <strong className="vf-display">{content.testimonials.rating}<small>{content.testimonials.ratingSuffix}</small></strong>
+        <span>{content.testimonials.ratingLabel}</span>
+        <div className="vf-platforms">
+          {content.testimonials.platforms.map((platform, i) => (
+            <motion.span
+              key={platform}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.4, delay: 0.4 + i * 0.08 }}
+            >
+              {platform}
+            </motion.span>
+          ))}
+        </div>
+      </motion.div>
+      <div className="vf-quotes vf-container">
+        {content.testimonials.quotes.map((quote, index) => (
+          <motion.blockquote
+            key={quote.name}
+            initial="hidden"
+            whileInView="show"
+            viewport={viewport}
+            variants={{
+              hidden: {},
+              show: { transition: { staggerChildren: 0.1, delayChildren: index * 0.08 } },
+            }}
+            data-testid={`quote-${index}`}
+          >
+            <motion.span
+              className="vf-mono"
+              variants={{ hidden: { opacity: 0 }, show: { opacity: 1, transition: { duration: 0.4 } } }}
+            >
+              {String(index + 1).padStart(2, '0')}
+            </motion.span>
+            <div>
+              <motion.p
+                variants={{
+                  hidden: { opacity: 0, y: 15 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+                }}
+              >
+                {quote.quote}
+              </motion.p>
+              <motion.cite
+                className="vf-display"
+                variants={{
+                  hidden: { opacity: 0, x: -10 },
+                  show: { opacity: 1, x: 0, transition: { duration: 0.4, delay: 0.15 } },
+                }}
+              >
+                {quote.name}
+              </motion.cite>
+              <motion.small
+                variants={{
+                  hidden: { opacity: 0 },
+                  show: { opacity: 1, transition: { duration: 0.3, delay: 0.25 } },
+                }}
+              >
+                {quote.role}
+              </motion.small>
+            </div>
+          </motion.blockquote>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export function Packages() {

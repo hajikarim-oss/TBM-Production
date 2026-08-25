@@ -73,12 +73,40 @@ export const content = {
     title: 'Different Businesses. Same Creative Obsession.',
     copy: 'We partner with brands across diverse industries, delivering creative video solutions designed to engage, inspire, and make a lasting impact.',
   },
-  playground: {
-    title: 'OUR PLAYGROUND',
-    categories: ['Brand Film', 'UGC', 'Event', 'Social Media', 'Product', 'Documentary', 'Corporate', 'Commercial'],
+  ourServices: {
+    eyebrow: '08',
+    title: 'Our Services',
+    intro: 'We are a digital studio based in Mumbai, focused on crafting visual stories that move people.',
+    items: [
+      { name: 'Branded Content', category: 'PRODUCTION', description: 'Story-driven content that connects your brand with the right audience.', media: media.workA },
+      { name: 'DVCs', category: 'PRODUCTION', description: 'Digital video campaigns built for impact across every platform.', media: media.workB },
+      { name: 'Vertical Ad Films', category: 'ADVERTISING', description: 'Scroll-stopping vertical formats designed for social-first campaigns.', media: media.workC },
+      { name: 'Product Launch Videos', category: 'COMMERCIAL', description: 'Cinematic reveals that make your product unforgettable from day one.', media: media.workD },
+      { name: 'Factory, Podcast, Long-form', category: 'DOCUMENTARY', description: 'In-depth storytelling that captures process, people, and purpose.', media: media.meet },
+    ],
+  },
+  trustedBy: {
+    label: '//WE\'VE\nTRUSTED BY',
+    tags: ['CLEAN VISUALS TO HELP BRANDS GROW.', 'MOTION & VISUAL DESIGNER.', 'PREVIOUSLY VOICE AI AND NOVA LABS'],
+    logos: [
+      'acme',
+      'Altype',
+      'Lumina',
+      'Logoipsum',
+      'Vortex',
+      'LOGD',
+      'Logoipsum',
+      'Bolt',
+    ],
   },
   stats: {
-    title: "These Numbers Didn't Happen Overnight",
+    eyebrow: 'Studio',
+    introParts: [
+      { text: 'Founded in 2020, TheBoredMonkey Studios is the production and post-production wing of TheBoredMonkey.' },
+      { text: 'We work with ', highlight: true },
+      { text: '"WHATEVER IT TAKES MINDSET."', highlight: true },
+      { text: ' Full pipeline in-house. One team, one brief, one standard, from the first creative conversation to final delivery.' },
+    ],
     items: [
       { number: '1', label: 'Years Creating', copy: 'Helping brands tell better stories through thoughtful video production and creative post production.' },
       { number: '100', label: 'Videos Delivered', copy: 'From short form content to brand films, every project is crafted with purpose and precision.' },
@@ -198,6 +226,36 @@ export const content = {
       { brand: 'ROWAN & CO.', type: 'Brand Film', concept: 'Clarity, culture, and timeless design', credit: 'Produced by Sequence', context: 'Independent identities for brands that value substance over noise.', media: media.workA },
       { brand: 'SYNTH', type: 'Product Film', concept: 'Generative intelligence, made human', credit: 'Directed by Mira Chen', context: 'Tools that feel intuitive because they were built with the user in mind.', media: media.workB },
       { brand: 'ARC ONE', type: 'Ad Film', concept: 'Distilled form, tactile material', credit: 'Produced by Sequence', context: 'A single gesture that says everything.', media: media.workC },
+    ],
+  },
+  theRoom: {
+    eyebrow: '07',
+    title: 'Filmmakers / The Room',
+    members: [
+      {
+        name: 'Mira Chen',
+        role: 'Director & Cinematographer',
+        brands: ['MIRA LENS', 'LUMEN', 'HUSH', 'ROWAN & CO.', 'SYNTH'],
+        media: media.workA,
+      },
+      {
+        name: 'Arlo Voss',
+        role: 'Creative Director',
+        brands: ['AFTERIMAGE', 'NEON DRIFT', 'NORD', 'EMBER & ASH', 'ARC ONE'],
+        media: media.workB,
+      },
+      {
+        name: 'Kai Rivera',
+        role: 'Editor & Colorist',
+        brands: ['VELVET ROOM', 'AKOYA', 'LUMEN', 'SYNTH', 'HUSH'],
+        media: media.workC,
+      },
+      {
+        name: 'Suki Tanaka',
+        role: 'Motion Designer',
+        brands: ['MIRA LENS', 'AFTERIMAGE', 'NORD', 'ROWAN & CO.', 'NEON DRIFT'],
+        media: media.meet,
+      },
     ],
   },
 } as const;
