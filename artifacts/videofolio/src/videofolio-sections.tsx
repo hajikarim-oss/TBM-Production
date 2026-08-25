@@ -123,6 +123,122 @@ export function Hero() {
   );
 }
 
+export function BrandCarousel() {
+  const [active, setActive] = useState(0);
+  const [player, setPlayer] = useState<number | null>(null);
+  const films = content.brandGrid.films;
+  const total = films.length;
+
+  useEffect(() => {
+    if (player !== null) return;
+    const timer = window.setInterval(() => {
+      setActive((prev) => (prev + 1) % total);
+    }, 3000);
+    return () => window.clearInterval(timer);
+  }, [total, player]);
+
+  const goNext = () => setActive((prev) => (prev + 1) % total);
+  const goPrev = () => setActive((prev) => (prev - 1 + total) % total);
+
+  const getCardStyle = (index: number) => {
+    const diff = ((index - active + total) % total);
+    const centered = diff > total / 2 ? diff - total : diff;
+
+    if (centered === 0) return { transform: 'translateX(0) scale(1) rotate(0deg)', zIndex: 5, opacity: 1 };
+    if (centered === -1) return { transform: 'translateX(-110%) scale(0.78) rotate(-5deg)', zIndex: 3, opacity: 0.5 };
+    if (centered === 1) return { transform: 'translateX(110%) scale(0.78) rotate(5deg)', zIndex: 3, opacity: 0.5 };
+    if (centered === -2) return { transform: 'translateX(-180%) scale(0.65) rotate(-8deg)', zIndex: 2, opacity: 0.2 };
+    if (centered === 2) return { transform: 'translateX(180%) scale(0.65) rotate(8deg)', zIndex: 2, opacity: 0.2 };
+    return { transform: 'translateX(0) scale(0.5)', zIndex: 1, opacity: 0 };
+  };
+
+  return (
+    <>
+      <section className="vf-carousel">
+        <div className="vf-carousel-header">
+          <h2 className="vf-display vf-carousel-title">One approach<br />Endless <em>possibilities.</em></h2>
+          <p className="vf-carousel-subtitle">We partner with forward-thinking teams and ambitious brands to build digital experiences that creates impact.</p>
+        </div>
+        <div className="vf-carousel-stage">
+          {films.map((film, index) => (
+            <div
+              key={film.brand + index}
+              className={`vf-carousel-card ${index === active ? 'is-active' : ''}`}
+              style={getCardStyle(index) as React.CSSProperties}
+              onClick={() => setPlayer(index)}
+              data-testid={`carousel-card-${index}`}
+            >
+              <div className="vf-carousel-card-media">
+                <video
+                  src={film.media}
+                  muted
+                  loop
+                  playsInline
+                  autoPlay={index === active}
+                />
+              </div>
+              <div className="vf-carousel-card-info">
+                <span className="vf-carousel-brand">{film.brand}</span>
+                <span className="vf-carousel-type">{film.type}</span>
+                <span className="vf-carousel-concept">{film.concept}</span>
+                <span className="vf-carousel-credit">{film.credit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="vf-carousel-controls">
+          <button className="vf-carousel-arrow" onClick={goPrev} aria-label="Previous">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div className="vf-carousel-dots">
+            {films.map((_, index) => (
+              <button
+                key={index}
+                className={`vf-carousel-dot ${index === active ? 'is-active' : ''}`}
+                onClick={() => setActive(index)}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
+          <button className="vf-carousel-arrow" onClick={goNext} aria-label="Next">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </section>
+      <AnimatePresence>
+        {player !== null && (
+          <motion.div
+            className="vf-carousel-player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPlayer(null)}
+          >
+            <motion.div
+              className="vf-carousel-player-inner"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="vf-carousel-player-close" onClick={() => setPlayer(null)} aria-label="Close">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M4 4l10 10M14 4L4 14" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
+              <video src={films[player].media} autoPlay controls playsInline />
+              <div className="vf-carousel-player-meta">
+                <span className="vf-carousel-player-brand">{films[player].brand}</span>
+                <span className="vf-carousel-player-type">{films[player].type}</span>
+                <span className="vf-carousel-player-concept">{films[player].concept}</span>
+                <span className="vf-carousel-player-credit">{films[player].credit}</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+}
+
 export function MeetSequence() {
   return <section className="vf-meet vf-section" id="about">
     <div className="vf-container vf-meet-grid">
@@ -261,6 +377,94 @@ export function HorizontalGallery() {
         </div>
       </div>
     </section>
+  );
+}
+
+export function BrandGrid() {
+  const [player, setPlayer] = useState<number | null>(null);
+
+  return (
+    <>
+      <section className="vf-brand-grid">
+        <div className="vf-brand-grid-header">
+          <h2 className="vf-display vf-brand-grid-title">{content.brandGrid.title}</h2>
+        </div>
+        <div className="vf-brand-grid-inner">
+          {content.brandGrid.films.map((film, index) => (
+            <div
+              key={film.brand + index}
+              className={`vf-brand-card vf-brand-height-${film.height}`}
+              data-testid={`brand-card-${index}`}
+            >
+              <div className="vf-brand-card-media">
+                <video
+                  src={film.media}
+                  muted
+                  loop
+                  playsInline
+                  data-testid={`brand-video-${index}`}
+                />
+                <div className="vf-brand-card-overlay">
+                  <span className="vf-brand-card-concept">{film.concept}</span>
+                  <span className="vf-brand-card-brand-inline">{film.brand}</span>
+                </div>
+                <button
+                  className="vf-brand-card-view"
+                  onClick={() => setPlayer(index)}
+                  data-testid={`brand-view-${index}`}
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 10L10 2M10 2H4M10 2V8" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  VIEW
+                </button>
+              </div>
+              <div className="vf-brand-card-meta">
+                <span className="vf-brand-card-brand">{film.brand}</span>
+                <span className="vf-brand-card-type">{film.type}</span>
+                <span className="vf-brand-card-concept-desktop">{film.concept}</span>
+                <span className="vf-brand-card-credit">{film.credit}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      <AnimatePresence>
+        {player !== null ? (
+          <motion.div
+            className="vf-brand-player"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPlayer(null)}
+            data-testid="brand-player-overlay"
+          >
+            <motion.div
+              className="vf-brand-player-inner"
+              initial={{ scale: 0.94, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.96, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button className="vf-brand-player-close" onClick={() => setPlayer(null)} data-testid="brand-player-close" aria-label="Close">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" strokeWidth="1.5" strokeLinecap="round"/></svg>
+              </button>
+              <video
+                src={content.brandGrid.films[player].media}
+                autoPlay
+                controls
+                playsInline
+                data-testid="brand-player-video"
+              />
+              <div className="vf-brand-player-meta">
+                <span className="vf-brand-card-brand">{content.brandGrid.films[player].brand}</span>
+                <span className="vf-brand-card-type">{content.brandGrid.films[player].type}</span>
+                <span className="vf-brand-card-concept">{content.brandGrid.films[player].concept}</span>
+                <span className="vf-brand-card-credit">{content.brandGrid.films[player].credit}</span>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </>
   );
 }
 

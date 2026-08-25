@@ -1,19 +1,16 @@
 import { useState } from 'react';
 import {
+  BrandCarousel,
   CTA,
-  Expertise,
   FAQ,
-  FeaturedWorks,
   Footer,
   Header,
   Hero,
   HorizontalGallery,
   Insights,
-  MeetSequence,
   MenuOverlay,
   Packages,
   Playground,
-  Services,
   Stats,
   Testimonials,
 } from './videofolio-sections';
@@ -27,10 +24,7 @@ function App() {
       <MenuOverlay open={menuOpen} onClose={() => setMenuOpen(false)} />
       <Hero />
       <HorizontalGallery />
-      <MeetSequence />
-      <FeaturedWorks />
-      <Services />
-      <Expertise />
+      <BrandCarousel />
       <Playground />
       <Stats />
       <Testimonials />

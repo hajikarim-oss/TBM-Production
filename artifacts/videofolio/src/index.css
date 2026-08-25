@@ -23,25 +23,27 @@
 }
 
 :root {
-  --red: #c20000;
-  --red-hot: #e80000;
-  --red-deep: #9e0000;
-  --ink: #090b0e;
-  --ink-soft: #111419;
-  --paper: #f5f3ef;
-  --white: #fff;
-  --line: rgba(255,255,255,.17);
-  --line-dark: rgba(17,20,25,.16);
+  --gold: #E8A62C;
+  --gold-hot: #f0b84d;
+  --gold-deep: #c78d1e;
+  --ink: #FAFAFA;
+  --ink-soft: #F0F0F0;
+  --paper: #FFFFFF;
+  --white: #0D0D0D;
+  --grey: #6B6B6B;
+  --line: rgba(0,0,0,.1);
+  --line-dark: rgba(0,0,0,.06);
   --display: "TASA Orbiter", "Inter Display", Inter, sans-serif;
   --body: Inter, sans-serif;
   --mono: "Space Mono", monospace;
+  --sans: Inter, sans-serif;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; overflow-x: clip; }
 body {
   margin: 0;
-  background: #0a0a0a;
+  background: var(--ink);
   color: var(--white);
   font-family: var(--body);
   -webkit-font-smoothing: antialiased;
@@ -50,9 +52,9 @@ body {
 button, a { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { text-decoration: none; }
-::selection { background: var(--white); color: var(--red); }
+::selection { background: var(--gold); color: var(--white); }
 
-.vf-app { min-width: 320px; background: #0a0a0a; }
+.vf-app { min-width: 320px; background: var(--ink); }
 .vf-section { position: relative; border-top: 1px solid var(--line); }
 .vf-grid {
   background-image: linear-gradient(to right, transparent calc(25% - .5px), var(--line) 25%, transparent calc(25% + .5px), transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px), transparent calc(75% - .5px), var(--line) 75%, transparent calc(75% + .5px));
