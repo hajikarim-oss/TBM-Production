@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { content, media } from './content';
 import './videofolio.css';
 
@@ -107,84 +107,83 @@ export function Header({ onMenu }: { onMenu: () => void }) {
 }
 
 export function Hero() {
-  const videos = [
-    media.hero, media.meet, media.workA, media.workB,
-    media.workC, media.workD, media.workE, media.workF,
-  ];
-
-  const [activeLayer, setActiveLayer] = useState(0);
-  const [layer0Video, setLayer0Video] = useState(videos[0]);
-  const [layer1Video, setLayer1Video] = useState(videos[1]);
-  
+  const slides = content.hero.slides;
+  const [currentIdx, setCurrentIdx] = useState(0);
+  const idxRef = useRef(0);
+  const nextIdxRef = useRef(1);
+  const [showNext, setShowNext] = useState(false);
+  const transitioningRef = useRef(false);
   const currentRef = useRef<HTMLVideoElement>(null);
   const nextRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveLayer(prev => prev === 0 ? 1 : 0);
-    }, 5500);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (activeLayer === 0) {
-        setLayer1Video(videos[(videos.indexOf(layer0Video) + 1) % videos.length]);
-      } else {
-        setLayer0Video(videos[(videos.indexOf(layer1Video) + 1) % videos.length]);
-      }
+  const transition = (newIdx: number) => {
+    if (transitioningRef.current) return;
+    transitioningRef.current = true;
+    nextIdxRef.current = newIdx;
+    nextRef.current?.play().catch(() => {});
+    setShowNext(true);
+    setTimeout(() => {
+      idxRef.current = newIdx;
+      setCurrentIdx(newIdx);
+      setShowNext(false);
+      transitioningRef.current = false;
     }, 1000);
-    return () => clearTimeout(timer);
-  }, [activeLayer]);
+  };
+
+  const goNext = useCallback(() => {
+    transition((idxRef.current + 1) % slides.length);
+  }, [slides.length]);
+
+  const goPrev = () => transition((idxRef.current - 1 + slides.length) % slides.length);
 
   useEffect(() => {
-    if (activeLayer === 0) {
-      currentRef.current?.play().catch(() => {});
-      nextRef.current?.pause();
-    } else {
-      nextRef.current?.play().catch(() => {});
-      currentRef.current?.pause();
-    }
-  }, [activeLayer]);
+    const id = setInterval(goNext, 7000);
+    return () => clearInterval(id);
+  }, [goNext]);
 
   return (
     <section className="vf-hero" id="home">
       <div className="vf-hero-video-bg">
         <video
           ref={currentRef}
-          src={layer0Video}
+          src={slides[currentIdx].video}
           muted
           playsInline
-          preload="auto"
-          style={{ opacity: activeLayer === 0 ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          loop
+          autoPlay
+          style={{ opacity: showNext ? 0 : 1, transition: 'opacity 1s ease-in-out' }}
         />
         <video
           ref={nextRef}
-          src={layer1Video}
+          src={slides[nextIdxRef.current].video}
           muted
           playsInline
+          loop
           preload="auto"
-          style={{ opacity: activeLayer === 1 ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          style={{ opacity: showNext ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
         />
       </div>
       <div className="vf-hero-overlay" />
-      <div className="vf-hero-grid-overlay" />
       <div className="vf-hero-content">
-        <div className="vf-hero-inner">
-          <h1 className="vf-hero-title">WE MAKE<br />VIDEOS PEOPLE<br />REMEMBER</h1>
-          <div className="vf-hero-bottom-row">
-            <a className="vf-red-button vf-view-works" href="#works">
-              <svg width="22" height="16" viewBox="0 0 22 16" fill="currentColor"><rect x="0" y="0" width="3" height="16" rx="1"/><rect x="5" y="0" width="3" height="16" rx="1"/><rect x="10" y="0" width="3" height="16" rx="1"/><rect x="15" y="0" width="3" height="16" rx="1"/><rect x="19" y="2" width="3" height="12" rx="1"/><polygon points="20,5 20,11 23,8" fill="#fff"/></svg>
-              VIEW WORKS
-            </a>
+        <div className="vf-hero-layout">
+          <div className="vf-hero-left">
+            <h1 className="vf-hero-title">{content.hero.title}</h1>
+          </div>
+          <div className="vf-hero-right">
+            <p className="vf-hero-description">{content.hero.description}</p>
           </div>
         </div>
-        <div className="vf-hero-footer">
-          <span>[NEW YORK BASED]</span>
-          <span>[AWARD WINNING AGENCY]</span>
-          <span>[EST 2015]</span>
-          <span className="vf-clock"><b />{content.hero.clock}</span>
+      </div>
+      <div className="vf-hero-bottom">
+        <button className="vf-hero-arrow" onClick={goPrev} aria-label="Previous">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <div className="vf-hero-brand-info">
+          <img src={slides[currentIdx].logo} alt={slides[currentIdx].brand} className="vf-hero-brand-logo" />
         </div>
+        <button className="vf-hero-arrow" onClick={goNext} aria-label="Next">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
       </div>
     </section>
   );
@@ -375,19 +374,8 @@ export function TheRoom() {
 
 export function TrustedBy() {
   const logos = content.trustedBy.logos;
-  const row1 = logos.slice(0, 4);
-  const row2 = logos.slice(4);
-
-  const renderCard = (logo: string, i: number) => (
-    <div key={i} className="vf-trusted-card">
-      <div className="vf-trusted-card-front">
-        <span className="vf-trusted-card-logo">{logo}</span>
-      </div>
-      <div className="vf-trusted-card-back">
-        <span className="vf-trusted-card-logo">{logo}</span>
-      </div>
-    </div>
-  );
+  const row1 = logos.slice(0, 8);
+  const row2 = logos.slice(8);
 
   return (
     <section className="vf-trusted">
@@ -404,10 +392,18 @@ export function TrustedBy() {
       </div>
       <div className="vf-trusted-grid">
         <div className="vf-trusted-row">
-          {row1.map(renderCard)}
+          {row1.map((logo, i) => (
+            <div key={i} className="vf-trusted-logo">
+              <img src={logo.src} alt={logo.name} loading="lazy" />
+            </div>
+          ))}
         </div>
-        <div className="vf-trusted-row vf-trusted-row-offset">
-          {row2.map(renderCard)}
+        <div className="vf-trusted-row">
+          {row2.map((logo, i) => (
+            <div key={i} className="vf-trusted-logo">
+              <img src={logo.src} alt={logo.name} loading="lazy" />
+            </div>
+          ))}
         </div>
       </div>
     </section>
