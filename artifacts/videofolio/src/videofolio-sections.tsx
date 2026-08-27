@@ -109,58 +109,73 @@ export function Header({ onMenu }: { onMenu: () => void }) {
 export function Hero() {
   const slides = content.hero.slides;
   const [currentIdx, setCurrentIdx] = useState(0);
-  const idxRef = useRef(0);
-  const nextIdxRef = useRef(1);
-  const [showNext, setShowNext] = useState(false);
-  const transitioningRef = useRef(false);
-  const currentRef = useRef<HTMLVideoElement>(null);
-  const nextRef = useRef<HTMLVideoElement>(null);
+  const [nextIdx, setNextIdx] = useState(1 % slides.length);
+  const [fading, setFading] = useState(false);
+  const curRef = useRef<HTMLVideoElement>(null);
+  const nxtRef = useRef<HTMLVideoElement>(null);
+  const busy = useRef(false);
 
-  const transition = (newIdx: number) => {
-    if (transitioningRef.current) return;
-    transitioningRef.current = true;
-    nextIdxRef.current = newIdx;
-    nextRef.current?.play().catch(() => {});
-    setShowNext(true);
-    setTimeout(() => {
-      idxRef.current = newIdx;
-      setCurrentIdx(newIdx);
-      setShowNext(false);
-      transitioningRef.current = false;
-    }, 1000);
-  };
-
-  const goNext = useCallback(() => {
-    transition((idxRef.current + 1) % slides.length);
-  }, [slides.length]);
-
-  const goPrev = () => transition((idxRef.current - 1 + slides.length) % slides.length);
+  const transitionTo = useCallback((to: number) => {
+    if (busy.current || to === currentIdx) return;
+    busy.current = true;
+    setNextIdx(to);
+  }, [currentIdx]);
 
   useEffect(() => {
-    const id = setInterval(goNext, 7000);
+    const vid = nxtRef.current;
+    if (!vid || nextIdx === currentIdx) { busy.current = false; return; }
+    vid.load();
+    const onReady = () => {
+      vid.removeEventListener('canplay', onReady);
+      vid.play().catch(() => {});
+      setFading(true);
+    };
+    vid.addEventListener('canplay', onReady);
+    return () => vid.removeEventListener('canplay', onReady);
+  }, [nextIdx, currentIdx]);
+
+  useEffect(() => {
+    if (!fading) return;
+    const t = setTimeout(() => {
+      setCurrentIdx(nextIdx);
+      setFading(false);
+      busy.current = false;
+    }, 1100);
+    return () => clearTimeout(t);
+  }, [fading, nextIdx]);
+
+  useEffect(() => {
+    curRef.current?.play().catch(() => {});
+  }, [currentIdx]);
+
+  useEffect(() => {
+    const id = setInterval(() => transitionTo((currentIdx + 1) % slides.length), 7000);
     return () => clearInterval(id);
-  }, [goNext]);
+  }, [currentIdx, transitionTo, slides.length]);
+
+  const goNext = useCallback(() => transitionTo((currentIdx + 1) % slides.length), [currentIdx, transitionTo, slides.length]);
+  const goPrev = useCallback(() => transitionTo((currentIdx - 1 + slides.length) % slides.length), [currentIdx, transitionTo, slides.length]);
 
   return (
     <section className="vf-hero" id="home">
       <div className="vf-hero-video-bg">
         <video
-          ref={currentRef}
+          ref={curRef}
           src={slides[currentIdx].video}
           muted
           playsInline
           loop
           autoPlay
-          style={{ opacity: showNext ? 0 : 1, transition: 'opacity 1s ease-in-out' }}
+          style={{ opacity: fading ? 0 : 1, transition: 'opacity 1.1s ease-in-out' }}
         />
         <video
-          ref={nextRef}
-          src={slides[nextIdxRef.current].video}
+          ref={nxtRef}
+          src={slides[nextIdx].video}
           muted
           playsInline
           loop
-          preload="auto"
-          style={{ opacity: showNext ? 1 : 0, transition: 'opacity 1s ease-in-out', position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+          preload="metadata"
+          style={{ opacity: fading ? 1 : 0, transition: 'opacity 1.1s ease-in-out' }}
         />
       </div>
       <div className="vf-hero-overlay" />
@@ -374,37 +389,19 @@ export function TheRoom() {
 
 export function TrustedBy() {
   const logos = content.trustedBy.logos;
-  const row1 = logos.slice(0, 8);
-  const row2 = logos.slice(8);
+  const doubled = [...logos, ...logos];
 
   return (
     <section className="vf-trusted">
-      <div className="vf-trusted-header">
-        <div>
-          <span className="vf-trusted-eyebrow vf-mono">{content.trustedBy.label}</span>
-          <h2 className="vf-display vf-trusted-title">Trusted By</h2>
-        </div>
-        <div className="vf-trusted-tags">
-          {content.trustedBy.tags.map((tag, i) => (
-            <span key={i} className="vf-trusted-tag vf-mono">{tag}</span>
-          ))}
-        </div>
+      <div className="vf-container vf-trusted-header">
+        <h2 className="vf-display">{content.trustedBy.title}</h2>
       </div>
-      <div className="vf-trusted-grid">
-        <div className="vf-trusted-row">
-          {row1.map((logo, i) => (
-            <div key={i} className="vf-trusted-logo">
-              <img src={logo.src} alt={logo.name} loading="lazy" />
-            </div>
-          ))}
-        </div>
-        <div className="vf-trusted-row">
-          {row2.map((logo, i) => (
-            <div key={i} className="vf-trusted-logo">
-              <img src={logo.src} alt={logo.name} loading="lazy" />
-            </div>
-          ))}
-        </div>
+      <div className="vf-trusted-track">
+        {doubled.map((logo, i) => (
+          <div key={i} className="vf-trusted-tile">
+            <img src={logo.src} alt={logo.name} loading="lazy" />
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -812,79 +809,114 @@ export function Contact() {
 }
 
 export function HorizontalGallery() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const total = content.gallery.films.length;
+  const [activeCategory, setActiveCategory] = useState(0);
+  const [player, setPlayer] = useState(false);
+  const [videoKey, setVideoKey] = useState(0);
+  const categories = content.gallery.categories;
+  const currentFilm = categories[activeCategory].film;
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
-
-  useEffect(() => {
-    return scrollYProgress.on('change', (v) => {
-      const idx = Math.min(total - 1, Math.floor(v * total));
-      setActive(idx);
-    });
-  }, [scrollYProgress, total]);
-
-  const goNext = () => { if (active < total - 1) setActive(active + 1); };
-  const goPrev = () => { if (active > 0) setActive(active - 1); };
+  const handleCategoryClick = (idx: number) => {
+    if (idx === activeCategory) return;
+    setActiveCategory(idx);
+    setVideoKey((k) => k + 1);
+  };
 
   return (
-    <section className="vf-gallery-section" ref={sectionRef}>
+    <section className="vf-gallery-section" id="gallery">
       <div className="vf-gallery-inner">
         <div className="vf-gallery-header">
           <h2 className="vf-display">{content.gallery.title}</h2>
         </div>
-        <div className="vf-gallery-panels">
-          {content.gallery.films.map((film, index) => (
-            <div
-              className={`vf-panel ${index === active ? 'is-active' : ''}`}
-              key={film.brand + index}
-              data-testid={`panel-film-${index}`}
-            >
-              <div className="vf-panel-video">
-                <video
-                  src={film.media}
-                  muted
-                  loop
-                  playsInline
-                  autoPlay={index === active}
-                  aria-label={`${film.brand} - ${film.concept}`}
-                />
-              </div>
-              <span className="vf-panel-label vf-mono">
-                <span className="vf-panel-label-red">P</span>({String(index + 1).padStart(2, '0')})
-              </span>
-              {index === active && (
-                <motion.div
-                  className="vf-panel-info"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
+        <div className="vf-gallery-body">
+          <div className="vf-gallery-sidebar">
+            {categories.map((cat, idx) => (
+              <button
+                key={cat.label}
+                className={`vf-gallery-cat ${idx === activeCategory ? 'is-active' : ''}`}
+                onClick={() => handleCategoryClick(idx)}
+              >
+                <span className="vf-gallery-cat-text">{cat.label}</span>
+                {idx === activeCategory && (
+                  <motion.div
+                    className="vf-gallery-cat-line"
+                    layoutId="catLine"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+              </button>
+            ))}
+          </div>
+          <div className="vf-gallery-main">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCategory}
+                className="vf-gallery-feature"
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div
+                  className="vf-gallery-feature-video"
+                  onClick={() => setPlayer(true)}
                 >
-                  <h3 className="vf-display">{film.concept}</h3>
-                  <p>{film.brand} — {film.type}</p>
-                </motion.div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="vf-gallery-controls">
-          <span className="vf-gallery-counter vf-mono">
-            {String(active + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
-          </span>
-          <div className="vf-gallery-nav">
-            <button className="vf-gallery-btn" onClick={goPrev} disabled={active === 0} aria-label="Previous">
-              <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M18 7H2M8 1L2 7L8 13" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
-            <button className="vf-gallery-btn" onClick={goNext} disabled={active === total - 1} aria-label="Next">
-              <svg width="18" height="14" viewBox="0 0 18 14" fill="none"><path d="M0 7H16M10 1L16 7L10 13" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-            </button>
+                  <video
+                    key={videoKey}
+                    src={currentFilm.media}
+                    muted
+                    loop
+                    playsInline
+                    autoPlay
+                    aria-label={`${currentFilm.brand} - ${currentFilm.concept}`}
+                  />
+                  <div className="vf-gallery-feature-overlay" />
+                  <button
+                    className="vf-gallery-play"
+                    onClick={(e) => { e.stopPropagation(); setPlayer(true); }}
+                    aria-label="Play video"
+                  >
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                  </button>
+                  <div className="vf-gallery-feature-info">
+                    <h3 className="vf-display">{currentFilm.concept}</h3>
+                    <p>{currentFilm.brand} — {currentFilm.type}</p>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
       </div>
+      <AnimatePresence>
+        {player && (
+          <motion.div
+            className="vf-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setPlayer(false)}
+          >
+            <motion.div
+              className="vf-modal-player"
+              initial={{ scale: 0.92, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.92, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <video
+                src={currentFilm.media}
+                controls
+                autoPlay
+                aria-label={`${currentFilm.brand} - ${currentFilm.concept}`}
+              />
+              <button className="vf-modal-close" onClick={() => setPlayer(false)} aria-label="Close player">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
