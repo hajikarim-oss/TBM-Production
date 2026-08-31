@@ -8,7 +8,6 @@ import runtimeErrorOverlay from '@replit/vite-plugin-runtime-error-modal';
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 export default defineConfig({
-  base: '/studio',
   plugins: [
     react(),
     tailwindcss(),
