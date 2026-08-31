@@ -2,7 +2,7 @@
   "version": 2,
   "framework": "vite",
   "buildCommand": "pnpm --filter @workspace/videofolio build",
-  "outputDirectory": "artifacts/videofolio/dist/public",
+  "outputDirectory": "artifacts/videofolio/dist",
   "installCommand": "pnpm install",
   "rewrites": [
     { "source": "/studio/assets/:match*", "destination": "/studio/assets/:match*" },
