@@ -1,5 +1,0 @@
-#!/bin/bash
-pnpm --filter @workspace/videofolio build
-mkdir -p /vercel/path0/dist/studio
-cp -r /vercel/path0/artifacts/videofolio/dist/* /vercel/path0/dist/studio/
-echo '<!DOCTYPE html><html><head><meta http-equiv="refresh" content="0;url=/studio"></head></html>' > /vercel/path0/dist/index.html
