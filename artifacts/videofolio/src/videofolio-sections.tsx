@@ -501,11 +501,22 @@ export function TrustedBy() {
   return (
     <section className="vf-trusted">
       <div className="vf-trusted-track">
-        {doubled.map((logo, i) => (
-          <div key={i} className="vf-trusted-tile" data-testid={`trusted-tile-${logo.name.toLowerCase().replaceAll(' ', '-')}`}>
-            <img src={logo.src} alt={logo.name} loading="lazy" />
-          </div>
-        ))}
+        {doubled.map((logo, i) => {
+          const isTransparentWhite = logo.src.includes('-white.png') || logo.src.includes('wakefit.png') || logo.src.includes('REEQUIL_logo.png');
+          const isInverted = !isTransparentWhite;
+          const isSquare = ['Atomberg', 'The Flex', 'Eat Anytime', 'Rorosaur', 'Pilgrim', 'Rabitat'].includes(logo.name);
+          const logoClass = `${isInverted ? 'vf-logo-inverted' : ''} ${isSquare ? 'vf-logo-square' : 'vf-logo-wide'}`.trim();
+          return (
+            <div key={i} className="vf-trusted-tile" data-testid={`trusted-tile-${logo.name.toLowerCase().replaceAll(' ', '-')}`}>
+              <img 
+                src={logo.src} 
+                alt={logo.name} 
+                loading="lazy" 
+                className={logoClass} 
+              />
+            </div>
+          );
+        })}
       </div>
     </section>
   );
