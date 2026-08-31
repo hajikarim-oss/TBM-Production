@@ -29,7 +29,7 @@ function Video({ src, className = '', posterLabel }: { src: string; className?: 
 export function BrandMark() {
   return (
     <a href="#home" className="vf-brand" data-testid="link-brand" aria-label="TheBoredMonkey">
-      <img src={`${import.meta.env.BASE_URL}/logo.png`} alt="TheBoredMonkey" className="vf-brand-logo" />
+      <img src="/logo.png" alt="TheBoredMonkey" className="vf-brand-logo" />
     </a>
   );
 }
@@ -1139,7 +1139,7 @@ export function Footer() {
       <div className="vf-container">
         <div className="vf-footer-top-row">
           <div className="vf-footer-brand">
-            <img src={`${import.meta.env.BASE_URL}/logo.png`} alt="TheBoredMonkey" className="vf-footer-logo-img" />
+            <img src="/logo.png" alt="TheBoredMonkey" className="vf-footer-logo-img" />
           </div>
           <div className="vf-footer-socials">
             {content.footer.socials.map((s) => (

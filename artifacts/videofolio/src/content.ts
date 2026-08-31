@@ -1,5 +1,4 @@
 const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
-const BASE = import.meta.env.BASE_URL;
 
 export const media = {
   hero: `${R2}/Atomberg%20Factory%20Edit_With%20Map%20Animation%20V2.mp4`,
@@ -35,11 +34,11 @@ export const content = {
     established: '[EST 2022]',
     clock: '3:34:33 AM',
     slides: [
-      { brand: 'ATOMBERG', product: 'Atomberg', video: `${R2}/Atomberg%20.mp4`, logo: `${BASE}/brands/Atomberg-logo.svg` },
-      { brand: 'BIOPEAK', product: 'Biopeak', video: `${R2}/Biopeak.mp4`, logo: `${BASE}/brands/biopeak-logo-white.png` },
-      { brand: 'BLUE TYGA', product: 'Blue Tyga', video: `${R2}/Blue%20Tyga.mp4`, logo: `${BASE}/brands/bluetyga-logo-white.png` },
-      { brand: 'VIBHOR', product: 'Vibhor', video: `${R2}/Vibhor.mp4`, logo: `${BASE}/brands/vibhor-logo.png` },
-      { brand: 'ZOFF', product: 'Zoff', video: `${R2}/Zoff.mp4`, logo: `${BASE}/brands/zoff-logo-white.png` },
+      { brand: 'ATOMBERG', product: 'Atomberg', video: `${R2}/Atomberg%20.mp4`, logo: `/brands/Atomberg-logo.svg` },
+      { brand: 'BIOPEAK', product: 'Biopeak', video: `${R2}/Biopeak.mp4`, logo: `/brands/biopeak-logo-white.png` },
+      { brand: 'BLUE TYGA', product: 'Blue Tyga', video: `${R2}/Blue%20Tyga.mp4`, logo: `/brands/bluetyga-logo-white.png` },
+      { brand: 'VIBHOR', product: 'Vibhor', video: `${R2}/Vibhor.mp4`, logo: `/brands/vibhor-logo.png` },
+      { brand: 'ZOFF', product: 'Zoff', video: `${R2}/Zoff.mp4`, logo: `/brands/zoff-logo-white.png` },
     ],
   },
   meet: {
@@ -105,21 +104,21 @@ export const content = {
     title: 'Crafted for 15+ Brands',
     copy: 'Every logo here represents a creative partnership, a shared vision, and a project we\'re proud to put our name on.',
     logos: [
-      { name: 'Atomberg', src: `${BASE}/brands/atomberg-logo-white.png` },
-      { name: 'Biopeak', src: `${BASE}/brands/biopeak-logo-white.png` },
-      { name: 'Blue Tyga', src: `${BASE}/brands/bluetyga-logo-white.png` },
-      { name: 'CheQ', src: `${BASE}/brands/CheQ.jpg` },
-      { name: 'Eat Anytime', src: `${BASE}/brands/eatanytime_new_logo.avif` },
-      { name: 'Eclipse Solaire', src: `${BASE}/brands/eclipse solaire.jpg` },
-      { name: 'Neemans', src: `${BASE}/brands/Neemans-Lakeshore-Y-Junction-Hyderabad.webp` },
-      { name: 'Pilgrim', src: `${BASE}/brands/Pilgrim-New-Logo-Without-Tagline_a9de71c3-9c1c-4a33-b4eb-95830dab01db.avif` },
-      { name: 'Rabitat', src: `${BASE}/brands/Rabitat.webp` },
-      { name: 'Reequil', src: `${BASE}/brands/REEQUIL_logo.png` },
-      { name: 'Rorosaur', src: `${BASE}/brands/Rorosaur_logo_1_1.avif` },
-      { name: 'The Flex', src: `${BASE}/brands/The_Flex_white-01.avif` },
-      { name: 'Vibhor', src: `${BASE}/brands/vibhor-logo-white.png` },
-      { name: 'Wakefit', src: `${BASE}/brands/wakefit.png` },
-      { name: 'Zoff', src: `${BASE}/brands/zoff-logo-white.png` },
+      { name: 'Atomberg', src: `/brands/atomberg-logo-white.png` },
+      { name: 'Biopeak', src: `/brands/biopeak-logo-white.png` },
+      { name: 'Blue Tyga', src: `/brands/bluetyga-logo-white.png` },
+      { name: 'CheQ', src: `/brands/CheQ.jpg` },
+      { name: 'Eat Anytime', src: `/brands/eatanytime_new_logo.avif` },
+      { name: 'Eclipse Solaire', src: `/brands/eclipse solaire.jpg` },
+      { name: 'Neemans', src: `/brands/Neemans-Lakeshore-Y-Junction-Hyderabad.webp` },
+      { name: 'Pilgrim', src: `/brands/Pilgrim-New-Logo-Without-Tagline_a9de71c3-9c1c-4a33-b4eb-95830dab01db.avif` },
+      { name: 'Rabitat', src: `/brands/Rabitat.webp` },
+      { name: 'Reequil', src: `/brands/REEQUIL_logo.png` },
+      { name: 'Rorosaur', src: `/brands/Rorosaur_logo_1_1.avif` },
+      { name: 'The Flex', src: `/brands/The_Flex_white-01.avif` },
+      { name: 'Vibhor', src: `/brands/vibhor-logo-white.png` },
+      { name: 'Wakefit', src: `/brands/wakefit.png` },
+      { name: 'Zoff', src: `/brands/zoff-logo-white.png` },
     ],
   },
   stats: {
@@ -228,19 +227,19 @@ export const content = {
     categories: [
       {
         label: 'DVCs',
-        film: { brand: 'Blue Tyga', type: 'DVC', concept: 'Made for comfort, built for impact', credit: 'Produced by TheBoredMonkey', media: media.workB, logo: `${BASE}/brands/Blue Tyga.png` },
+        film: { brand: 'Blue Tyga', type: 'DVC', concept: 'Made for comfort, built for impact', credit: 'Produced by TheBoredMonkey', media: media.workB, logo: `/brands/Blue Tyga.png` },
       },
       {
         label: 'Vertical ad films',
-        film: { brand: 'Atomberg', type: 'Vertical Ad Film', concept: 'Fan technology that speaks for itself', credit: 'Produced by TheBoredMonkey', media: media.workD, logo: `${BASE}/brands/Atomberg.jpg` },
+        film: { brand: 'Atomberg', type: 'Vertical Ad Film', concept: 'Fan technology that speaks for itself', credit: 'Produced by TheBoredMonkey', media: media.workD, logo: `/brands/Atomberg.jpg` },
       },
       {
         label: 'Product launch videos',
-        film: { brand: 'Atomberg', type: 'Product Launch', concept: 'Introducing the next gen water purifier', credit: 'Produced by TheBoredMonkey', media: media.meet, logo: `${BASE}/brands/Atomberg.jpg` },
+        film: { brand: 'Atomberg', type: 'Product Launch', concept: 'Introducing the next gen water purifier', credit: 'Produced by TheBoredMonkey', media: media.meet, logo: `/brands/Atomberg.jpg` },
       },
       {
         label: 'Factory',
-        film: { brand: 'Atomberg', type: 'Factory Film', concept: 'Inside the making of innovation', credit: 'Produced by TheBoredMonkey', media: media.hero, logo: `${BASE}/brands/Atomberg.jpg` },
+        film: { brand: 'Atomberg', type: 'Factory Film', concept: 'Inside the making of innovation', credit: 'Produced by TheBoredMonkey', media: media.hero, logo: `/brands/Atomberg.jpg` },
       },
       {
         label: 'Founder',
@@ -248,11 +247,11 @@ export const content = {
       },
       {
         label: 'Podcast',
-        film: { brand: 'Atomberg', type: 'Podcast Teaser', concept: 'Conversations that drive innovation', credit: 'Produced by TheBoredMonkey', media: media.workF, logo: `${BASE}/brands/Atomberg.jpg` },
+        film: { brand: 'Atomberg', type: 'Podcast Teaser', concept: 'Conversations that drive innovation', credit: 'Produced by TheBoredMonkey', media: media.workF, logo: `/brands/Atomberg.jpg` },
       },
       {
         label: 'Long-form',
-        film: { brand: 'Biopeak', type: 'Long-form Film', concept: 'Wellness, redefined from the ground up', credit: 'Produced by TheBoredMonkey', media: media.workA, logo: `${BASE}/brands/Biopeak.png` },
+        film: { brand: 'Biopeak', type: 'Long-form Film', concept: 'Wellness, redefined from the ground up', credit: 'Produced by TheBoredMonkey', media: media.workA, logo: `/brands/Biopeak.png` },
       },
     ],
     films: [
