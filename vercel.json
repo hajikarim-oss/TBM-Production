@@ -2,5 +2,10 @@
   "version": 2,
   "framework": "vite",
   "buildCommand": "npm run build --workspace artifacts/videofolio",
-  "outputDirectory": "artifacts/videofolio/dist/public"
+  "outputDirectory": "artifacts/videofolio/dist/public",
+  "rewrites": [
+    { "source": "/studio/assets/:match*", "destination": "/studio/assets/:match*" },
+    { "source": "/studio/brands/:match*", "destination": "/studio/brands/:match*" },
+    { "source": "/studio/(.*)", "destination": "/studio/index.html" }
+  ]
 }

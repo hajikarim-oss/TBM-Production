@@ -29,7 +29,7 @@ function Video({ src, className = '', posterLabel }: { src: string; className?: 
 export function BrandMark() {
   return (
     <a href="#home" className="vf-brand" data-testid="link-brand" aria-label="TheBoredMonkey">
-      <img src="/logo.png" alt="TheBoredMonkey" className="vf-brand-logo" />
+      <img src={`${import.meta.env.BASE_URL}/logo.png`} alt="TheBoredMonkey" className="vf-brand-logo" />
     </a>
   );
 }
@@ -126,21 +126,22 @@ export function Hero() {
     if (!vid || nextIdx === currentIdx) { busy.current = false; return; }
     vid.load();
     const onReady = () => {
-      vid.removeEventListener('canplay', onReady);
+      vid.removeEventListener('loadeddata', onReady);
       vid.play().catch(() => {});
-      setFading(true);
+      setTimeout(() => setFading(true), 100);
     };
-    vid.addEventListener('canplay', onReady);
-    return () => vid.removeEventListener('canplay', onReady);
+    vid.addEventListener('loadeddata', onReady);
+    return () => vid.removeEventListener('loadeddata', onReady);
   }, [nextIdx, currentIdx]);
 
   useEffect(() => {
     if (!fading) return;
     const t = setTimeout(() => {
+      curRef.current?.pause();
       setCurrentIdx(nextIdx);
       setFading(false);
       busy.current = false;
-    }, 1100);
+    }, 1300);
     return () => clearTimeout(t);
   }, [fading, nextIdx]);
 
@@ -166,7 +167,7 @@ export function Hero() {
           playsInline
           loop
           autoPlay
-          style={{ opacity: fading ? 0 : 1, transition: 'opacity 1.1s ease-in-out' }}
+          style={{ opacity: fading ? 0 : 1, transition: 'opacity 1.2s ease-in-out' }}
         />
         <video
           ref={nxtRef}
@@ -174,8 +175,8 @@ export function Hero() {
           muted
           playsInline
           loop
-          preload="metadata"
-          style={{ opacity: fading ? 1 : 0, transition: 'opacity 1.1s ease-in-out' }}
+          preload="none"
+          style={{ opacity: fading ? 1 : 0, transition: 'opacity 1.2s ease-in-out' }}
         />
       </div>
       <div className="vf-hero-overlay" />
@@ -393,9 +394,6 @@ export function TrustedBy() {
 
   return (
     <section className="vf-trusted">
-      <div className="vf-container vf-trusted-header">
-        <h2 className="vf-display">{content.trustedBy.title}</h2>
-      </div>
       <div className="vf-trusted-track">
         {doubled.map((logo, i) => (
           <div key={i} className="vf-trusted-tile">
@@ -554,7 +552,7 @@ export function Stats() {
   return (
     <section className="vf-stats vf-section" id="stats">
       <div className="vf-container">
-        <div className="vf-stats-top">
+        <div className="vf-stats-intro">
           <motion.div
             className="vf-stats-label"
             initial={{ opacity: 0 }}
@@ -581,6 +579,7 @@ export function Stats() {
             )}
           </motion.p>
         </div>
+        <div className="vf-stats-divider" />
         <div className="vf-stats-row">
           {content.stats.items.map((stat, i) => (
             <motion.div
@@ -589,7 +588,7 @@ export function Stats() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewport}
-              transition={{ duration: 0.5, delay: 0.2 + i * 0.08 }}
+              transition={{ duration: 0.5, delay: 0.15 + i * 0.08 }}
             >
               <span className="vf-stat-num">{stat.number}</span>
               <span className="vf-stat-label">{stat.label}</span>
@@ -797,6 +796,9 @@ export function Contact() {
                 <input type="email" placeholder="Email*" required />
               </div>
               <div className="vf-form-group">
+                <input type="tel" placeholder="Mobile Number*" required />
+              </div>
+              <div className="vf-form-group">
                 <textarea placeholder="Message*" rows={3} required />
               </div>
               <button type="submit" className="vf-submit-btn">Submit Now</button>
@@ -878,6 +880,9 @@ export function HorizontalGallery() {
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                   </button>
                   <div className="vf-gallery-feature-info">
+                    {currentFilm.logo && (
+                      <img className="vf-gallery-feature-logo" src={currentFilm.logo} alt={currentFilm.brand} />
+                    )}
                     <h3 className="vf-display">{currentFilm.concept}</h3>
                     <p>{currentFilm.brand} — {currentFilm.type}</p>
                   </div>
@@ -1012,7 +1017,38 @@ export function BrandGrid() {
 }
 
 export function Footer() {
-  const [copied, setCopied] = useState(false);
-  const copy = () => { navigator.clipboard?.writeText(content.footer.contactEmail); setCopied(true); window.setTimeout(() => setCopied(false), 1600); };
-  return <footer className="vf-footer vf-section" id="resources"><div className="vf-container vf-footer-top"><BrandMark /><div className="vf-footer-contact"><button onClick={copy} data-testid="button-footer-copy-email" aria-label={content.footer.contactEmail}>{copied ? content.ui.copied : content.footer.contactEmail}</button><a href={`tel:${content.footer.phone}`} data-testid="link-footer-phone">{content.footer.phone}</a><span>{content.footer.address}</span></div><div className="vf-footer-links"><a href="#resources" data-testid="link-footer-resources">{content.footer.resources}</a><a href="#resources" data-testid="link-footer-legal">{content.footer.legal}</a></div></div><div className="vf-container vf-footer-bottom"><span>{content.footer.template}</span><span>{content.footer.made}</span><span>{content.footer.framer}</span></div></footer>;
+  return (
+    <footer className="vf-footer-new" id="resources">
+      <div className="vf-container">
+        <div className="vf-footer-top-row">
+          <div className="vf-footer-brand">
+            <img src={`${import.meta.env.BASE_URL}/logo.png`} alt="TheBoredMonkey" className="vf-footer-logo-img" />
+          </div>
+          <div className="vf-footer-socials">
+            {content.footer.socials.map((s) => (
+              <a key={s.label} href={s.href}>{s.label}</a>
+            ))}
+          </div>
+          <div className="vf-footer-address">
+            <p>{content.footer.address}</p>
+            <a href={`tel:${content.footer.phone}`}>{content.footer.phone}</a>
+          </div>
+        </div>
+        <div className="vf-footer-bottom-row">
+          <div className="vf-footer-email-block">
+            <strong>{content.footer.businessLabel}</strong>
+            <a href={`mailto:${content.footer.businessEmail}`}>{content.footer.businessEmail} <span>↗</span></a>
+          </div>
+          <div className="vf-footer-email-block">
+            <strong>{content.footer.careersLabel}</strong>
+            <a href={`mailto:${content.footer.careersEmail}`}>{content.footer.careersEmail} <span>↗</span></a>
+          </div>
+          <div className="vf-footer-email-block">
+            <strong>{content.footer.agencyLabel}</strong>
+            <a href={`mailto:${content.footer.agencyEmail}`}>{content.footer.agencyEmail} <span>↗</span></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
 }

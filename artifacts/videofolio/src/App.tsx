@@ -1,13 +1,11 @@
 import { useState } from 'react';
 import {
-  BrandCarousel,
   Contact,
   Footer,
   Header,
   Hero,
   HorizontalGallery,
   MenuOverlay,
-  OurServices,
   Stats,
   TheRoom,
   TrustedBy,
@@ -23,9 +21,7 @@ function App() {
       <Hero />
       <HorizontalGallery />
       <TrustedBy />
-      <BrandCarousel />
       <TheRoom />
-      <OurServices />
       <Stats />
       <Contact />
       <Footer />
