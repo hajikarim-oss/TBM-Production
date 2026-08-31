@@ -1,9 +1,8 @@
 {
   "version": 2,
-  "buildCommand": "pnpm --filter @workspace/videofolio build",
-  "outputDirectory": "artifacts/videofolio/dist",
   "installCommand": "pnpm install",
-  "framework": null,
+  "buildCommand": "pnpm --filter @workspace/videofolio build && cp -r artifacts/videofolio/dist public",
+  "outputDirectory": "public",
   "rewrites": [
     { "source": "/studio/assets/:match*", "destination": "/studio/assets/:match*" },
     { "source": "/studio/brands/:match*", "destination": "/studio/brands/:match*" },
