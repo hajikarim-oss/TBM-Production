@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter @workspace/videofolio build; mkdir -p dist; cp -r artifacts/videofolio/dist/* dist/",
+  "buildCommand": "pnpm --filter @workspace/videofolio build && mkdir -p /vercel/path0/dist && cp -r /vercel/path0/artifacts/videofolio/dist/* /vercel/path0/dist/",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/studio/assets/:match*", "destination": "/assets/:match*" },
