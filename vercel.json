@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "pnpm install",
-  "buildCommand": "pnpm --filter @workspace/videofolio build && cp -r artifacts/videofolio/dist/* dist/ 2>/dev/null; mkdir -p dist && cp -r artifacts/videofolio/dist/* dist/",
+  "buildCommand": "pnpm --filter @workspace/videofolio build; mkdir -p dist; cp -r artifacts/videofolio/dist/* dist/",
   "outputDirectory": "dist",
   "rewrites": [
     { "source": "/studio/assets/:match*", "destination": "/assets/:match*" },
