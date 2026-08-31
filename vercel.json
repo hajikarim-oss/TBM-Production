@@ -1,6 +1,6 @@
 {
   "version": 2,
   "installCommand": "pnpm install",
-  "buildCommand": "bash build.sh",
+  "buildCommand": "node vercel-build.js",
   "outputDirectory": "dist"
 }
