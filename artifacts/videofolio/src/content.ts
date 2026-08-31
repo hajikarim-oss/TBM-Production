@@ -35,10 +35,10 @@ export const content = {
     clock: '3:34:33 AM',
     slides: [
       { brand: 'ATOMBERG', product: 'Atomberg', video: `${R2}/Atomberg%20.mp4`, logo: `/brands/Atomberg-logo.svg` },
-      { brand: 'BIOPEAK', product: 'Biopeak', video: `${R2}/Biopeak.mp4`, logo: `/brands/biopeak-logo-white.png` },
       { brand: 'BLUE TYGA', product: 'Blue Tyga', video: `${R2}/Blue%20Tyga.mp4`, logo: `/brands/bluetyga-logo-white.png` },
-      { brand: 'VIBHOR', product: 'Vibhor', video: `${R2}/Vibhor.mp4`, logo: `/brands/vibhor-logo.png` },
       { brand: 'ZOFF', product: 'Zoff', video: `${R2}/Zoff.mp4`, logo: `/brands/zoff-logo-white.png` },
+      { brand: 'VIBHOR', product: 'Vibhor', video: `${R2}/Vibhor.mp4`, logo: `/brands/vibhor-logo.png` },
+      { brand: 'BIOPEAK', product: 'Biopeak', video: `${R2}/Biopeak.mp4`, logo: `/brands/biopeak-logo-white.png` },
     ],
   },
   meet: {
