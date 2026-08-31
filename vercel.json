@@ -3,8 +3,8 @@
   "installCommand": "pnpm install",
   "buildCommand": "pnpm --filter @workspace/videofolio build",
   "rewrites": [
-    { "source": "/studio/assets/:match*", "destination": "/studio/assets/:match*" },
-    { "source": "/studio/brands/:match*", "destination": "/studio/brands/:match*" },
-    { "source": "/studio/(.*)", "destination": "/studio/index.html" }
+    { "source": "/studio/assets/:match*", "destination": "/assets/:match*" },
+    { "source": "/studio/brands/:match*", "destination": "/brands/:match*" },
+    { "source": "/studio/:match*", "destination": "/index.html" }
   ]
 }
