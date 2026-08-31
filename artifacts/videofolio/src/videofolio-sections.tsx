@@ -64,8 +64,8 @@ export function MenuOverlay({ open, onClose }: { open: boolean; onClose: () => v
             ))}
           </nav>
           <div className="vf-menu-contact">
-            <button className="vf-email" data-testid="button-copy-email" onClick={() => navigator.clipboard?.writeText(content.footer.contactEmail)}>
-              {content.footer.contactEmail}
+            <button className="vf-email" data-testid="button-copy-email" onClick={() => navigator.clipboard?.writeText(content.footer.email)}>
+              {content.footer.email}
               <span>{content.ui.copied}</span>
             </button>
             <a href={`tel:${content.footer.phone}`} data-testid="link-menu-phone">{content.footer.phone}</a>
@@ -109,74 +109,180 @@ export function Header({ onMenu }: { onMenu: () => void }) {
 export function Hero() {
   const slides = content.hero.slides;
   const [currentIdx, setCurrentIdx] = useState(0);
-  const [nextIdx, setNextIdx] = useState(1 % slides.length);
-  const [fading, setFading] = useState(false);
-  const curRef = useRef<HTMLVideoElement>(null);
-  const nxtRef = useRef<HTMLVideoElement>(null);
+
+  const [video1Src, setVideo1Src] = useState<string>(slides[0].video);
+  const [video2Src, setVideo2Src] = useState<string>(slides[1 % slides.length].video);
+  const [activeVideo, setActiveVideo] = useState<1 | 2>(1);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [slideDirection, setSlideDirection] = useState<'next' | 'prev'>('next');
+
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
   const busy = useRef(false);
 
   const transitionTo = useCallback((to: number) => {
     if (busy.current || to === currentIdx) return;
     busy.current = true;
-    setNextIdx(to);
-  }, [currentIdx]);
+    const dir = to > currentIdx ? 'next' : 'prev';
+    setSlideDirection(dir);
+
+    if (activeVideo === 1) {
+      setVideo2Src(slides[to].video);
+      setTimeout(() => {
+        const vid2 = video2Ref.current;
+        if (vid2) {
+          vid2.load();
+          vid2.play()
+            .then(() => {
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveVideo(2);
+                setCurrentIdx(to);
+                setIsTransitioning(false);
+                busy.current = false;
+              }, 800);
+            })
+            .catch(() => {
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveVideo(2);
+                setCurrentIdx(to);
+                setIsTransitioning(false);
+                busy.current = false;
+              }, 800);
+            });
+        }
+      }, 50);
+    } else {
+      setVideo1Src(slides[to].video);
+      setTimeout(() => {
+        const vid1 = video1Ref.current;
+        if (vid1) {
+          vid1.load();
+          vid1.play()
+            .then(() => {
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveVideo(1);
+                setCurrentIdx(to);
+                setIsTransitioning(false);
+                busy.current = false;
+              }, 800);
+            })
+            .catch(() => {
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setActiveVideo(1);
+                setCurrentIdx(to);
+                setIsTransitioning(false);
+                busy.current = false;
+              }, 800);
+            });
+        }
+      }, 50);
+    }
+  }, [currentIdx, activeVideo, slides]);
 
   useEffect(() => {
-    const vid = nxtRef.current;
-    if (!vid || nextIdx === currentIdx) { busy.current = false; return; }
-    vid.load();
-    const onReady = () => {
-      vid.removeEventListener('loadeddata', onReady);
-      vid.play().catch(() => {});
-      setTimeout(() => setFading(true), 100);
-    };
-    vid.addEventListener('loadeddata', onReady);
-    return () => vid.removeEventListener('loadeddata', onReady);
-  }, [nextIdx, currentIdx]);
-
-  useEffect(() => {
-    if (!fading) return;
-    const t = setTimeout(() => {
-      curRef.current?.pause();
-      setCurrentIdx(nextIdx);
-      setFading(false);
-      busy.current = false;
-    }, 1300);
-    return () => clearTimeout(t);
-  }, [fading, nextIdx]);
-
-  useEffect(() => {
-    curRef.current?.play().catch(() => {});
-  }, [currentIdx]);
-
-  useEffect(() => {
-    const id = setInterval(() => transitionTo((currentIdx + 1) % slides.length), 7000);
+    const id = setInterval(() => {
+      const next = (currentIdx + 1) % slides.length;
+      transitionTo(next);
+    }, 7000);
     return () => clearInterval(id);
   }, [currentIdx, transitionTo, slides.length]);
 
-  const goNext = useCallback(() => transitionTo((currentIdx + 1) % slides.length), [currentIdx, transitionTo, slides.length]);
-  const goPrev = useCallback(() => transitionTo((currentIdx - 1 + slides.length) % slides.length), [currentIdx, transitionTo, slides.length]);
+  const goNext = useCallback(() => {
+    const next = (currentIdx + 1) % slides.length;
+    transitionTo(next);
+  }, [currentIdx, transitionTo, slides.length]);
+
+  const goPrev = useCallback(() => {
+    const prev = (currentIdx - 1 + slides.length) % slides.length;
+    transitionTo(prev);
+  }, [currentIdx, transitionTo, slides.length]);
+
+  const getVideo1Style = () => {
+    const base = { position: 'absolute' as const, inset: 0, width: '100%', height: '100%', objectFit: 'cover' as const };
+    if (activeVideo === 1) {
+      if (isTransitioning) {
+        return {
+          ...base,
+          transform: `translate3d(${slideDirection === 'next' ? '-100%' : '100%'}, 0, 0)`,
+          transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+        };
+      }
+      return {
+        ...base,
+        transform: 'translate3d(0, 0, 0)',
+        transition: 'none',
+      };
+    } else {
+      if (isTransitioning) {
+        return {
+          ...base,
+          transform: 'translate3d(0, 0, 0)',
+          transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+        };
+      }
+      return {
+        ...base,
+        transform: `translate3d(${slideDirection === 'next' ? '100%' : '-100%'}, 0, 0)`,
+        transition: 'none',
+      };
+    }
+  };
+
+  const getVideo2Style = () => {
+    const base = { position: 'absolute' as const, inset: 0, width: '100%', height: '100%', objectFit: 'cover' as const };
+    if (activeVideo === 2) {
+      if (isTransitioning) {
+        return {
+          ...base,
+          transform: `translate3d(${slideDirection === 'next' ? '-100%' : '100%'}, 0, 0)`,
+          transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+        };
+      }
+      return {
+        ...base,
+        transform: 'translate3d(0, 0, 0)',
+        transition: 'none',
+      };
+    } else {
+      if (isTransitioning) {
+        return {
+          ...base,
+          transform: 'translate3d(0, 0, 0)',
+          transition: 'transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)',
+        };
+      }
+      return {
+        ...base,
+        transform: `translate3d(${slideDirection === 'next' ? '100%' : '-100%'}, 0, 0)`,
+        transition: 'none',
+      };
+    }
+  };
 
   return (
     <section className="vf-hero" id="home">
-      <div className="vf-hero-video-bg">
+      <div className="vf-hero-video-bg" style={{ position: 'relative', overflow: 'hidden', width: '100%', height: '100%' }}>
         <video
-          ref={curRef}
-          src={slides[currentIdx].video}
+          ref={video1Ref}
+          src={video1Src}
           muted
           playsInline
           loop
           autoPlay
-          style={{ opacity: fading ? 0 : 1, transition: 'opacity 1.2s ease-in-out' }}
+          style={getVideo1Style()}
         />
         <video
-          ref={nxtRef}
-          src={slides[nextIdx].video}
+          ref={video2Ref}
+          src={video2Src}
           muted
           playsInline
           loop
-          preload="none"
-          style={{ opacity: fading ? 1 : 0, transition: 'opacity 1.2s ease-in-out' }}
+          autoPlay
+          style={getVideo2Style()}
         />
       </div>
       <div className="vf-hero-overlay" />
@@ -328,11 +434,11 @@ const stagger = {
 };
 const cardIn = {
   hidden: { opacity: 0, y: 40, scale: 0.95 },
-  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const } },
 };
 const tagIn = {
   hidden: { opacity: 0, y: 8 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
+  show: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' as const } },
 };
 
 export function TheRoom() {
@@ -396,7 +502,7 @@ export function TrustedBy() {
     <section className="vf-trusted">
       <div className="vf-trusted-track">
         {doubled.map((logo, i) => (
-          <div key={i} className="vf-trusted-tile">
+          <div key={i} className="vf-trusted-tile" data-testid={`trusted-tile-${logo.name.toLowerCase().replaceAll(' ', '-')}`}>
             <img src={logo.src} alt={logo.name} loading="lazy" />
           </div>
         ))}
@@ -571,7 +677,7 @@ export function Stats() {
             transition={{ duration: 0.6, delay: 0.1 }}
           >
             {content.stats.introParts.map((part, i) =>
-              part.highlight ? (
+              (part as any).highlight ? (
                 <span key={i} className="vf-gold">{part.text}</span>
               ) : (
                 <span key={i}>{part.text}</span>

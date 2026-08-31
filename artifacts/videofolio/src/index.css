@@ -26,14 +26,14 @@
   --gold: #E8A62C;
   --gold-hot: #f0b84d;
   --gold-deep: #c78d1e;
-  --ink: #FAFAFA;
-  --ink-soft: #F0F0F0;
-  --paper: #FFFFFF;
-  --white: #0D0D0D;
-  --grey: #6B6B6B;
-  --line: rgba(0,0,0,.1);
-  --line-dark: rgba(0,0,0,.06);
-  --display: "Playfair Display", "TASA Orbiter", Georgia, serif;
+  --ink: #000000;
+  --ink-soft: #0a0a0a;
+  --paper: #111111;
+  --white: #FFFFFF;
+  --grey: #888888;
+  --line: rgba(255,255,255,.1);
+  --line-dark: rgba(255,255,255,.06);
+  --display: "TASA Orbiter", "Playfair Display", Georgia, serif;
   --body: "DM Sans", "Inter", sans-serif;
   --mono: "Space Mono", monospace;
   --sans: "DM Sans", "Inter", sans-serif;
@@ -46,13 +46,14 @@ body {
   background: var(--ink);
   color: var(--white);
   font-family: var(--body);
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
   overflow-x: clip;
 }
 button, a { font: inherit; color: inherit; }
 button { cursor: pointer; }
 a { text-decoration: none; }
-::selection { background: var(--gold); color: var(--white); }
+::selection { background: var(--gold); color: #000; }
 
 .vf-app { min-width: 320px; background: var(--ink); }
 .vf-section { position: relative; border-top: 1px solid var(--line); }
@@ -62,7 +63,7 @@ a { text-decoration: none; }
 .vf-container { width: calc(100% - 100px); margin: 0 auto; }
 .vf-display { font-family: var(--display); letter-spacing: -.055em; }
 .vf-mono { font-family: var(--mono); letter-spacing: -.04em; }
-.vf-eyebrow { font: 11px/1 var(--mono); letter-spacing: .02em; text-transform: uppercase; }
+.vf-eyebrow { font: 11px/1 var(--mono); letter-spacing: .02em; text-transform: uppercase; color: var(--grey); }
 .vf-noise:after {
   content: "";
   pointer-events: none;
@@ -75,9 +76,12 @@ a { text-decoration: none; }
 }
 
 @media (max-width: 900px) {
-  .vf-container { width: calc(100% - 100px); }
+  .vf-container { width: calc(100% - 56px); }
 }
 @media (max-width: 600px) {
   .vf-container { width: calc(100% - 40px); }
   .vf-grid { background-image: linear-gradient(to right, transparent calc(50% - .5px), var(--line) 50%, transparent calc(50% + .5px)); }
+}
+@media (max-width: 480px) {
+  .vf-container { width: calc(100% - 32px); }
 }
