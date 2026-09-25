@@ -7,42 +7,42 @@ export interface BtsSlide {
 const BTS_SLIDES: BtsSlide[] = [
   {
     id: 'bts-1',
-    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=720&auto=format&fit=crop&q=75',
     alt: 'ARRI Alexa tracking shot on studio set',
   },
   {
     id: 'bts-2',
-    image: 'https://images.unsplash.com/photo-1579632652768-6cb9dcf85912?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1579632652768-6cb9dcf85912?w=720&auto=format&fit=crop&q=75',
     alt: 'Motorized gimbal and optical camera rig',
   },
   {
     id: 'bts-3',
-    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=720&auto=format&fit=crop&q=75',
     alt: 'High-speed studio camera and cinema lighting',
   },
   {
     id: 'bts-4',
-    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=720&auto=format&fit=crop&q=75',
     alt: 'Multi-track production audio recording desk',
   },
   {
     id: 'bts-5',
-    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=720&auto=format&fit=crop&q=75',
     alt: 'DaVinci Resolve 4K theatrical color grading bay',
   },
   {
     id: 'bts-6',
-    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=720&auto=format&fit=crop&q=75',
     alt: 'Director on location with prime cinema camera',
   },
   {
     id: 'bts-7',
-    image: 'https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?w=720&auto=format&fit=crop&q=75',
     alt: 'Cinema prime lenses and focus pull calibration',
   },
   {
     id: 'bts-8',
-    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1400&auto=format&fit=crop&q=85',
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=720&auto=format&fit=crop&q=75',
     alt: 'Studio screening and master playback theatre',
   },
 ];

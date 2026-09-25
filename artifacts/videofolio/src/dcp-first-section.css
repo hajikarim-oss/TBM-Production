@@ -933,6 +933,11 @@
   background-color: rgba(255, 255, 255, 0.25);
 }
 
+@keyframes dcpProgressFill {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+
 .dcp-hero__progressFill {
   position: absolute;
   top: 8px; /* matches padding */
@@ -941,7 +946,8 @@
   width: 0%;
   background-color: var(--dcp-white);
   border-radius: 2px;
-  /* No CSS animation — driven by requestAnimationFrame for sync */
+  animation: dcpProgressFill 8s linear forwards;
+  will-change: width;
 }
 
 .dcp-hero__progressNum {

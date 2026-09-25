@@ -15,7 +15,7 @@ const CREW: CrewMember[] = [
     name: 'Saurabh Chaubey',
     role: 'Producer & Director',
     experience: '8+ Years Industry Directing',
-    portrait: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&auto=format&fit=crop&q=80',
+    portrait: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=75',
     bio: 'Directing cinematic visual narratives with deep emotional pacing. Renowned for high-speed macro food and spice cinematography, commercial TVCs, and large-scale celebrity ad films.',
     brands: [
       'Zoff Spices',
@@ -32,7 +32,7 @@ const CREW: CrewMember[] = [
     name: 'Suraj Adawade',
     role: 'Executive Producer',
     experience: '7+ Years Studio Production',
-    portrait: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&auto=format&fit=crop&q=80',
+    portrait: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=75',
     bio: 'Commanding high-tempo physical production, complex multi-location commercial logistics, and rapid post-production pipeline execution across Mumbai, Goa, and pan-India shoots.',
     brands: [
       'Blue Tyga (Milind Soman)',

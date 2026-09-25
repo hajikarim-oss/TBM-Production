@@ -682,6 +682,7 @@ function SplashCursor({
     let animId = null;
     let isDestroyed = false;
     let isRunning = false;
+    let needsResize = true;
 
     function wakeUp() {
       lastInteractionTime = performance.now();
@@ -706,7 +707,10 @@ function SplashCursor({
       }
 
       const dt = calcDeltaTime();
-      if (resizeCanvas()) initFramebuffers();
+      if (needsResize) {
+        needsResize = false;
+        if (resizeCanvas()) initFramebuffers();
+      }
       updateColors(dt);
       applyInputs();
       step(dt);
@@ -723,8 +727,8 @@ function SplashCursor({
     }
 
     function resizeCanvas() {
-      let width = scaleByPixelRatio(canvas.clientWidth);
-      let height = scaleByPixelRatio(canvas.clientHeight);
+      let width = scaleByPixelRatio(canvas.clientWidth || window.innerWidth);
+      let height = scaleByPixelRatio(canvas.clientHeight || window.innerHeight);
       if (canvas.width !== width || canvas.height !== height) {
         canvas.width = width;
         canvas.height = height;
@@ -1060,6 +1064,12 @@ function SplashCursor({
       }
     };
 
+    const onResize = () => {
+      needsResize = true;
+      wakeUp();
+    };
+
+    window.addEventListener('resize', onResize);
     window.addEventListener('mousedown', onMouseDown);
     window.addEventListener('mousemove', onMouseMove);
     window.addEventListener('touchstart', onTouchStart, { passive: true });
@@ -1071,6 +1081,7 @@ function SplashCursor({
     return () => {
       isDestroyed = true;
       if (animId) cancelAnimationFrame(animId);
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('mousedown', onMouseDown);
       window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('touchstart', onTouchStart);

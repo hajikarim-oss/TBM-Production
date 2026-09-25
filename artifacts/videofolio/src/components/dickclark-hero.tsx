@@ -100,31 +100,10 @@ export function DickClarkHero() {
 
   const [isMuted] = useState(true);
 
-  // Carousel progress timer & autoplay
-  const [progress, setProgress] = useState(0);
-  const progressRAF = useRef<number>(0);
-  const progressStart = useRef<number>(0);
-
   const video1Ref = useRef<HTMLVideoElement>(null);
   const video2Ref = useRef<HTMLVideoElement>(null);
   const busy = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const startProgressTimer = useCallback(() => {
-    setProgress(0);
-    progressStart.current = performance.now();
-
-    const animate = (now: number) => {
-      const elapsed = now - progressStart.current;
-      const pct = Math.min(elapsed / AUTOPLAY_DURATION, 1);
-      setProgress(pct);
-      if (pct < 1) {
-        progressRAF.current = requestAnimationFrame(animate);
-      }
-    };
-    cancelAnimationFrame(progressRAF.current);
-    progressRAF.current = requestAnimationFrame(animate);
-  }, []);
 
   const transitionTo = useCallback(
     (toIndex: number) => {
@@ -150,7 +129,6 @@ export function DickClarkHero() {
                   setCurrentIdx(toIndex);
                   setIsTransitioning(false);
                   busy.current = false;
-                  startProgressTimer();
                   if (video1Ref.current) video1Ref.current.pause();
                 }, crossfadeDuration);
               });
@@ -172,7 +150,6 @@ export function DickClarkHero() {
                   setCurrentIdx(toIndex);
                   setIsTransitioning(false);
                   busy.current = false;
-                  startProgressTimer();
                   if (video2Ref.current) video2Ref.current.pause();
                 }, crossfadeDuration);
               });
@@ -180,7 +157,7 @@ export function DickClarkHero() {
         }, 30);
       }
     },
-    [activeBuffer, currentIdx, slides, reduceMotion, isMuted, startProgressTimer]
+    [activeBuffer, currentIdx, slides, reduceMotion, isMuted]
   );
 
   const goNext = useCallback(() => {
@@ -194,23 +171,18 @@ export function DickClarkHero() {
   }, [currentIdx, slides.length, transitionTo]);
 
   useEffect(() => {
-    startProgressTimer();
-    return () => cancelAnimationFrame(progressRAF.current);
-  }, [startProgressTimer]);
-
-  useEffect(() => {
+    if (autoplayRef.current) clearTimeout(autoplayRef.current);
     autoplayRef.current = setTimeout(() => {
       goNext();
     }, AUTOPLAY_DURATION);
     return () => {
       if (autoplayRef.current) clearTimeout(autoplayRef.current);
     };
-  }, [goNext]);
+  }, [currentIdx, goNext]);
 
   const handleManualNav = useCallback(
     (direction: 'next' | 'prev' | number) => {
       if (autoplayRef.current) clearTimeout(autoplayRef.current);
-      cancelAnimationFrame(progressRAF.current);
 
       if (typeof direction === 'number') {
         transitionTo(direction);
@@ -370,10 +342,8 @@ export function DickClarkHero() {
               >
                 {i === currentIdx && (
                   <span
+                    key={`progress-fill-${currentIdx}`}
                     className="dcp-hero__progressFill"
-                    style={{
-                      width: `${progress * 100}%`,
-                    }}
                   />
                 )}
               </button>
