@@ -98,45 +98,7 @@ export function DickClarkHero() {
   const [activeBuffer, setActiveBuffer] = useState<1 | 2>(1);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  // Director's Monitor Interactive State
-  const [aspectRatio, setAspectRatio] = useState<'2.39' | '16:9' | '9:16'>('16:9');
-  const [lutFilter, setLutFilter] = useState<'film' | 'raw' | 'rec709'>('film');
-  const [isMuted, setIsMuted] = useState(true);
-  const [hudVisible, setHudVisible] = useState(true);
-
-  // Timecode generator
-  const [timecode, setTimecode] = useState('01:24:18:04');
-
-  // Progress timer
-  const [progress, setProgress] = useState(0);
-  const progressRAF = useRef<number>(0);
-  const progressStart = useRef<number>(0);
-
-  const video1Ref = useRef<HTMLVideoElement>(null);
-  const video2Ref = useRef<HTMLVideoElement>(null);
-  const busy = useRef(false);
-  const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Real 24fps SMPTE Timecode Ticker
-  useEffect(() => {
-    let frame = 14;
-    let sec = 28;
-    let min = 15;
-    const hour = 1;
-    const timer = setInterval(() => {
-      frame = (frame + 1) % 24;
-      if (frame === 0) {
-        sec = (sec + 1) % 60;
-        if (sec === 0) {
-          min = (min + 1) % 60;
-        }
-      }
-      setTimecode(
-        `${String(hour).padStart(2, '0')}:${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}:${String(frame).padStart(2, '0')}`
-      );
-    }, 1000 / 24);
-    return () => clearInterval(timer);
-  }, []);
+  const [isMuted] = useState(true);
 
   const startProgressTimer = useCallback(() => {
     setProgress(0);
@@ -249,30 +211,12 @@ export function DickClarkHero() {
     [goNext, goPrev, transitionTo]
   );
 
-  const toggleSound = () => {
-    const nextMuted = !isMuted;
-    setIsMuted(nextMuted);
-    if (video1Ref.current) video1Ref.current.muted = nextMuted;
-    if (video2Ref.current) video2Ref.current.muted = nextMuted;
-  };
-
   const currentSlide = slides[currentIdx] || slides[0];
 
-  // LUT Filter CSS mapping
-  const lutFilterStyle = {
-    film: 'contrast(1.08) saturate(1.12) brightness(0.96)',
-    raw: 'contrast(0.82) saturate(0.65) brightness(1.12)',
-    rec709: 'contrast(1.0) saturate(1.0) brightness(1.0)',
-  }[lutFilter];
-
   return (
-    <section className={`dcp-hero dcp-hero--aspect-${aspectRatio.replace(':', '-')}`} id="home">
-      {/* ─── Anamorphic Cinema Matte Bars (Smooth Crop Switcher) ─── */}
-      <div className="dcp-hero__matteBar dcp-hero__matteBar--top" aria-hidden="true" />
-      <div className="dcp-hero__matteBar dcp-hero__matteBar--bottom" aria-hidden="true" />
-
+    <section className="dcp-hero" id="home">
       {/* ─── Background Video Canvas with Dual Buffers ─── */}
-      <div className="dcp-hero__videoCanvas" style={{ filter: lutFilterStyle }}>
+      <div className="dcp-hero__videoCanvas">
         <video
           ref={video1Ref}
           src={video1Src}
@@ -302,116 +246,6 @@ export function DickClarkHero() {
           }}
         />
         <div className="dcp-hero__videoOverlay" />
-      </div>
-
-      {/* ─── Tactile Production Director's Monitor HUD ─── */}
-      {hudVisible && (
-        <div className="dcp-monitorHud" aria-hidden="true">
-          {/* Top Edge: REC + Timecode + Live Lens Spec */}
-          <div className="dcp-monitorHud__top">
-            <div className="dcp-monitorHud__rec">
-              <span className="dcp-monitorHud__recDot" />
-              <span className="dcp-monitorHud__recText">REC</span>
-              <span className="dcp-monitorHud__timecode">{timecode}</span>
-            </div>
-
-            <div className="dcp-monitorHud__lensSpec">
-              <span>{currentSlide.lens}</span>
-              <span className="dcp-specDiv">/</span>
-              <span>{currentSlide.format}</span>
-              <span className="dcp-specDiv">/</span>
-              <span>{currentSlide.fps}</span>
-            </div>
-
-            <div className="dcp-monitorHud__battery">
-              <span>BAT 94%</span>
-              <div className="dcp-batIcon"><span style={{ width: '94%' }} /></div>
-            </div>
-          </div>
-
-          {/* Framing Corner Markers */}
-          <div className="dcp-monitorHud__corner dcp-corner--tl" />
-          <div className="dcp-monitorHud__corner dcp-corner--tr" />
-          <div className="dcp-monitorHud__corner dcp-corner--bl" />
-          <div className="dcp-monitorHud__corner dcp-corner--br" />
-
-          {/* Center 2.39 Crosshairs */}
-          <div className="dcp-monitorHud__reticle">
-            <div className="dcp-reticle__lineX" />
-            <div className="dcp-reticle__lineY" />
-            <span className="dcp-reticle__plus">+</span>
-          </div>
-
-          {/* Bottom Left: Audio VU Decibels */}
-          <div className="dcp-monitorHud__audio">
-            <div className="dcp-vuTrack">
-              <span className="dcp-vuLabel">L</span>
-              <div className="dcp-vuMeter"><span className="dcp-vuLevel dcp-vuLevel--1" /></div>
-            </div>
-            <div className="dcp-vuTrack">
-              <span className="dcp-vuLabel">R</span>
-              <div className="dcp-vuMeter"><span className="dcp-vuLevel dcp-vuLevel--2" /></div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Interactive Camera Utility Bar (Aspect / LUT / Sound / HUD) ─── */}
-      <div className="dcp-directorBar">
-        {/* Aspect Ratio Switcher */}
-        <div className="dcp-directorTool">
-          <span className="dcp-directorToolLabel">FRAME</span>
-          <div className="dcp-toolPillGroup">
-            {(['2.39', '16:9', '9:16'] as const).map((ratio) => (
-              <button
-                key={ratio}
-                type="button"
-                className={`dcp-toolPill ${aspectRatio === ratio ? 'is-active' : ''}`}
-                onClick={() => setAspectRatio(ratio)}
-              >
-                {ratio === '2.39' ? 'SCOPE 2.39:1' : ratio === '16:9' ? '16:9 DVC' : '9:16 REEL'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Color LUT Switcher */}
-        <div className="dcp-directorTool">
-          <span className="dcp-directorToolLabel">LUT</span>
-          <div className="dcp-toolPillGroup">
-            {(['film', 'rec709', 'raw'] as const).map((lut) => (
-              <button
-                key={lut}
-                type="button"
-                className={`dcp-toolPill ${lutFilter === lut ? 'is-active' : ''}`}
-                onClick={() => setLutFilter(lut)}
-              >
-                {lut === 'film' ? 'TBM FILM' : lut === 'rec709' ? 'REC.709' : 'RAW LOG'}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Audio Mute / Unmute */}
-        <button
-          type="button"
-          className={`dcp-audioBtn ${!isMuted ? 'is-live' : ''}`}
-          onClick={toggleSound}
-          title={isMuted ? 'Unmute Sound' : 'Mute Sound'}
-        >
-          <span className="dcp-audioIcon">{isMuted ? '🔇' : '🔊'}</span>
-          <span>{isMuted ? 'AUDIO OFF' : 'AUDIO LIVE'}</span>
-        </button>
-
-        {/* HUD Toggle */}
-        <button
-          type="button"
-          className={`dcp-hudToggleBtn ${hudVisible ? 'is-active' : ''}`}
-          onClick={() => setHudVisible((v) => !v)}
-          title="Toggle Camera Monitor HUD"
-        >
-          HUD {hudVisible ? 'ON' : 'OFF'}
-        </button>
       </div>
 
       {/* ─── Hero Content Grid (Dick Clark Layout: Left Title + Right Description) ─── */}
