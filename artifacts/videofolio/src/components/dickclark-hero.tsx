@@ -100,6 +100,16 @@ export function DickClarkHero() {
 
   const [isMuted] = useState(true);
 
+  // Carousel progress timer & autoplay
+  const [progress, setProgress] = useState(0);
+  const progressRAF = useRef<number>(0);
+  const progressStart = useRef<number>(0);
+
+  const video1Ref = useRef<HTMLVideoElement>(null);
+  const video2Ref = useRef<HTMLVideoElement>(null);
+  const busy = useRef(false);
+  const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   const startProgressTimer = useCallback(() => {
     setProgress(0);
     progressStart.current = performance.now();
