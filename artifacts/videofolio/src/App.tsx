@@ -6,6 +6,7 @@ import { BestWorkGrid } from './components/best-work-grid';
 import { ProducersCrew } from './components/producers-crew';
 import { BehindTheScenes } from './components/behind-the-scenes';
 import { ContactSection } from './components/contact-section';
+import SplashCursor from './components/lumina-cursor';
 
 import './dcp-first-section.css';
 import './tbm-sections.css';
@@ -14,6 +15,9 @@ import './index.css';
 function App() {
   return (
     <main className="vf-app dcp-root">
+      {/* ─── Lumina WebGL Fluid Splash Cursor Effect ─── */}
+      <SplashCursor />
+
       {/* ─── SECTION 1: Dick Clark Productions Hero (6 Brands + Viewfinder HUD) ─── */}
       <DickClarkHeader />
       <DickClarkHero />

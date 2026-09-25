@@ -851,7 +851,7 @@
   letter-spacing: -0.02em;
 }
 
-/* Horizontal Splide Track */
+/* Horizontal Splide Track - Continuous Marquee with Hover Pause */
 .splide {
   width: 100%;
   overflow: hidden;
@@ -860,20 +860,39 @@
 
 .splide__track {
   width: 100%;
-  cursor: grab;
   overflow: hidden;
   user-select: none;
 }
 
-.splide__track:active {
-  cursor: grabbing;
+.splide__marquee {
+  display: flex;
+  width: max-content;
 }
 
-.splide__list.is-project {
+.splide__group {
   display: flex;
-  gap: clamp(16px, 2vw, 28px);
-  padding: 0 clamp(24px, 5vw, 80px);
-  width: max-content;
+  flex-shrink: 0;
+  gap: clamp(18px, 2.2vw, 32px);
+  padding-right: clamp(18px, 2.2vw, 32px);
+  animation: btsContinuousScroll 42s linear infinite;
+  will-change: transform;
+}
+
+/* Pause scrolling on cursor hover */
+.behind-the-scene-wrap:hover .splide__group,
+.splide:hover .splide__group,
+.splide__track:hover .splide__group,
+.splide__slide:hover .splide__group {
+  animation-play-state: paused;
+}
+
+@keyframes btsContinuousScroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
 }
 
 .splide__slide {
@@ -887,18 +906,19 @@
   position: relative;
   background-color: #121216;
   border-radius: 2px;
+  cursor: pointer;
 }
 
 .project-image-splide {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
-  filter: grayscale(20%) contrast(1.05);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  filter: grayscale(18%) contrast(1.04);
 }
 
 .project-image-splide-wrap:hover .project-image-splide {
-  transform: scale(1.04);
+  transform: scale(1.05);
   filter: grayscale(0%) contrast(1.08);
 }
 

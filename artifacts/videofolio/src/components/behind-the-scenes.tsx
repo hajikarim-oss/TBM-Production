@@ -1,6 +1,3 @@
-import { useRef } from 'react';
-import { motion } from 'framer-motion';
-
 export interface BtsSlide {
   id: string;
   image: string;
@@ -20,13 +17,13 @@ const BTS_SLIDES: BtsSlide[] = [
   },
   {
     id: 'bts-3',
-    image: 'https://images.unsplash.com/photo-1518173946687-a4c8a383392e?w=1400&auto=format&fit=crop&q=85',
-    alt: '1000FPS high-speed macro food capture',
+    image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=1400&auto=format&fit=crop&q=85',
+    alt: 'High-speed studio camera and cinema lighting',
   },
   {
     id: 'bts-4',
     image: 'https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1400&auto=format&fit=crop&q=85',
-    alt: 'Multi-track production audio recording',
+    alt: 'Multi-track production audio recording desk',
   },
   {
     id: 'bts-5',
@@ -35,19 +32,22 @@ const BTS_SLIDES: BtsSlide[] = [
   },
   {
     id: 'bts-6',
-    image: 'https://images.unsplash.com/photo-1536240478700-b869070f9279?w=1400&auto=format&fit=crop&q=85',
-    alt: 'Commercial lighting setup on location',
+    image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1400&auto=format&fit=crop&q=85',
+    alt: 'Director on location with prime cinema camera',
   },
   {
     id: 'bts-7',
     image: 'https://images.unsplash.com/photo-1512790182412-b19e6d62bc39?w=1400&auto=format&fit=crop&q=85',
     alt: 'Cinema prime lenses and focus pull calibration',
   },
+  {
+    id: 'bts-8',
+    image: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1400&auto=format&fit=crop&q=85',
+    alt: 'Studio screening and master playback theatre',
+  },
 ];
 
 export function BehindTheScenes() {
-  const trackRef = useRef<HTMLDivElement>(null);
-
   return (
     <section className="behind-the-scene-wrap" id="bts">
       {/* Exact Kookie Kollective Zara Action Header */}
@@ -57,31 +57,44 @@ export function BehindTheScenes() {
         </div>
       </div>
 
-      {/* Splide / Horizontal Slider Container */}
-      <div className="splide">
-        <div className="splide__track" ref={trackRef}>
-          <motion.div
-            role="list"
-            className="splide__list is-project"
-            drag="x"
-            dragConstraints={trackRef}
-            dragElastic={0.15}
-            whileTap={{ cursor: 'grabbing' }}
-          >
-            {BTS_SLIDES.map((slide) => (
-              <div role="listitem" key={slide.id} className="splide__slide">
-                <div className="project-image-splide-wrap">
-                  <img
-                    src={slide.image}
-                    alt={slide.alt}
-                    className="project-image-splide"
-                    loading="lazy"
-                    draggable={false}
-                  />
+      {/* Continuously Horizontally Scrolling Splide Container (Pauses on Cursor Hover) */}
+      <div className="splide" aria-label="Behind the scenes continuous gallery">
+        <div className="splide__track">
+          <div className="splide__marquee">
+            {/* Primary Track */}
+            <div className="splide__group">
+              {BTS_SLIDES.map((slide) => (
+                <div key={`primary-${slide.id}`} className="splide__slide">
+                  <div className="project-image-splide-wrap">
+                    <img
+                      src={slide.image}
+                      alt={slide.alt}
+                      className="project-image-splide"
+                      loading="lazy"
+                      draggable={false}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </motion.div>
+              ))}
+            </div>
+
+            {/* Seamless Infinite Looping Track */}
+            <div className="splide__group" aria-hidden="true">
+              {BTS_SLIDES.map((slide) => (
+                <div key={`duplicate-${slide.id}`} className="splide__slide">
+                  <div className="project-image-splide-wrap">
+                    <img
+                      src={slide.image}
+                      alt={slide.alt}
+                      className="project-image-splide"
+                      loading="lazy"
+                      draggable={false}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
