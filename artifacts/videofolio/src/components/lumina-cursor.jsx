@@ -38,7 +38,7 @@ function SplashCursor({
       this.deltaY = 0;
       this.down = false;
       this.moved = false;
-      this.color = [0, 0, 0];
+      this.color = { r: 0.9, g: 0.7, b: 0.4 };
     }
 
     let config = {
@@ -190,6 +190,7 @@ function SplashCursor({
       let program = gl.createProgram();
       gl.attachShader(program, vertexShader);
       gl.attachShader(program, fragmentShader);
+      gl.bindAttribLocation(program, 0, 'aPosition');
       gl.linkProgram(program);
       if (!gl.getProgramParameter(program, gl.LINK_STATUS)) console.trace(gl.getProgramInfoLog(program));
       return program;
@@ -672,6 +673,7 @@ function SplashCursor({
       displayMaterial.setKeywords(displayKeywords);
     }
 
+    resizeCanvas();
     updateKeywords();
     initFramebuffers();
     let lastUpdateTime = performance.now();
@@ -810,15 +812,19 @@ function SplashCursor({
     function splatPointer(pointer) {
       let dx = pointer.deltaX * config.SPLAT_FORCE;
       let dy = pointer.deltaY * config.SPLAT_FORCE;
-      splat(pointer.texcoordX, pointer.texcoordY, dx, dy, pointer.color);
+      let color = pointer.color;
+      if (!color || typeof color.r !== 'number') {
+        color = generateColor();
+      }
+      splat(pointer.texcoordX, pointer.texcoordY, dx, dy, color);
     }
 
     function clickSplat(pointer) {
       for (let i = 0; i < 10; i++) {
         const color = generateColor();
-        color.r *= 15.0;
-        color.g *= 15.0;
-        color.b *= 15.0;
+        color.r *= 2.5;
+        color.g *= 2.5;
+        color.b *= 2.5;
         let angle = (i / 10) * Math.PI * 2;
         let dx = Math.cos(angle) * 150;
         let dy = Math.sin(angle) * 150;
@@ -894,7 +900,7 @@ function SplashCursor({
       const r = parseInt(val.slice(0, 2), 16) / 255;
       const g = parseInt(val.slice(2, 4), 16) / 255;
       const b = parseInt(val.slice(4, 6), 16) / 255;
-      return { r: r * 0.15, g: g * 0.15, b: b * 0.15 };
+      return { r: r * 0.8, g: g * 0.8, b: b * 0.8 };
     }
 
     function generateColor() {
@@ -902,9 +908,9 @@ function SplashCursor({
         return hexToRGB(config.COLOR);
       }
       let c = HSVtoRGB(Math.random(), 1.0, 1.0);
-      c.r *= 0.15;
-      c.g *= 0.15;
-      c.b *= 0.15;
+      c.r *= 0.85;
+      c.g *= 0.85;
+      c.b *= 0.85;
       return c;
     }
 
@@ -994,8 +1000,10 @@ function SplashCursor({
       let pointer = pointers[0];
       let posX = scaleByPixelRatio(e.clientX);
       let posY = scaleByPixelRatio(e.clientY);
-      let color = pointer.color;
-      updatePointerMoveData(pointer, posX, posY, color);
+      if (!pointer.color || typeof pointer.color.r !== 'number') {
+        pointer.color = generateColor();
+      }
+      updatePointerMoveData(pointer, posX, posY, pointer.color);
     };
 
     const onTouchStart = e => {

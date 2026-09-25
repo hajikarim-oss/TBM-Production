@@ -16,7 +16,20 @@ function App() {
   return (
     <main className="vf-app dcp-root">
       {/* ─── Lumina WebGL Fluid Splash Cursor Effect ─── */}
-      <SplashCursor />
+      <SplashCursor
+        SIM_RESOLUTION={128}
+        DYE_RESOLUTION={512}
+        PRESSURE_ITERATIONS={24}
+        DENSITY_DISSIPATION={2.2}
+        VELOCITY_DISSIPATION={1.8}
+        PRESSURE={0.8}
+        CURL={30}
+        SPLAT_RADIUS={0.28}
+        SPLAT_FORCE={6000}
+        COLOR_UPDATE_SPEED={15}
+        SHADING={true}
+        RAINBOW_MODE={true}
+      />
 
       {/* ─── SECTION 1: Dick Clark Productions Hero (6 Brands + Viewfinder HUD) ─── */}
       <DickClarkHeader />
