@@ -17,15 +17,15 @@ function App() {
     <main className="vf-app dcp-root">
       {/* ─── Lumina WebGL Fluid Splash Cursor Effect ─── */}
       <SplashCursor
-        SIM_RESOLUTION={128}
-        DYE_RESOLUTION={512}
-        PRESSURE_ITERATIONS={24}
+        SIM_RESOLUTION={96}
+        DYE_RESOLUTION={384}
+        PRESSURE_ITERATIONS={12}
         DENSITY_DISSIPATION={2.2}
         VELOCITY_DISSIPATION={1.8}
         PRESSURE={0.8}
-        CURL={30}
+        CURL={25}
         SPLAT_RADIUS={0.28}
-        SPLAT_FORCE={6000}
+        SPLAT_FORCE={5500}
         COLOR_UPDATE_SPEED={15}
         SHADING={true}
         RAINBOW_MODE={true}

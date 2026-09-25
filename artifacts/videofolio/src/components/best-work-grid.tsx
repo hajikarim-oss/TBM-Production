@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
@@ -93,21 +93,74 @@ const COL_2 = [WORK_ITEMS[1], WORK_ITEMS[4], WORK_ITEMS[7]];
 const COL_3 = [WORK_ITEMS[2], WORK_ITEMS[5], WORK_ITEMS[8]];
 
 function WorkCard({ item }: { item: WorkItem }) {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
+  useEffect(() => {
+    const el = cardRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+        if (videoRef.current) {
+          if (entry.isIntersecting) {
+            videoRef.current.play().catch(() => {});
+          } else {
+            videoRef.current.pause();
+          }
+        }
+      },
+      { rootMargin: '120px 0px', threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="work-content-item">
+    <div className="work-content-item" ref={cardRef}>
       <div className="work-content-item-card-wrap">
         <div className="work-content-content">
           <div className="work-content-image">
-            {/* Background looping video */}
+            {/* Viewport-optimized video stream: plays only when in or near viewport */}
             <div className="bg-video">
-              <video
-                playsInline
-                loop
-                muted
-                autoPlay
-                preload="metadata"
-                src={item.video}
-              />
+              {isInView ? (
+                <video
+                  ref={videoRef}
+                  playsInline
+                  loop
+                  muted
+                  autoPlay
+                  preload="metadata"
+                  src={item.video}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    backgroundColor: '#121216',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    style={{
+                      maxWidth: '55%',
+                      maxHeight: '55%',
+                      objectFit: 'contain',
+                      opacity: 0.65,
+                      filter: 'brightness(0) invert(1)',
+                    }}
+                    loading="lazy"
+                  />
+                </div>
+              )}
             </div>
           </div>
           <div className="work-content-title">

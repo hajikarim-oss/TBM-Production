@@ -151,6 +151,7 @@ export function DickClarkHero() {
                   setIsTransitioning(false);
                   busy.current = false;
                   startProgressTimer();
+                  if (video1Ref.current) video1Ref.current.pause();
                 }, crossfadeDuration);
               });
           }
@@ -172,6 +173,7 @@ export function DickClarkHero() {
                   setIsTransitioning(false);
                   busy.current = false;
                   startProgressTimer();
+                  if (video2Ref.current) video2Ref.current.pause();
                 }, crossfadeDuration);
               });
           }
@@ -248,7 +250,6 @@ export function DickClarkHero() {
           muted={isMuted}
           loop
           playsInline
-          autoPlay
           style={{
             opacity: activeBuffer === 2 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
             zIndex: activeBuffer === 2 ? 2 : 1,

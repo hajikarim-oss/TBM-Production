@@ -5,13 +5,13 @@ import React, { useEffect, useRef } from 'react';
  * A high-performance fluid simulation cursor effect using WebGL.
  */
 function SplashCursor({
-  SIM_RESOLUTION = 128,
-  DYE_RESOLUTION = 1440,
-  CAPTURE_RESOLUTION = 512,
-  DENSITY_DISSIPATION = 3.5,
-  VELOCITY_DISSIPATION = 2,
-  PRESSURE = 0.1,
-  PRESSURE_ITERATIONS = 20,
+  SIM_RESOLUTION = 96,
+  DYE_RESOLUTION = 384,
+  CAPTURE_RESOLUTION = 256,
+  DENSITY_DISSIPATION = 2.2,
+  VELOCITY_DISSIPATION = 1.8,
+  PRESSURE = 0.8,
+  PRESSURE_ITERATIONS = 12,
   CURL = 3,
   SPLAT_RADIUS = 0.2,
   SPLAT_FORCE = 6000,
@@ -677,12 +677,34 @@ function SplashCursor({
     updateKeywords();
     initFramebuffers();
     let lastUpdateTime = performance.now();
+    let lastInteractionTime = performance.now();
     let colorUpdateTimer = 0.0;
     let animId = null;
     let isDestroyed = false;
+    let isRunning = false;
+
+    function wakeUp() {
+      lastInteractionTime = performance.now();
+      if (!isRunning && !isDestroyed) {
+        isRunning = true;
+        lastUpdateTime = performance.now();
+        animId = requestAnimationFrame(updateFrame);
+      }
+    }
 
     function updateFrame() {
-      if (isDestroyed) return;
+      if (isDestroyed) {
+        isRunning = false;
+        return;
+      }
+
+      // If no pointer interaction for 1.5 seconds, fluid has dissipated -> sleep to save 100% GPU
+      if (performance.now() - lastInteractionTime > 1500) {
+        isRunning = false;
+        animId = null;
+        return;
+      }
+
       const dt = calcDeltaTime();
       if (resizeCanvas()) initFramebuffers();
       updateColors(dt);
@@ -974,7 +996,7 @@ function SplashCursor({
     }
 
     function scaleByPixelRatio(input) {
-      const pixelRatio = window.devicePixelRatio || 1;
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 1.25);
       return Math.floor(input * pixelRatio);
     }
 
@@ -989,6 +1011,7 @@ function SplashCursor({
     }
 
     const onMouseDown = e => {
+      wakeUp();
       let pointer = pointers[0];
       let posX = scaleByPixelRatio(e.clientX);
       let posY = scaleByPixelRatio(e.clientY);
@@ -997,6 +1020,7 @@ function SplashCursor({
     };
 
     const onMouseMove = e => {
+      wakeUp();
       let pointer = pointers[0];
       let posX = scaleByPixelRatio(e.clientX);
       let posY = scaleByPixelRatio(e.clientY);
@@ -1007,6 +1031,7 @@ function SplashCursor({
     };
 
     const onTouchStart = e => {
+      wakeUp();
       const touches = e.targetTouches;
       let pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
@@ -1017,6 +1042,7 @@ function SplashCursor({
     };
 
     const onTouchMove = e => {
+      wakeUp();
       const touches = e.targetTouches;
       let pointer = pointers[0];
       for (let i = 0; i < touches.length; i++) {
@@ -1040,7 +1066,7 @@ function SplashCursor({
     window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('touchend', onTouchEnd);
 
-    updateFrame();
+    wakeUp();
 
     return () => {
       isDestroyed = true;
