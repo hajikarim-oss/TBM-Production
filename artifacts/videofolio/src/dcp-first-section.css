@@ -1,0 +1,1079 @@
+/* ==========================================================================
+   THEBOREDMONKEY STUDIO — MASTER DESIGN SYSTEM
+   
+   Design Principles Applied:
+   ├── Jakub Krehel   → Subtle production polish, blur+opacity+translateY
+   ├── Emil Kowalski   → Restraint, speed, purposeful motion (<300ms UI)
+   ├── taste-skill v2  → Anti-slop, anti-center bias, premium consumer palette
+   └── Accessibility   → prefers-reduced-motion everywhere
+   ========================================================================== */
+
+/* ─── FONTS ─── */
+@font-face {
+  font-family: 'PP Neue Montreal';
+  font-style: normal;
+  font-weight: 400;
+  src: url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/medium/PPNeueMontreal-Medium.woff2') format('woff2'),
+       url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/medium/PPNeueMontreal-Medium.woff') format('woff');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/semi-bold/PPNeueMontreal-SemiBold.woff2') format('woff2'),
+       url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/semi-bold/PPNeueMontreal-SemiBold.woff') format('woff');
+  font-display: swap;
+}
+
+/* ─── DESIGN TOKENS ─── */
+:root {
+  --dcp-font: 'PP Neue Montreal', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --dcp-canvas: #0a0a0a;
+  --dcp-white: #ffffff;
+  --dcp-white-muted: rgba(255, 255, 255, 0.82);
+  --dcp-white-subtle: rgba(255, 255, 255, 0.55);
+  --dcp-red: #d63032;
+  --dcp-red-glow: rgba(214, 48, 50, 0.35);
+  --dcp-hairline: rgba(255, 255, 255, 0.12);
+  
+  /* Motion tokens (Emil: custom cubics, never bare 'ease') */
+  --dcp-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dcp-ease-broadcast: cubic-bezier(0.23, 1, 0.32, 1);
+  --dcp-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
+  --dcp-duration-fast: 180ms;
+  --dcp-duration-ui: 280ms;
+  --dcp-duration-crossfade: 600ms;
+}
+
+/* ─── ROOT ─── */
+.dcp-root {
+  font-family: var(--dcp-font);
+  background-color: var(--dcp-canvas);
+  color: var(--dcp-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dcp-container {
+  width: 100%;
+  margin: 0 auto;
+  padding-left: clamp(2.4rem, 4.5vw, 5.6rem);
+  padding-right: clamp(2.4rem, 4.5vw, 5.6rem);
+}
+
+/* ==========================================================================
+   1. HEADER NAVIGATION
+   ========================================================================== */
+.dcp-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 100;
+  padding-top: clamp(2rem, 3.5vh, 3.4rem);
+  padding-bottom: clamp(1.2rem, 2vh, 1.8rem);
+  display: flex;
+  align-items: center;
+  transition: 
+    transform 0.5s var(--dcp-ease),
+    background-color 0.35s var(--dcp-ease),
+    backdrop-filter 0.35s var(--dcp-ease),
+    border-color 0.35s;
+  border-bottom: 1px solid transparent;
+}
+
+.dcp-header.is-hidden {
+  transform: translateY(-115%);
+}
+
+.dcp-header.is-scrolled {
+  background-color: rgba(10, 10, 10, 0.78);
+  backdrop-filter: blur(24px) saturate(1.2);
+  -webkit-backdrop-filter: blur(24px) saturate(1.2);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+}
+
+/* Gradient scrim behind header for readable nav over video */
+.dcp-header__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 280%;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.7) 0%,
+    rgba(0, 0, 0, 0.35) 50%,
+    transparent 100%
+  );
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 0.35s var(--dcp-ease);
+}
+
+.dcp-header.is-scrolled .dcp-header__background {
+  opacity: 0;
+}
+
+.dcp-header__items {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Studio Logo (Top Left) ── */
+.dcp-header__logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: 
+    transform var(--dcp-duration-fast) var(--dcp-ease),
+    opacity var(--dcp-duration-fast);
+}
+
+.dcp-header__logo:hover {
+  opacity: 0.88;
+  transform: scale(0.98);
+}
+
+.dcp-header__logo-img {
+  height: clamp(30px, 3.6rem, 38px);
+  width: auto;
+  max-width: 220px;
+  object-fit: contain;
+  display: block;
+}
+
+/* ── Desktop Center Navigation ── */
+.dcp-header__navItems {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  pointer-events: auto;
+}
+
+@media (max-width: 920px) {
+  .dcp-header__navItems {
+    display: none;
+  }
+}
+
+.dcp-header__navList {
+  display: flex;
+  align-items: center;
+  gap: clamp(2.4rem, 3.6vw, 4.8rem);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dcp-header__navListItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+}
+
+.dcp-header__navLink {
+  color: var(--dcp-white);
+  font-family: var(--dcp-font);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  padding: 6px 0;
+}
+
+/* Rolling text mask hover (Dick Clark / Linear physical-roll effect) */
+.dcp-link__mask {
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  vertical-align: top;
+}
+
+.dcp-link__mask .dcp-buttonText {
+  display: block;
+  transition: transform 0.35s var(--dcp-ease);
+}
+
+.dcp-link__mask .dcp-buttonText:last-child {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  transform: translateY(110%);
+}
+
+.dcp-header__navLink:hover .dcp-buttonText:first-child {
+  transform: translateY(-100%);
+}
+
+.dcp-header__navLink:hover .dcp-buttonText:last-child {
+  transform: translateY(0);
+}
+
+/* ── Contact Pill Button (Top Right) ── */
+.dcp-header__right {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.dcp-header__contactBtn {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--dcp-white);
+  color: #111111;
+  border: 1px solid var(--dcp-white);
+  border-radius: 9999px;
+  height: 40px;
+  padding: 0 20px 0 16px;
+  font-family: var(--dcp-font);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--dcp-duration-ui) var(--dcp-ease),
+    background-color var(--dcp-duration-fast),
+    box-shadow 0.35s;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.15),
+    0 4px 20px rgba(0, 0, 0, 0.12);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Emil: scale(0.97) on :active for tactile feedback, not on hover */
+.dcp-header__contactBtn:hover {
+  transform: scale(1.03);
+  background-color: #f5f5f5;
+  box-shadow:
+    0 6px 24px rgba(255, 255, 255, 0.12),
+    0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.dcp-header__contactBtn:active {
+  transform: scale(0.97);
+}
+
+/* Recording Tally Pulse Dot */
+.dcp-header__contactDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--dcp-red);
+  margin-right: 9px;
+  display: inline-block;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.dcp-header__contactDot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background-color: var(--dcp-red);
+  opacity: 0.5;
+  animation: tallyPulse 2.8s var(--dcp-ease-broadcast) infinite;
+}
+
+@keyframes tallyPulse {
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 0; }
+}
+
+/* Mobile Menu Button */
+.dcp-header__mobileMenuBtn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: var(--dcp-white);
+  cursor: pointer;
+  padding: 8px;
+  transition: opacity var(--dcp-duration-fast);
+}
+
+.dcp-header__mobileMenuBtn:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 920px) {
+  .dcp-header__mobileMenuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* ==========================================================================
+   2. HERO SECTION (CINEMATIC SPLIT GRID)
+   ========================================================================== */
+.dcp-hero {
+  position: relative;
+  width: 100%;
+  height: 100svh;
+  min-height: 640px;
+  overflow: hidden;
+  background-color: #080808;
+}
+
+/* ── Video Canvas: Dual-Buffer Crossfade ── */
+.dcp-hero__videoCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.dcp-hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: opacity;
+}
+
+/* Triple atmospheric scrim: cinematic depth + readability */
+.dcp-hero__videoOverlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    /* Top: header readability */
+    linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.12) 28%, transparent 48%),
+    /* Bottom: controls readability */
+    linear-gradient(0deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.2) 30%, transparent 52%),
+    /* Center: cinematic vignette */
+    radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── Anamorphic Matte Bars (Aspect Ratio Letterboxing) ── */
+.dcp-hero__matteBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0;
+  background-color: #000;
+  z-index: 8;
+  pointer-events: none;
+  transition: height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.dcp-hero__matteBar--top { top: 0; }
+.dcp-hero__matteBar--bottom { bottom: 0; }
+
+.dcp-hero--aspect-2-39 .dcp-hero__matteBar {
+  height: clamp(50px, 9.5vh, 90px);
+}
+.dcp-hero--aspect-9-16 .dcp-hero__videoCanvas {
+  max-width: 56.25vh;
+  margin: 0 auto;
+}
+
+/* ── Director's Utility Bar (Top Right Overlay) ── */
+.dcp-directorBar {
+  position: absolute;
+  top: clamp(80px, 12vh, 104px);
+  right: clamp(24px, 4.5vw, 56px);
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dcp-directorTool {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 10, 12, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 6px;
+  border-radius: 9999px;
+}
+
+.dcp-directorToolLabel {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+  padding-left: 8px;
+}
+
+.dcp-toolPillGroup {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dcp-toolPill {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dcp-toolPill.is-active {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-weight: 600;
+}
+
+.dcp-toolPill:hover:not(.is-active) {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.dcp-audioBtn,
+.dcp-hudToggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(10, 10, 12, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dcp-audioBtn.is-live {
+  border-color: rgba(34, 197, 94, 0.4);
+  color: #22c55e;
+}
+
+.dcp-audioBtn:hover,
+.dcp-hudToggleBtn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ── Director's Monitor HUD Overlay ── */
+.dcp-monitorHud {
+  position: absolute;
+  inset: clamp(14px, 3vh, 32px) clamp(20px, 4vw, 52px);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.dcp-monitorHud__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10.5px;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.08em;
+}
+
+.dcp-monitorHud__rec {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dcp-monitorHud__recDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dcp-red);
+}
+
+.dcp-monitorHud__recText {
+  color: var(--dcp-red);
+  font-weight: 700;
+}
+
+.dcp-monitorHud__timecode {
+  color: #fff;
+  padding-left: 8px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dcp-monitorHud__lensSpec {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.dcp-specDiv {
+  color: rgba(255, 255, 255, 0.25);
+}
+
+.dcp-monitorHud__battery {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dcp-batIcon {
+  width: 20px;
+  height: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+  padding: 1px;
+}
+
+.dcp-batIcon span {
+  display: block;
+  height: 100%;
+  background: #22c55e;
+  border-radius: 1px;
+}
+
+/* Reticle & Corners */
+.dcp-monitorHud__corner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(255, 255, 255, 0.25);
+  border-style: solid;
+}
+.dcp-corner--tl { top: 0; left: 0; border-width: 1px 0 0 1px; }
+.dcp-corner--tr { top: 0; right: 0; border-width: 1px 1px 0 0; }
+.dcp-corner--bl { bottom: 0; left: 0; border-width: 0 0 1px 1px; }
+.dcp-corner--br { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+
+.dcp-monitorHud__reticle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+}
+
+.dcp-reticle__lineX { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255, 255, 255, 0.15); }
+.dcp-reticle__lineY { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: rgba(255, 255, 255, 0.15); }
+.dcp-reticle__plus { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: rgba(255, 255, 255, 0.3); font-size: 14px; }
+
+.dcp-monitorHud__audio {
+  position: absolute;
+  bottom: 8px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.dcp-vuTrack {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dcp-vuLabel { width: 12px; }
+
+.dcp-vuMeter {
+  width: 70px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.dcp-vuLevel {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e 70%, #eab308 85%, #ef4444 100%);
+  border-radius: 2px;
+}
+.dcp-vuLevel--1 { width: 68%; }
+.dcp-vuLevel--2 { width: 55%; }
+
+/* Campaign Eyebrow in Hero Content */
+.dcp-hero__campaignTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 12px;
+  border-radius: 9999px;
+  margin-bottom: 14px;
+}
+
+.dcp-campaignDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--dcp-red);
+}
+
+/* Eyebrow wrap & HUD toggle */
+.dcp-hero__eyebrowWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 5px 14px;
+  border-radius: 9999px;
+}
+.dcp-hero__eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--dcp-red);
+  box-shadow: 0 0 8px var(--dcp-red);
+}
+.dcp-hero__eyebrow {
+  font-family: var(--dcp-font);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.dcp-hero__hudToggle {
+  margin-top: 18px;
+}
+.dcp-hero__hudBtn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-family: ui-monospace, monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s var(--dcp-ease);
+}
+.dcp-hero__hudBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+.dcp-hero__hudBtnDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+/* ── Hero Content Grid ── */
+.dcp-hero__content {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 10;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.dcp-hero__splitLayout {
+  width: 100%;
+  display: flex;
+  align-items: flex-end; /* Baseline datum lock between title + description */
+  justify-content: space-between;
+  box-sizing: border-box;
+  pointer-events: auto;
+  margin-top: 4vh;
+}
+
+/* Left: Large Stacked Title with Optical Kerning */
+.dcp-hero__left {
+  max-width: 580px;
+  text-align: left;
+}
+
+.dcp-hero__title {
+  font-family: var(--dcp-font);
+  font-size: clamp(40px, 5.2vw, 76px);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--dcp-white);
+  margin: 0;
+  text-wrap: balance;
+  filter: drop-shadow(0 4px 28px rgba(0, 0, 0, 0.55));
+  margin-left: -2px; /* Optical alignment on the 'W' (Jakub: trust eyes over math) */
+}
+
+/* Right: Studio Description (baseline-locked to title) */
+.dcp-hero__right {
+  max-width: 320px;
+  text-align: left;
+  padding-bottom: 6px; /* Precise datum alignment with title baseline */
+}
+
+.dcp-hero__description {
+  font-family: var(--dcp-font);
+  font-size: clamp(14px, 1.05vw, 15.5px);
+  font-weight: 400;
+  letter-spacing: -0.006em;
+  line-height: 1.52;
+  color: var(--dcp-white-muted);
+  margin: 0;
+  text-wrap: pretty;
+  filter: drop-shadow(0 2px 16px rgba(0, 0, 0, 0.65));
+}
+
+/* ── Mobile responsive ── */
+@media (max-width: 880px) {
+  .dcp-hero__splitLayout {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 10vh;
+  }
+  .dcp-hero__left,
+  .dcp-hero__right {
+    max-width: 100%;
+    padding-bottom: 0;
+  }
+  .dcp-hero__title {
+    font-size: clamp(32px, 8.5vw, 52px);
+    margin-left: 0;
+  }
+  .dcp-hero__description {
+    font-size: 14.5px;
+    max-width: 44ch;
+  }
+}
+
+/* ==========================================================================
+   3. BOTTOM CAROUSEL CONTROLS (< LOGO >) + PROGRESS TRACKER
+   ========================================================================== */
+.dcp-hero__controls {
+  position: absolute;
+  bottom: clamp(28px, 5vh, 48px);
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  pointer-events: none;
+  gap: 14px;
+}
+
+.dcp-hero__controlsInner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(16px, 2.5vw, 32px);
+  pointer-events: auto;
+}
+
+/* ── Circular Arrow Buttons (with magnetic fill) ── */
+.dcp-hero__arrow {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: transparent;
+  color: var(--dcp-white);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  transition:
+    border-color var(--dcp-duration-ui) var(--dcp-ease),
+    transform var(--dcp-duration-ui) var(--dcp-ease);
+  flex-shrink: 0;
+}
+
+.dcp-hero__arrow:hover {
+  border-color: var(--dcp-white);
+  transform: scale(1.08);
+}
+
+/* Emil: tactile feedback on active */
+.dcp-hero__arrow:active {
+  transform: scale(0.95);
+}
+
+.dcp-hero__arrowFill {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: var(--dcp-white);
+  transform: scale(0);
+  transition: transform 0.35s var(--dcp-ease);
+  z-index: 1;
+}
+
+.dcp-hero__arrow:hover .dcp-hero__arrowFill {
+  transform: scale(1);
+}
+
+.dcp-hero__arrow svg {
+  position: relative;
+  z-index: 2;
+  transition:
+    transform var(--dcp-duration-ui) var(--dcp-ease),
+    color var(--dcp-duration-ui) var(--dcp-ease);
+}
+
+.dcp-hero__arrow-prev:hover svg {
+  transform: translateX(-2px);
+  color: #111111;
+}
+
+.dcp-hero__arrow-next:hover svg {
+  transform: translateX(2px);
+  color: #111111;
+}
+
+/* ── Center Brand Logo Container ── */
+.dcp-hero__brandCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  min-width: clamp(150px, 18vw, 220px);
+  max-width: 240px;
+  position: relative;
+}
+
+.dcp-hero__brandLogo {
+  max-width: 100%;
+  max-height: 46px;
+  object-fit: contain;
+  filter: brightness(0) invert(1) drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* ── Progress Tracker (JS-driven fill synced with autoplay) ── */
+.dcp-hero__progressTracker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  pointer-events: auto;
+}
+
+.dcp-hero__progressDashes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dcp-hero__progressDash {
+  width: 20px;
+  height: 2px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color var(--dcp-duration-fast);
+  border: none;
+  padding: 0;
+  /* Expand click target for accessibility */
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-clip: content-box;
+}
+
+.dcp-hero__progressDash:hover {
+  background-color: rgba(255, 255, 255, 0.45);
+}
+
+.dcp-hero__progressDash.is-active {
+  background-color: rgba(255, 255, 255, 0.25);
+}
+
+.dcp-hero__progressFill {
+  position: absolute;
+  top: 8px; /* matches padding */
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background-color: var(--dcp-white);
+  border-radius: 2px;
+  /* No CSS animation — driven by requestAnimationFrame for sync */
+}
+
+.dcp-hero__progressNum {
+  font-family: var(--dcp-font);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--dcp-white-subtle);
+  text-transform: uppercase;
+  /* Tabular nums for stable width during slide transitions */
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   4. SCROLL INVITATION CUE
+   ========================================================================== */
+.dcp-hero__scrollCue {
+  position: absolute;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 15;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.3s;
+}
+
+.dcp-hero__scrollLine {
+  width: 1px;
+  height: 18px;
+  background: linear-gradient(180deg, var(--dcp-white) 0%, transparent 100%);
+  animation: scrollDown 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+}
+
+@keyframes scrollDown {
+  0% { transform: scaleY(0); transform-origin: top; opacity: 0; }
+  50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+  100% { transform: translateY(18px) scaleY(0); transform-origin: bottom; opacity: 0; }
+}
+
+/* ==========================================================================
+   5. MOBILE MENU OVERLAY
+   ========================================================================== */
+.dcp-menuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background-color: #0b0b0b;
+  display: flex;
+  flex-direction: column;
+  padding: 32px 24px;
+}
+
+.dcp-menuOverlay__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.dcp-menuOverlay__nav {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.dcp-menuOverlay__link {
+  font-family: var(--dcp-font);
+  font-size: clamp(32px, 8vw, 54px);
+  color: var(--dcp-white);
+  text-decoration: none;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  transition: opacity var(--dcp-duration-fast);
+}
+
+.dcp-menuOverlay__link:hover {
+  opacity: 0.7;
+}
+
+.dcp-menuOverlay__close {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: #fff;
+  border-radius: 9999px;
+  padding: 8px 18px;
+  font-family: var(--dcp-font);
+  font-size: 13px;
+  text-transform: uppercase;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition:
+    background-color var(--dcp-duration-fast),
+    border-color var(--dcp-duration-fast);
+}
+
+.dcp-menuOverlay__close:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ==========================================================================
+   6. ACCESSIBILITY: prefers-reduced-motion
+   Emil Kowalski: "This is not optional and not a follow-up"
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .dcp-header,
+  .dcp-header__contactBtn,
+  .dcp-header__logo,
+  .dcp-hero__arrow,
+  .dcp-hero__arrowFill,
+  .dcp-hero__arrow svg,
+  .dcp-hero__video,
+  .dcp-hero__brandLogo,
+  .dcp-menuOverlay__link,
+  .dcp-menuOverlay__close,
+  .dcp-link__mask .dcp-buttonText {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  .dcp-header__contactDot::after {
+    animation: none !important;
+  }
+
+  .dcp-hero__scrollLine {
+    animation: none !important;
+    opacity: 0.5;
+  }
+}
