@@ -325,24 +325,41 @@
 }
 
 /* ==========================================================================
-   2. HERO SECTION (CINEMATIC SPLIT GRID)
+   2. HERO SECTION (CINEMATIC SCROLL-DRIVEN WIDE TO VERTICAL MORPH)
    ========================================================================== */
-.dcp-hero {
+.dcp-hero-scrollTrack {
   position: relative;
   width: 100%;
-  height: 100svh;
-  min-height: 640px;
-  overflow: hidden;
-  background-color: #080808;
+  height: 175vh;
+  background-color: #070709;
 }
 
-/* ── Video Canvas: Dual-Buffer Crossfade ── */
-.dcp-hero__videoCanvas {
-  position: absolute;
-  inset: 0;
+.dcp-hero-stickyFrame {
+  position: sticky;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  z-index: 0;
+  height: 100svh;
+  min-height: 600px;
+  overflow: hidden;
+  background-color: #070709;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Morphing Video Wrap (Transforms Wide 100vw -> Centered Vertical Card) ── */
+.dcp-hero__morphVideoWrap {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: width, height, border-radius, transform;
+  z-index: 1;
+  background-color: #000;
+  flex-shrink: 0;
 }
 
 .dcp-hero__video {
@@ -361,14 +378,11 @@
   width: 100%;
   height: 100%;
   background:
-    /* Top: header readability */
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.12) 28%, transparent 48%),
-    /* Bottom: controls readability */
     linear-gradient(0deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.2) 30%, transparent 52%),
-    /* Center: cinematic vignette */
     radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 /* ── Anamorphic Matte Bars (Aspect Ratio Letterboxing) ── */
@@ -962,7 +976,7 @@
 }
 
 /* ==========================================================================
-   4. SCROLL INVITATION CUE
+   5. SCROLL INVITATION CUE
    ========================================================================== */
 .dcp-hero__scrollCue {
   position: absolute;

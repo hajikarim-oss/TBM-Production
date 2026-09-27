@@ -44,8 +44,9 @@ export function DickClarkHeader() {
       // Glassmorphism state (Emil: instant, no unnecessary animation)
       setScrolled(currentScrollY > 40);
 
-      // Smart hide/show on scroll direction
-      if (currentScrollY > 180 && currentScrollY > lastScrollY.current) {
+      // Smart hide/show on scroll direction only after scrolling past the hero scroll track
+      const heroThreshold = (window.innerHeight || 800) * 1.6;
+      if (currentScrollY > heroThreshold && currentScrollY > lastScrollY.current) {
         setHidden(true);
       } else {
         setHidden(false);
