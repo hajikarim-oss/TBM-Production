@@ -32,110 +32,165 @@
 }
 
 /* ==========================================================================
-   SECTION 2: BRAND LOGO MARQUEE (SPREADSHEET #2)
-   Normalized pure white monochrome client ribbon with hairline accents
+   SECTION 2: BRAND PARTNERS (MODERN DUAL-TRACK SILK MARQUEE)
+   Cinema-grade floating glass capsules with edge vignette fade and live badge
    ========================================================================== */
-.tbm-marqueeSection {
-  background-color: #070709;
-  border-top: 1px solid rgba(255, 255, 255, 0.07);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-  padding: clamp(30px, 4.5vh, 46px) 0;
+.tbm-brands {
+  background-color: #08080b;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: clamp(52px, 7.5vh, 84px) 0;
   position: relative;
   overflow: hidden;
 }
 
-.tbm-marqueeHeader {
+.tbm-brands__header {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 20px;
-  margin-bottom: 26px;
+  text-align: center;
   padding: 0 24px;
+  margin-bottom: clamp(32px, 5vh, 48px);
 }
 
-.tbm-marqueeLine {
-  width: clamp(40px, 8vw, 100px);
-  height: 1px;
-  background: rgba(255, 255, 255, 0.12);
+.tbm-brands__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.tbm-marqueeLabel {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10.5px;
-  letter-spacing: 0.2em;
+.tbm-brands__liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #d63032;
+  box-shadow: 0 0 8px rgba(214, 48, 50, 0.8);
+  animation: recordingLightBlink 2s ease-in-out infinite;
+}
+
+.tbm-brands__label {
+  font-family: var(--dcp-font, 'PP Neue Montreal', sans-serif);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.72);
 }
 
-.tbm-marqueeContainer {
-  position: relative;
+.tbm-brands__tagline {
+  font-family: var(--dcp-font, 'PP Neue Montreal', sans-serif);
+  font-size: clamp(14px, 1.1vw, 16px);
+  color: rgba(255, 255, 255, 0.42);
+  max-width: 540px;
+  margin: 12px auto 0;
+  line-height: 1.5;
+}
+
+/* Edge vignette mask for seamless fade */
+.tbm-brands__showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
   width: 100%;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 12%, #000 88%, transparent 100%);
+}
+
+.tbm-brands__trackWrap {
+  display: flex;
   overflow: hidden;
-  display: flex;
-  align-items: center;
+  width: 100%;
+  user-select: none;
 }
 
-.tbm-marqueeGradient {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: clamp(60px, 12vw, 180px);
-  z-index: 5;
-  pointer-events: none;
-}
-.tbm-marqueeGradient--left {
-  left: 0;
-  background: linear-gradient(90deg, #070709 25%, transparent 100%);
-}
-.tbm-marqueeGradient--right {
-  right: 0;
-  background: linear-gradient(-90deg, #070709 25%, transparent 100%);
-}
-
-.tbm-marqueeTrack {
+.tbm-brands__track {
   display: flex;
   align-items: center;
-  gap: clamp(44px, 6vw, 84px);
+  gap: 14px;
   width: max-content;
-  animation: marqueeContinuous 38s linear infinite;
   will-change: transform;
 }
 
-.tbm-marqueeSection:hover .tbm-marqueeTrack {
+.tbm-brands__track--left {
+  animation: tbmDriftLeft 36s linear infinite;
+}
+
+.tbm-brands__track--right {
+  animation: tbmDriftRight 36s linear infinite;
+}
+
+.tbm-brands__trackWrap:hover .tbm-brands__track {
   animation-play-state: paused;
 }
 
-@keyframes marqueeContinuous {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes tbmDriftLeft {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
 }
 
-.tbm-marqueeItem {
-  flex-shrink: 0;
-  height: clamp(24px, 3.4vh, 34px);
+@keyframes tbmDriftRight {
+  0% {
+    transform: translate3d(-33.3333%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Glass capsule card */
+.tbm-brands__card {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 8px;
-  opacity: 0.55;
-  transition: opacity 0.25s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 66px;
+  min-width: 175px;
+  padding: 0 28px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
 }
 
-.tbm-marqueeItem:hover {
-  opacity: 1;
-  transform: scale(1.06);
+.tbm-brands__card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.18);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
 }
 
-.tbm-marqueeLogo {
-  max-height: 100%;
-  max-width: 140px;
+.tbm-brands__logo {
+  max-height: 28px;
+  max-width: 110px;
   width: auto;
+  height: auto;
   object-fit: contain;
-  filter: brightness(1);
+  opacity: 0.52;
+  transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.tbm-brands__card:hover .tbm-brands__logo {
+  opacity: 1;
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.35));
+  transform: scale(1.04);
 }
 
 /* ==========================================================================
-   SECTION 3: STUDIO STORY (BALANCED 2-COLUMN ARCHITECTURAL EDITORIAL)
+   SECTION 3: STUDIO STORY (CENTERED SINGLE-COLUMN MANIFESTO)
    ========================================================================== */
 .tbm-story {
   position: relative;
@@ -144,74 +199,24 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.tbm-story__grid {
-  display: grid;
-  grid-template-columns: 1fr 1.08fr;
-  gap: clamp(48px, 7vw, 110px);
-  align-items: start;
-  margin-bottom: clamp(64px, 10vh, 112px);
-}
-
-@media (max-width: 960px) {
-  .tbm-story__grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
-
-.tbm-story__eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: ui-monospace, monospace;
-  font-size: 11px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 22px;
-}
-
-.tbm-story__heading {
-  font-family: var(--dcp-font);
-  font-size: clamp(38px, 4.6vw, 68px);
-  font-weight: 500;
-  line-height: 1.08;
-  letter-spacing: -0.03em;
-  color: #fff;
-  margin: 0 0 28px 0;
-}
-
-.tbm-story__originBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 6px 14px;
-  border-radius: 9999px;
-  font-family: ui-monospace, monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.65);
-}
-
-.tbm-originDot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--dcp-red);
+/* Single-column centered manifesto block */
+.tbm-story__manifesto {
+  max-width: 780px;
+  margin: 0 auto clamp(64px, 10vh, 112px);
+  text-align: center;
 }
 
 .tbm-story__quote {
   font-family: var(--dcp-font);
-  font-size: clamp(20px, 2.2vw, 30px);
+  font-size: clamp(22px, 2.6vw, 34px);
   font-weight: 400;
   line-height: 1.42;
   letter-spacing: -0.015em;
-  color: rgba(255, 255, 255, 0.76);
-  margin: 0 0 22px 0;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0 0 28px 0;
   padding: 0;
   border: none;
+  text-wrap: pretty;
 }
 
 .tbm-text-white {
@@ -231,21 +236,22 @@
   letter-spacing: -0.01em;
 }
 
-
 .tbm-story__subcopy {
   font-family: var(--dcp-font);
   font-size: clamp(14.5px, 1.1vw, 16.5px);
   line-height: 1.65;
-  color: rgba(255, 255, 255, 0.52);
-  margin: 0 0 36px 0;
+  color: rgba(255, 255, 255, 0.48);
+  margin: 0 0 40px 0;
+  text-wrap: pretty;
 }
 
 .tbm-story__pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  display: inline-grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 32px 48px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 24px;
+  padding-top: 28px;
+  text-align: left;
 }
 
 @media (max-width: 600px) {

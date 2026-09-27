@@ -325,41 +325,48 @@
 }
 
 /* ==========================================================================
-   2. HERO SECTION (CINEMATIC SCROLL-DRIVEN WIDE TO VERTICAL MORPH)
+   2. HERO SECTION (SCROLL-DRIVEN MORPH: FULLSCREEN → PORTRAIT)
+   Inspired by DickClark.com — video morphs from fullscreen to centered
+   portrait as user scrolls. GPU-composited via transform/will-change.
    ========================================================================== */
-.dcp-hero-scrollTrack {
+
+/* Tall scroll runway — hero sticks inside while user scrolls through */
+.dcp-heroWrap {
   position: relative;
-  width: 100%;
-  height: 175vh;
-  background-color: #070709;
+  height: 220vh;
+  background-color: #080808;
 }
 
-.dcp-hero-stickyFrame {
+.dcp-hero {
   position: sticky;
   top: 0;
-  left: 0;
   width: 100%;
   height: 100svh;
-  min-height: 600px;
+  min-height: 640px;
   overflow: hidden;
-  background-color: #070709;
+  background-color: #080808;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
 }
 
-/* ── Morphing Video Wrap (Transforms Wide 100vw -> Centered Vertical Card) ── */
-.dcp-hero__morphVideoWrap {
+/* ── Video Morph Container (scroll-driven width/height/radius) ── */
+.dcp-hero__videoMorph {
   position: relative;
   overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  will-change: width, height, border-radius, transform;
-  z-index: 1;
-  background-color: #000;
-  flex-shrink: 0;
+  will-change: width, height, border-radius;
+  /* Fallback for no-JS */
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Video Canvas: Dual-Buffer Crossfade ── */
+.dcp-hero__videoCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .dcp-hero__video {
@@ -378,33 +385,14 @@
   width: 100%;
   height: 100%;
   background:
+    /* Top: header readability */
     linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.12) 28%, transparent 48%),
+    /* Bottom: controls readability */
     linear-gradient(0deg, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.2) 30%, transparent 52%),
+    /* Center: cinematic vignette */
     radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.4) 100%);
   pointer-events: none;
-  z-index: 3;
-}
-
-/* ── Anamorphic Matte Bars (Aspect Ratio Letterboxing) ── */
-.dcp-hero__matteBar {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 0;
-  background-color: #000;
-  z-index: 8;
-  pointer-events: none;
-  transition: height 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-}
-.dcp-hero__matteBar--top { top: 0; }
-.dcp-hero__matteBar--bottom { bottom: 0; }
-
-.dcp-hero--aspect-2-39 .dcp-hero__matteBar {
-  height: clamp(50px, 9.5vh, 90px);
-}
-.dcp-hero--aspect-9-16 .dcp-hero__videoCanvas {
-  max-width: 56.25vh;
-  margin: 0 auto;
+  z-index: 1;
 }
 
 /* ── Director's Utility Bar (Top Right Overlay) ── */
@@ -976,7 +964,7 @@
 }
 
 /* ==========================================================================
-   5. SCROLL INVITATION CUE
+   4. SCROLL INVITATION CUE
    ========================================================================== */
 .dcp-hero__scrollCue {
   position: absolute;

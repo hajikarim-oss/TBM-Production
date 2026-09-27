@@ -21,7 +21,7 @@ export const STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'CPJ Commercial',
     talent: 'Commercial Ad Film',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
-    logo: '/brands/atomberg-logo-white.png',
+    logo: '/brands/atomberg-logo-white.svg',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI MASTER ANAMORPHIC 40mm T1.9',
     iso: 'ISO 800',
@@ -104,6 +104,22 @@ export function DickClarkHero() {
   const video2Ref = useRef<HTMLVideoElement>(null);
   const busy = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  /* ─── Scroll-driven morph: fullscreen → portrait ─── */
+  const heroWrapRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: heroWrapRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // Video container morphs: 100% width → 42% width centered, with border-radius
+  const videoWidth = useTransform(scrollYProgress, [0, 0.55, 1], ['100%', '100%', '42%']);
+  const videoHeight = useTransform(scrollYProgress, [0, 0.55, 1], ['100%', '100%', '75vh']);
+  const videoBorderRadius = useTransform(scrollYProgress, [0, 0.55, 1], [0, 0, 16]);
+
+  // Content fades out as video morphs
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
+  const controlsOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
 
   const transitionTo = useCallback(
     (toIndex: number) => {
@@ -197,111 +213,55 @@ export function DickClarkHero() {
 
   const currentSlide = slides[currentIdx] || slides[0];
 
-  const scrollTrackRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: scrollTrackRef,
-    offset: ['start start', 'end end'],
-  });
-
-  // Wide to Vertical morph transforms
-  // As user scrolls down: video smoothly travels down and contracts into a 9:16 vertical card
-  const videoWidth = useTransform(
-    scrollYProgress,
-    [0.0, 0.68],
-    ['100vw', 'clamp(280px, 23vw, 360px)']
-  );
-  const videoHeight = useTransform(
-    scrollYProgress,
-    [0.0, 0.68],
-    ['100vh', 'clamp(480px, 58vh, 620px)']
-  );
-  const videoRadius = useTransform(
-    scrollYProgress,
-    [0.0, 0.68],
-    ['0px', '22px']
-  );
-  // Visibly moves down through the viewport with the scroll rather than staying stuck in place
-  const videoY = useTransform(
-    scrollYProgress,
-    [0.0, 0.68],
-    ['0px', '75px']
-  );
-  const videoShadow = useTransform(
-    scrollYProgress,
-    [0.04, 0.68],
-    [
-      '0px 0px 0px rgba(0,0,0,0)',
-      '0 32px 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.1)',
-    ]
-  );
-
-  // Hero title and controls fade out promptly as user starts scrolling
-  const heroContentOpacity = useTransform(scrollYProgress, [0.0, 0.20], [1, 0]);
-  const heroContentY = useTransform(scrollYProgress, [0.0, 0.20], [0, -60]);
-  const heroPointerEvents = useTransform(scrollYProgress, (v) => (v < 0.12 ? 'auto' : 'none'));
-
-  const controlsOpacity = useTransform(scrollYProgress, [0.0, 0.16], [1, 0]);
-  const controlsY = useTransform(scrollYProgress, [0.0, 0.16], [0, 45]);
-  const controlsPointerEvents = useTransform(scrollYProgress, (v) => (v < 0.12 ? 'auto' : 'none'));
-
   return (
-    <div className="dcp-hero-scrollTrack" ref={scrollTrackRef} id="home">
-      <div className="dcp-hero-stickyFrame">
-        {/* ─── Morphing Video Canvas (Widescreen 100vw -> Central Vertical 9:16 Card) ─── */}
+    <div className="dcp-heroWrap" ref={heroWrapRef}>
+      <section className="dcp-hero" id="home">
+        {/* ─── Video Canvas with scroll-driven morph ─── */}
         <motion.div
-          className="dcp-hero__morphVideoWrap"
+          className="dcp-hero__videoMorph"
           style={{
-            width: reduceMotion ? 'clamp(280px, 23vw, 360px)' : videoWidth,
-            height: reduceMotion ? 'clamp(480px, 58vh, 620px)' : videoHeight,
-            borderRadius: reduceMotion ? '22px' : videoRadius,
-            y: reduceMotion ? '75px' : videoY,
-            boxShadow: reduceMotion
-              ? '0 32px 80px rgba(0,0,0,0.85), 0 0 0 1px rgba(255,255,255,0.1)'
-              : videoShadow,
+            width: videoWidth,
+            height: videoHeight,
+            borderRadius: videoBorderRadius,
           }}
         >
-          <video
-            ref={video1Ref}
-            src={video1Src}
-            className="dcp-hero__video"
-            muted={isMuted}
-            loop
-            playsInline
-            autoPlay
-            style={{
-              opacity: activeBuffer === 1 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
-              zIndex: activeBuffer === 1 ? 2 : 1,
-              transition: reduceMotion ? 'none' : 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-            }}
-          />
-          <video
-            ref={video2Ref}
-            src={video2Src}
-            className="dcp-hero__video"
-            muted={isMuted}
-            loop
-            playsInline
-            style={{
-              opacity: activeBuffer === 2 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
-              zIndex: activeBuffer === 2 ? 2 : 1,
-              transition: reduceMotion ? 'none' : 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
-            }}
-          />
-          <div className="dcp-hero__videoOverlay" />
+          <div className="dcp-hero__videoCanvas">
+            <video
+              ref={video1Ref}
+              src={video1Src}
+              className="dcp-hero__video"
+              muted={isMuted}
+              loop
+              playsInline
+              autoPlay
+              style={{
+                opacity: activeBuffer === 1 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
+                zIndex: activeBuffer === 1 ? 2 : 1,
+                transition: reduceMotion ? 'none' : 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
+              }}
+            />
+            <video
+              ref={video2Ref}
+              src={video2Src}
+              className="dcp-hero__video"
+              muted={isMuted}
+              loop
+              playsInline
+              style={{
+                opacity: activeBuffer === 2 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
+                zIndex: activeBuffer === 2 ? 2 : 1,
+                transition: reduceMotion ? 'none' : 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1)',
+              }}
+            />
+            <div className="dcp-hero__videoOverlay" />
+          </div>
         </motion.div>
 
-        {/* ─── Hero Content Grid (Dick Clark Layout: Left Title + Right Description) ─── */}
-        <motion.div
-          className="dcp-hero__content"
-          style={{
-            opacity: reduceMotion ? 1 : heroContentOpacity,
-            y: reduceMotion ? 0 : heroContentY,
-            pointerEvents: reduceMotion ? 'auto' : heroPointerEvents,
-          }}
-        >
+        {/* ─── Hero Content Grid ─── */}
+        <motion.div className="dcp-hero__content" style={{ opacity: contentOpacity }}>
           <div className="dcp-container">
             <div className="dcp-hero__splitLayout">
-              {/* Left Column: Stacked Title with Dynamic Campaign Eyebrow */}
+              {/* Left Column */}
               <div className="dcp-hero__left">
                 <div className="dcp-hero__campaignTag">
                   <span className="dcp-campaignDot" />
@@ -309,33 +269,27 @@ export function DickClarkHero() {
                 </div>
 
                 <h1 className="dcp-hero__title">
-                  We Turn Live<br />
-                  into Legendary
+                  We Make Videos<br />
+                  People Remember
                 </h1>
               </div>
 
-              {/* Right Column: Studio Synopsis Paragraph */}
+              {/* Right Column */}
               <div className="dcp-hero__right">
                 <p className="dcp-hero__description">
-                  Dick Clark Productions &amp; TheBoredMonkey Studios — crafting cinematic
-                  commercials, televised entertainment, and culture-defining visual campaigns with a full in-house pipeline.
+                  TheBoredMonkey Studios is the dedicated production and post-production
+                  wing of TheBoredMonkey. We craft cinematic commercials, high-velocity
+                  brand films, and culture-defining visual campaigns with a full in-house pipeline.
                 </p>
               </div>
             </div>
           </div>
         </motion.div>
 
-        {/* ─── Bottom Center Controls: Dick Clark Carousel (< BRAND LOGO >) ─── */}
-        <motion.div
-          className="dcp-hero__controls"
-          style={{
-            opacity: reduceMotion ? 1 : controlsOpacity,
-            y: reduceMotion ? 0 : controlsY,
-            pointerEvents: reduceMotion ? 'auto' : controlsPointerEvents,
-          }}
-        >
+        {/* ─── Bottom Center Controls ─── */}
+        <motion.div className="dcp-hero__controls" style={{ opacity: controlsOpacity }}>
           <div className="dcp-hero__controlsInner">
-            {/* Previous Arrow Button */}
+            {/* Previous Arrow */}
             <button
               type="button"
               className="dcp-hero__arrow dcp-hero__arrow-prev"
@@ -343,23 +297,12 @@ export function DickClarkHero() {
               aria-label="Previous Brand Video"
             >
               <span className="dcp-hero__arrowFill" />
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-              >
-                <path
-                  d="M15 19l-7-7 7-7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M15 19l-7-7 7-7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
-            {/* Central Brand Logo Switcher */}
+            {/* Central Brand Logo */}
             <div className="dcp-hero__brandCenter">
               <AnimatePresence mode="wait">
                 <motion.img
@@ -375,7 +318,7 @@ export function DickClarkHero() {
               </AnimatePresence>
             </div>
 
-            {/* Next Arrow Button */}
+            {/* Next Arrow */}
             <button
               type="button"
               className="dcp-hero__arrow dcp-hero__arrow-next"
@@ -383,24 +326,13 @@ export function DickClarkHero() {
               aria-label="Next Brand Video"
             >
               <span className="dcp-hero__arrowFill" />
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-              >
-                <path
-                  d="M9 5l7 7-7 7"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+                <path d="M9 5l7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
 
-          {/* ─── 6-Brand Progress Tracker ─── */}
+          {/* ─── Progress Tracker ─── */}
           <div className="dcp-hero__progressTracker">
             <div className="dcp-hero__progressDashes">
               {slides.map((s, i) => (
@@ -426,7 +358,7 @@ export function DickClarkHero() {
             </span>
           </div>
         </motion.div>
-      </div>
+      </section>
     </div>
   );
 }

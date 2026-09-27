@@ -14,26 +14,28 @@ import './index.css';
 function App() {
   return (
     <main className="vf-app dcp-root">
-      {/* ─── SECTION 1: Dick Clark Productions Hero (6 Brands) ─── */}
+      {/* ─── Navigation Header ─── */}
       <DickClarkHeader />
+
+      {/* ─── SECTION 1: Hero with scroll-driven video morph (fullscreen → portrait) ─── */}
       <DickClarkHero />
 
-      {/* ─── SECTION 2: Infinite Brand Logo Marquee Strip ─── */}
-      <BrandMarquee />
-
-      {/* ─── SECTION 3: Studio Story ("WHATEVER IT TAKES MINDSET" + Moving Equipment) ─── */}
+      {/* ─── SECTION 2: Studio Manifesto & Stats ─── */}
       <StorySection />
 
-      {/* ─── SECTION 4: Best Work Grid (Kookie Kollective Asymmetric Editorial Masonry) ─── */}
+      {/* ─── SECTION 3: Brand Partners Grid ─── */}
+      <BrandMarquee />
+
+      {/* ─── SECTION 4: Best Work Grid (Parallax Masonry) ─── */}
       <BestWorkGrid />
 
-      {/* ─── SECTION 5: Meet The Crew / Our Producers (Saurabh Chaubey & Suraj Adawade) ─── */}
+      {/* ─── SECTION 5: Meet The Crew / Our Producers ─── */}
       <ProducersCrew />
 
-      {/* ─── SECTION 6: Behind The Scenes (Kookie Kollective Filmstrip Contact Sheet) ─── */}
+      {/* ─── SECTION 6: Behind The Scenes ─── */}
       <BehindTheScenes />
 
-      {/* ─── SECTION 7: Contact Us (Rolling Counters) + Kookie Kollective Studio Footer ─── */}
+      {/* ─── SECTION 7: Contact Us + Footer ─── */}
       <ContactSection />
     </main>
   );
