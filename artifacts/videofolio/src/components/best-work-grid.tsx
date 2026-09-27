@@ -38,12 +38,12 @@ const WORK_ITEMS: WorkItem[] = [
     video: `${R2}/Zoff.mp4`,
   },
   {
-    id: 'biopeak-health',
-    title: 'BIOPEAK HEALTH',
-    client: 'Biopeak Nutrition',
-    services: ['PRODUCT FILM', 'VFX', 'CINEMATOGRAPHY'],
-    image: '/brands/Biopeak.png',
-    video: `${R2}/Biopeak%20Script%202.mp4`,
+    id: 'happi-planet-home',
+    title: 'HAPPI PLANET',
+    client: 'Eco Home Revolution',
+    services: ['COMMERCIAL', '4K DIRECTION', 'POST PRODUCTION'],
+    image: '/brands/happi-planet-white.svg',
+    video: '/videos/happi-planet.mp4',
   },
   {
     id: 'vibhor-oils',

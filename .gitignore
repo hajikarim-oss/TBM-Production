@@ -47,3 +47,7 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Large media files
+artifacts/videofolio/public/videos/
+*.mp4

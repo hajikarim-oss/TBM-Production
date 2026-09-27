@@ -61,6 +61,9 @@ export default defineConfig({
     fs: {
       strict: true,
     },
+    watch: {
+      ignored: ['**/*.mp4', '**/public/videos/**', '**/node_modules/**', '**/.git/**'],
+    },
   },
   preview: {
     port,
