@@ -40,30 +40,19 @@ export function StorySection() {
       <div className="tbm-container">
         {/* Single-column centered manifesto — clean, editorial */}
         <div className="tbm-story__manifesto">
+          <div className="tbm-story__eyebrow">
+            <span className="tbm-story__dot" aria-hidden="true" />
+            <span>WHO WE ARE · STUDIO MANIFESTO</span>
+          </div>
+
           <blockquote className="tbm-story__quote">
             Founded in 2020, <strong className="tbm-text-white">TheBoredMonkey Studios</strong> is the dedicated production and post-production wing of TheBoredMonkey. We work with a{' '}
-            <span className="tbm-nowrap"><em className="tbm-text-gold">"Whatever It Takes Mindset"</em></span> — full pipeline in-house. One team, one brief, one standard, from the first creative conversation to final delivery.
+            <span className="tbm-nowrap"><em className="tbm-text-highlight">"Whatever It Takes Mindset"</em></span> — full pipeline in-house. One team, one brief, one standard, from the first creative conversation to final delivery.
           </blockquote>
 
           <p className="tbm-story__subcopy">
             No fragmented vendors. No miscommunicated briefs. We operate our own camera packages, lighting trucks, studio soundstages, and post-production suites to guarantee broadcast-grade execution for every brand partner.
           </p>
-
-          {/* Three Studio Production Pillars */}
-          <div className="tbm-story__pillars">
-            <div className="tbm-pillar">
-              <span className="tbm-pillarIndex">01</span>
-              <span className="tbm-pillarTitle">In-House Soundstage & Gear</span>
-            </div>
-            <div className="tbm-pillar">
-              <span className="tbm-pillarIndex">02</span>
-              <span className="tbm-pillarTitle">Director-Led Commercials</span>
-            </div>
-            <div className="tbm-pillar">
-              <span className="tbm-pillarIndex">03</span>
-              <span className="tbm-pillarTitle">Broadcast 4K Color & Post</span>
-            </div>
-          </div>
         </div>
 
         {/* Studio Production Metric Counters */}
