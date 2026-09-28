@@ -146,12 +146,12 @@
 }
 
 .tbm-brands__logo {
-  max-height: 28px;
-  max-width: 110px;
+  max-height: 32px;
+  max-width: 120px;
   width: auto;
   height: auto;
   object-fit: contain;
-  opacity: 0.9;
+  opacity: 0.95;
   transition: opacity 0.3s ease, filter 0.3s ease, transform 0.3s ease;
   user-select: none;
   pointer-events: none;
@@ -704,7 +704,7 @@
 
 .work-card-logo-container {
   height: 28px;
-  max-width: 80px;
+  max-width: 95px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -713,7 +713,7 @@
 
 .work-card-tile-logo {
   max-height: 26px;
-  max-width: 75px;
+  max-width: 90px;
   object-fit: contain;
   opacity: 0.95;
   transition: opacity 0.3s, transform 0.3s;

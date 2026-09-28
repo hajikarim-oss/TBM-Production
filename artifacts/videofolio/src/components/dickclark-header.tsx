@@ -73,6 +73,7 @@ export function DickClarkHeader() {
     { id: 'works', label: 'Works', href: '#works' },
     { id: 'producers', label: 'Producers', href: '#team' },
     { id: 'bts', label: 'BTS', href: '#bts' },
+    { id: 'contact', label: 'Contact', href: '#contact' },
   ];
 
   return (
@@ -114,13 +115,8 @@ export function DickClarkHeader() {
             </ul>
           </nav>
 
-          {/* Top Right: • CONTACT Pill + Mobile Menu */}
+          {/* Top Right: Mobile Menu Toggle (≤920px) */}
           <div className="dcp-header__right">
-            <a href="#contact" className="dcp-header__contactBtn">
-              <span className="dcp-header__contactDot" aria-hidden="true" />
-              <span>Contact</span>
-            </a>
-
             {/* Mobile Menu Toggle (≤920px) */}
             <button
               type="button"
@@ -185,17 +181,6 @@ export function DickClarkHeader() {
                   {item.label}
                 </motion.a>
               ))}
-              <motion.a
-                href="#contact"
-                className="dcp-menuOverlay__link"
-                onClick={() => setMenuOpen(false)}
-                custom={navItems.length}
-                variants={reduceMotion ? undefined : menuItemVariants}
-                initial={reduceMotion ? undefined : 'hidden'}
-                animate={reduceMotion ? undefined : 'visible'}
-              >
-                Contact
-              </motion.a>
             </nav>
           </motion.div>
         )}
