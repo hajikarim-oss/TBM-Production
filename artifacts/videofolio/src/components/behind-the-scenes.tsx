@@ -119,26 +119,14 @@ function BtsSlideCard({
         className="project-image-splide"
       />
 
-      {/* BTS Live On-Set Badge */}
-      <div className="bts-card-badge" aria-hidden="true">
-        <span className="bts-badge-dot" />
-        <span>BTS · {isVertical ? '9:16' : '16:9'}</span>
-      </div>
-
-      {/* Hover Watch BTS Button Overlay */}
+      {/* Minimal Play Hover Overlay */}
       <div className="bts-card-play-overlay">
         <div className="bts-card-play-btn">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
             <path d="M8 5v14l11-7z" />
           </svg>
-          <span>WATCH BTS</span>
+          <span>PLAY</span>
         </div>
-      </div>
-
-      {/* Caption at bottom */}
-      <div className="bts-card-caption">
-        <span className="bts-card-brand">{item.brand}</span>
-        <h4 className="bts-card-title">{item.title}</h4>
       </div>
     </div>
   );
@@ -344,18 +332,26 @@ export function BehindTheScenes() {
 
   return (
     <section className="behind-the-scene-wrap" id="bts">
-      {/* Header */}
-      <div className="behind-the-scene-headline">
-        <div className="tbm-sectionEyebrow" style={{ justifyContent: 'center', marginBottom: '12px' }}>
-          <span className="tbm-eyebrowLine" />
-          <span>005 — ON SET ARCHIVE</span>
+      {/* Exact Reference Top Navigation Bar */}
+      <div className="bts-nav-bar">
+        <div className="bts-nav-left">
+          <span className="bts-nav-dot" aria-hidden="true" />
+          <span className="bts-nav-label">PROJECT SHOWCASE</span>
         </div>
-        <div className="behind-scene-headline">
-          <h2 className="project-navigation-text is-project">behind the scenes</h2>
-        </div>
-        <p className="bts-section-subhead">
-          Raw on-set footage, camera rigging, and directing in motion across Mumbai and pan-India locations.
-        </p>
+
+        <h2 className="bts-nav-title">BEHIND THE SCENES</h2>
+
+        <button
+          type="button"
+          className="bts-nav-exit"
+          onClick={() => {
+            document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
+          }}
+          aria-label="Exit Behind the scenes"
+        >
+          <span>EXIT</span>
+          <span className="bts-nav-close-icon">✕</span>
+        </button>
       </div>
 
       {/* Continuously Horizontally Scrolling Splide Container (Pauses on Cursor Hover) */}

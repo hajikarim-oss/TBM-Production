@@ -1304,47 +1304,107 @@
 }
 
 /* ==========================================================================
-   SECTION 6: BEHIND THE SCENES (KOOKIE KOLLECTIVE ZARA ACTION BTS)
-   Exact extracted .behind-the-scene-wrap, typography & horizontal slide track
+/* ==========================================================================
+   SECTION 6: BEHIND THE SCENES (EXACT REFERENCE DESIGN)
    ========================================================================== */
 .behind-the-scene-wrap {
   display: flex;
   flex-direction: column;
-  row-gap: clamp(3rem, 6vh, 5rem);
-  margin-top: clamp(8rem, 14vh, 14rem);
-  margin-bottom: clamp(6rem, 10vh, 10rem);
+  row-gap: clamp(2.5rem, 5vh, 4rem);
+  padding: clamp(4rem, 8vh, 6.5rem) 0 clamp(6rem, 10vh, 8.5rem);
   overflow: clip;
   width: 100%;
+  background: #000000;
+  box-sizing: border-box;
 }
 
-.behind-the-scene-headline {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 clamp(1.5rem, 3vw, 3rem);
-  text-align: center;
-}
-
-.behind-scene-headline {
+/* 3-Column Top Navigation Bar */
+.bts-nav-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 clamp(24px, 4.5vw, 64px);
+  box-sizing: border-box;
 }
 
-.project-navigation-text {
-  color: #ffffff;
-  letter-spacing: 0.2px;
-  text-transform: uppercase;
+.bts-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.bts-nav-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #ffffff;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.bts-nav-label {
   font-family: var(--dcp-font, sans-serif);
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
 }
 
-.project-navigation-text.is-project {
-  font-size: clamp(2.2rem, 4vw, 3.5rem);
-  font-weight: 500;
-  line-height: 100%;
+.bts-nav-title {
+  font-family: var(--dcp-font, sans-serif);
+  font-size: clamp(24px, 3.2vw, 42px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+  text-transform: uppercase;
   margin: 0;
-  letter-spacing: -0.02em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.bts-nav-exit {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-family: var(--dcp-font, sans-serif);
+  font-size: clamp(11px, 0.9vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.bts-nav-exit:hover {
+  opacity: 0.7;
+  transform: translateX(2px);
+}
+
+.bts-nav-close-icon {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .bts-nav-bar {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .bts-nav-title {
+    order: -1;
+    width: 100%;
+    text-align: left;
+  }
 }
 
 /* Horizontal Splide Track - Continuous Marquee with Hover Pause */
@@ -1368,9 +1428,9 @@
 .splide__group {
   display: flex;
   flex-shrink: 0;
-  gap: clamp(18px, 2.2vw, 32px);
-  padding-right: clamp(18px, 2.2vw, 32px);
-  animation: btsContinuousScroll 42s linear infinite;
+  gap: clamp(14px, 1.8vw, 24px);
+  padding-right: clamp(14px, 1.8vw, 24px);
+  animation: btsContinuousScroll 36s linear infinite;
   will-change: transform;
 }
 
@@ -1395,34 +1455,23 @@
   flex-shrink: 0;
 }
 
-.bts-section-subhead {
-  font-family: var(--dcp-font, sans-serif);
-  font-size: clamp(14px, 1.1vw, 16px);
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 12px;
-  max-width: 580px;
-  text-align: center;
-  line-height: 1.55;
-}
-
+/* Landscape rectangular film frames (Exact match to reference) */
 .project-image-splide-wrap {
-  width: clamp(280px, 22vw, 400px);
-  aspect-ratio: 4 / 5.2;
+  width: clamp(280px, 24vw, 420px);
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   position: relative;
-  background-color: #0c0c10;
-  border-radius: 8px;
+  background-color: #0d0d12;
+  border-radius: 0px;
   cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
-  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.35s ease, box-shadow 0.4s ease;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
   outline: none;
 }
 
 .project-image-splide-wrap:hover {
-  transform: translateY(-8px) scale(1.02);
-  border-color: rgba(255, 255, 255, 0.28);
-  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.75), 0 0 32px rgba(214, 48, 50, 0.18);
+  transform: scale(1.025);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.85);
+  z-index: 2;
 }
 
 .project-image-splide {
@@ -1430,47 +1479,15 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  filter: grayscale(12%) contrast(1.05);
+  filter: grayscale(100%) contrast(1.15);
 }
 
 .project-image-splide-wrap:hover .project-image-splide {
   transform: scale(1.04);
-  filter: grayscale(0%) contrast(1.08);
+  filter: grayscale(0%) contrast(1.05);
 }
 
-/* BTS Live On-Set Badge */
-.bts-card-badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  background: rgba(10, 10, 14, 0.78);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 999px;
-  font-family: ui-monospace, monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #fff;
-  pointer-events: none;
-}
-
-.bts-badge-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: #d63032;
-  box-shadow: 0 0 6px #d63032;
-  animation: dcpBlink 1.4s ease-in-out infinite;
-}
-
-/* Hover Watch BTS Button Overlay */
+/* Minimal hover play indicator */
 .bts-card-play-overlay {
   position: absolute;
   inset: 0;
@@ -1478,7 +1495,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(8, 8, 11, 0.32);
+  background: rgba(0, 0, 0, 0.28);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
@@ -1493,7 +1510,7 @@
   align-items: center;
   gap: 7px;
   padding: 8px 16px;
-  background: rgba(14, 14, 18, 0.92);
+  background: rgba(10, 10, 14, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.25);
@@ -1502,47 +1519,14 @@
   font-family: var(--dcp-font, sans-serif);
   font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(214, 48, 50, 0.25);
+  letter-spacing: 0.1em;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
   transform: scale(0.92);
   transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .project-image-splide-wrap:hover .bts-card-play-btn {
   transform: scale(1);
-}
-
-/* Bottom Caption Overlay */
-.bts-card-caption {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 3;
-  padding: 48px 16px 16px 16px;
-  background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 12, 0.92) 100%);
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  pointer-events: none;
-}
-
-.bts-card-brand {
-  font-family: ui-monospace, monospace;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--dcp-red);
-  text-transform: uppercase;
-}
-
-.bts-card-title {
-  font-family: var(--dcp-font, sans-serif);
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0;
-  line-height: 1.25;
 }
 
 
