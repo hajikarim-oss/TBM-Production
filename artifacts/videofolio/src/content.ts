@@ -34,7 +34,7 @@ export const content = {
     established: '[EST 2022]',
     clock: '3:34:33 AM',
     slides: [
-      { brand: 'ATOMBERG', product: 'Atomberg', video: `${R2}/Atomberg%20.mp4`, logo: `/brands/Atomberg-logo.svg` },
+      { brand: 'ATOMBERG', product: 'Atomberg', video: `${R2}/Atomberg%20.mp4`, logo: `/brands/atomberg-logo-new.png` },
       { brand: 'BLUE TYGA', product: 'Blue Tyga', video: `${R2}/Blue%20Tyga.mp4`, logo: `/brands/bluetyga-logo-white.png` },
       { brand: 'ZOFF', product: 'Zoff', video: `${R2}/Zoff.mp4`, logo: `/brands/zoff-logo-white.png` },
       { brand: 'VIBHOR', product: 'Vibhor', video: `${R2}/Vibhor.mp4`, logo: `/brands/vibhor-logo.png` },
@@ -104,7 +104,7 @@ export const content = {
     title: 'Crafted for 15+ Brands',
     copy: 'Every logo here represents a creative partnership, a shared vision, and a project we\'re proud to put our name on.',
     logos: [
-      { name: 'Atomberg', src: `/brands/atomberg-logo-white.png` },
+      { name: 'Atomberg', src: `/brands/atomberg-logo-new.png` },
       { name: 'Biopeak', src: `/brands/biopeak-logo-white.png` },
       { name: 'Blue Tyga', src: `/brands/bluetyga-logo-white.png` },
       { name: 'CheQ', src: `/brands/CheQ.jpg` },
