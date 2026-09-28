@@ -319,6 +319,8 @@
 .tbm-statBlock {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .tbm-statNum {
@@ -330,6 +332,7 @@
   color: #fff;
   margin-bottom: 8px;
   font-variant-numeric: tabular-nums;
+  text-align: center;
 }
 
 .tbm-statTitle {
@@ -338,12 +341,14 @@
   font-weight: 500;
   color: #fff;
   margin-bottom: 4px;
+  text-align: center;
 }
 
 .tbm-statDesc {
   font-family: var(--dcp-font);
   font-size: 13px;
   color: rgba(255, 255, 255, 0.45);
+  text-align: center;
 }
 
 /* ==========================================================================
