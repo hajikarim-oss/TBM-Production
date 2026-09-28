@@ -52,15 +52,6 @@ export function StorySection() {
             <span className="tbm-story__headline-sub">full pipeline in-house.</span>
           </h2>
 
-          {/* The Creed: Rhythmic Scannable Pillar */}
-          <div className="tbm-story__creed">
-            <span className="tbm-creed-item">ONE TEAM</span>
-            <span className="tbm-creed-sep">/</span>
-            <span className="tbm-creed-item">ONE BRIEF</span>
-            <span className="tbm-creed-sep">/</span>
-            <span className="tbm-creed-item">ONE STANDARD</span>
-          </div>
-
           <p className="tbm-story__delivery">
             From the first creative conversation to final delivery.
           </p>

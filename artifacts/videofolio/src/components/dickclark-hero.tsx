@@ -313,32 +313,6 @@ export function DickClarkHero() {
               </svg>
             </button>
           </div>
-
-          {/* ─── Progress Tracker ─── */}
-          <div className="dcp-hero__progressTracker">
-            <div className="dcp-hero__progressDashes">
-              {slides.map((s, i) => (
-                <button
-                  key={s.brand}
-                  type="button"
-                  className={`dcp-hero__progressDash ${i === currentIdx ? 'is-active' : ''}`}
-                  onClick={() => handleManualNav(i)}
-                  title={`${s.brand} (${s.campaign})`}
-                  aria-label={`Go to ${s.brand}`}
-                >
-                  {i === currentIdx && (
-                    <span
-                      key={`progress-fill-${currentIdx}`}
-                      className="dcp-hero__progressFill"
-                    />
-                  )}
-                </button>
-              ))}
-            </div>
-            <span className="dcp-hero__progressNum">
-              {String(currentIdx + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
-            </span>
-          </div>
         </motion.div>
       </section>
     </div>
