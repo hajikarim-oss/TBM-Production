@@ -703,7 +703,7 @@
 }
 
 .work-card-logo-container {
-  height: 28px;
+  height: 32px;
   max-width: 95px;
   display: flex;
   align-items: center;
@@ -712,7 +712,7 @@
 }
 
 .work-card-tile-logo {
-  max-height: 26px;
+  max-height: 30px;
   max-width: 90px;
   object-fit: contain;
   opacity: 0.95;

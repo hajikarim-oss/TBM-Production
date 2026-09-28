@@ -101,7 +101,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Atomberg Cold Press Juicer',
     format: 'DVC ADS',
     client: 'DVC ADS',
-    logo: '/brands/atomberg-logo-new.png',
+    logo: '/brands/64bc9e84eb4c5b6cc701d034d9d1ce61.w5223.h3409.png',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     aspectRatio: '16:9',
   },
