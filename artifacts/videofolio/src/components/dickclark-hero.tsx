@@ -252,23 +252,16 @@ export function DickClarkHero() {
             <div className="dcp-hero__splitLayout">
               {/* Left Column */}
               <div className="dcp-hero__left">
-                <div className="dcp-hero__campaignTag">
-                  <span className="dcp-campaignDot" />
-                  <span>{currentSlide.brand} · {currentSlide.campaign}</span>
-                </div>
-
                 <h1 className="dcp-hero__title">
                   We Make Videos<br />
-                  People Remember
+                  <span className="tbm-text-highlight">People Remember</span>
                 </h1>
               </div>
 
               {/* Right Column */}
               <div className="dcp-hero__right">
                 <p className="dcp-hero__description">
-                  TheBoredMonkey Studios is the dedicated production and post-production
-                  wing of TheBoredMonkey. We craft cinematic commercials, high-velocity
-                  brand films, and culture-defining visual campaigns with a full in-house pipeline.
+                  The dedicated production and post-production wing of TheBoredMonkey. We craft cinematic commercials, high-velocity brand films, and culture-defining visual campaigns with a full in-house pipeline.
                 </p>
               </div>
             </div>

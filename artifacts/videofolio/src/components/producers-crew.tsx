@@ -129,16 +129,9 @@ export function ProducersCrew() {
     <section className="tbm-producers" id="team">
       <div className="tbm-container">
         <div className="tbm-producers__header">
-          <div className="tbm-sectionEyebrow">
-            <span className="tbm-eyebrowLine" />
-            <span>004 — LEADERSHIP & PRODUCTION</span>
-          </div>
-
-
-
           <h2 className="tbm-producers__title">
             The Producers & Directors.<br />
-            Behind Every Delivery.
+            <span className="tbm-text-highlight">Behind Every Delivery.</span>
           </h2>
           <p className="tbm-producers__desc">
             Directing sets and leading full-pipeline execution from Mumbai to pan-India locations.

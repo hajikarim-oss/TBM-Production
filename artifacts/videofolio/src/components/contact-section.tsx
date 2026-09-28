@@ -23,14 +23,9 @@ export function ContactSection() {
         <div className="tbm-contact__grid">
           {/* Left Column: Direct Outreach & Location */}
           <div className="tbm-contact__info">
-            <span className="tbm-sectionEyebrow">
-              <span className="tbm-eyebrowLine" />
-              005 — START A CONVERSATION
-            </span>
-
             <h2 className="tbm-contact__title">
               Let’s Produce Your<br />
-              Next Masterpiece.
+              <span className="tbm-text-highlight">Next Masterpiece.</span>
             </h2>
             <p className="tbm-contact__desc">
               Have a commercial brief, brand film campaign, or production requirement? Reach out directly to our production desk in Mumbai.

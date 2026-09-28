@@ -40,10 +40,6 @@ export function StorySection() {
       <div className="tbm-container">
         {/* Single-column centered manifesto — clean, editorial */}
         <div className="tbm-story__manifesto">
-          <div className="tbm-story__eyebrow">
-            <span className="tbm-story__dot" aria-hidden="true" />
-            <span>WHO WE ARE · EST. 2020</span>
-          </div>
 
           {/* 1: Origin & Identity */}
           <p className="tbm-story__intro">

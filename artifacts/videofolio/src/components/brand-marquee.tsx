@@ -29,15 +29,11 @@ const ROW_2: BrandItem[] = [
 export function BrandMarquee() {
   return (
     <section className="tbm-brands" id="clients" aria-label="Brand Partners">
-      {/* Studio Header with live broadcast badge */}
+      {/* Studio Header */}
       <div className="tbm-brands__header">
-        <div className="tbm-brands__badge">
-          <span className="tbm-brands__liveDot" aria-hidden="true" />
-          <span className="tbm-brands__label">CLIENTS & PRODUCTION PARTNERS</span>
-        </div>
-        <p className="tbm-brands__tagline">
-          Trusted by high-growth disrupters and household names to produce culture-shaping commercials.
-        </p>
+        <h2 className="tbm-brands__title">
+          Trusted by Market Disrupters & <span className="tbm-text-highlight">Household Names</span>
+        </h2>
       </div>
 
       {/* Modern Silk Dual-Marquee Showcase with Edge Vignette Mask */}
