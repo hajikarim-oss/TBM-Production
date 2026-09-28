@@ -1,7 +1,7 @@
-import { useRef, useState, useEffect, useCallback, createContext, useContext } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
-import { R2_BASE_URL as R2 } from '@/config';
+import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
 
 export interface WorkItem {
   id: string;
@@ -22,7 +22,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-logo.svg',
-    video: `${R2}/thursday-order-9-16.mp4`,
+    video: `${R2_ACC2_URL}/Thursday%20order_9_16.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -32,7 +32,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
-    video: `${R2}/gifting-hook-01.mp4`,
+    video: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -42,7 +42,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/happi-planet-brand-color.png',
-    video: `${R2}/happi-planet.mp4`,
+    video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -51,8 +51,8 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     title: 'Heritage Mustard Taste',
     format: 'DVC ADS',
     client: 'DVC ADS',
-    logo: '/brands/vibhor-logo-new.png',
-    video: `${R2}/vibhor-rupali-cooking-oil.mp4`,
+    logo: '/brands/vibhor-logo-white.png',
+    video: `${R2_ACC1_URL}/Vibhor.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -62,7 +62,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
-    video: `${R2}/script-2-hook-3.mp4`,
+    video: `${R2_ACC2_URL}/Script%202-%20Hook%203_3%20Oct25.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -72,7 +72,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
-    video: `${R2}/jordans-brush-mama-penguin.mp4`,
+    video: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -82,7 +82,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/setu-white.png',
-    video: `${R2}/setu-campaign.mp4`,
+    video: `${R2_ACC2_URL}/setu-campaign.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -92,7 +92,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
-    video: `${R2}/zoff-khadey-masale.mp4`,
+    video: `${R2_ACC1_URL}/Zoff.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -101,8 +101,8 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     title: 'Cold Press Juicer Launch',
     format: 'DVC ADS',
     client: 'DVC ADS',
-    logo: '/brands/atomberg-logo-new.png',
-    video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    logo: '/brands/atomberg-logo-white.svg',
+    video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     aspectRatio: '16:9',
   },
 ];
@@ -118,51 +118,6 @@ const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0); // Bombay, Vibhor, Setu
 const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1); // Fiona, Cheq, ZOFF
 const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2); // Happi Planet, Jordan, Atomberg
 
-/* ── Concurrent Video Playback Limiter ── */
-const MAX_CONCURRENT_VIDEOS = 3;
-
-interface VideoSlotManager {
-  request: (id: string, videoEl: HTMLVideoElement) => boolean;
-  release: (id: string) => void;
-}
-
-const VideoSlotContext = createContext<VideoSlotManager>({
-  request: () => false,
-  release: () => {},
-});
-
-function VideoSlotProvider({ children }: { children: React.ReactNode }) {
-  const activeVideos = useRef<Map<string, HTMLVideoElement>>(new Map());
-
-  const request = useCallback((id: string, videoEl: HTMLVideoElement): boolean => {
-    // Already playing this one
-    if (activeVideos.current.has(id)) return true;
-
-    // Slot available
-    if (activeVideos.current.size < MAX_CONCURRENT_VIDEOS) {
-      activeVideos.current.set(id, videoEl);
-      return true;
-    }
-
-    // No slot — find and evict the least recently added
-    return false;
-  }, []);
-
-  const release = useCallback((id: string) => {
-    const video = activeVideos.current.get(id);
-    if (video) {
-      video.pause();
-      activeVideos.current.delete(id);
-    }
-  }, []);
-
-  return (
-    <VideoSlotContext.Provider value={{ request, release }}>
-      {children}
-    </VideoSlotContext.Provider>
-  );
-}
-
 function WorkCard({
   item,
   isAnyModalOpen,
@@ -175,8 +130,8 @@ function WorkCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const slots = useContext(VideoSlotContext);
 
+  // Lazy render the video element when card is near viewport
   useEffect(() => {
     const el = cardRef.current;
     if (!el) return;
@@ -184,33 +139,36 @@ function WorkCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
-        if (entry.isIntersecting && !isAnyModalOpen && videoRef.current) {
-          if (slots.request(item.id, videoRef.current)) {
-            videoRef.current.play().catch(() => {});
-          }
-        } else if (!entry.isIntersecting) {
-          slots.release(item.id);
-          if (videoRef.current) videoRef.current.pause();
+        if (!entry.isIntersecting && videoRef.current) {
+          videoRef.current.pause();
         }
       },
-      { rootMargin: '120px 0px', threshold: 0.05 }
+      { rootMargin: '150px 0px', threshold: 0.05 }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [isAnyModalOpen, item.id, slots]);
+  }, []);
 
   // Pause card video when modal is open
   useEffect(() => {
     if (isAnyModalOpen && videoRef.current) {
       videoRef.current.pause();
-      slots.release(item.id);
-    } else if (!isAnyModalOpen && isInView && videoRef.current) {
-      if (slots.request(item.id, videoRef.current)) {
-        videoRef.current.play().catch(() => {});
-      }
     }
-  }, [isAnyModalOpen, isInView, item.id, slots]);
+  }, [isAnyModalOpen]);
+
+  // Hover to Play logic: plays on mouse enter, pauses on mouse leave
+  const handleMouseEnter = useCallback(() => {
+    if (!isAnyModalOpen && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isAnyModalOpen]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (videoRef.current) {
+      videoRef.current.pause();
+    }
+  }, []);
 
   const isVertical = item.aspectRatio === '9:16';
 
@@ -219,9 +177,11 @@ function WorkCard({
       <div
         className="work-content-item-card-wrap"
         onClick={() => onSelect(item)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
         role="button"
         tabIndex={0}
-        aria-label={`Watch ${item.title} (${item.format})`}
+        aria-label={`Watch ${item.brand} film`}
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
@@ -257,24 +217,16 @@ function WorkCard({
           </div>
         </div>
 
-        {/* Content inside the tile: Logo & Brand Name on left, Format on right */}
+        {/* Content inside the tile: Only Brand Logo */}
         <div className="work-content-body">
           <div className="work-card-headline-row">
-            <div className="work-card-brand-group">
-              <div className="work-card-logo-container" title={item.brand}>
-                <img
-                  src={item.logo}
-                  alt={item.brand}
-                  className="work-card-tile-logo"
-                  loading="lazy"
-                />
-              </div>
-              <h3 className="cards-headline">{item.title}</h3>
-            </div>
-
-            <div className={`format-tag-badge format-tag--${isVertical ? 'vertical' : 'dvc'}`}>
-              <span className="format-tag-dot" aria-hidden="true" />
-              <span>{item.format}</span>
+            <div className="work-card-logo-container" title={item.brand}>
+              <img
+                src={item.logo}
+                alt={item.brand}
+                className="work-card-tile-logo"
+                loading="lazy"
+              />
             </div>
           </div>
         </div>

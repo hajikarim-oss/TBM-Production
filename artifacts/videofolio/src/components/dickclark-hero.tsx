@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
-import { R2_BASE_URL as R2 } from '@/config';
+import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
 
 export interface HeroSlide {
   brand: string;
@@ -20,7 +20,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     brand: 'ATOMBERG',
     campaign: 'Cold Press Juicer Commercial',
     talent: 'Cold Press Juicer Film',
-    video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     logo: '/brands/atomberg-logo-new.png',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI MASTER ANAMORPHIC 40mm T1.9',
@@ -31,7 +31,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     brand: 'HAPPI PLANET',
     campaign: 'Plant-Powered Commercial',
     talent: 'Eco-Clean Ad Film',
-    video: `${R2}/happi-planet.mp4`,
+    video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
     logo: '/brands/happi-planet-brand-color.png',
     format: '4K PRORES 422 HQ',
     lens: 'LEICA SUMMICRON-C 50mm T2.0',
@@ -42,7 +42,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     brand: 'ZOFF',
     campaign: 'Spice Revolution',
     talent: 'High-Speed Commercial',
-    video: `${R2}/Zoff.mp4`,
+    video: `${R2_ACC1_URL}/Zoff.mp4`,
     logo: '/brands/zoff-logo-white.png',
     format: '4K RAW HIGH-SPEED',
     lens: 'ZEISS SUPREME PRIME 35mm T1.5',
@@ -53,7 +53,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     brand: 'VIBHOR',
     campaign: 'Heritage Taste',
     talent: 'Brand Film Series',
-    video: `${R2}/Vibhor.mp4`,
+    video: `${R2_ACC1_URL}/Vibhor.mp4`,
     logo: '/brands/vibhor-logo-new.png',
     format: '4K CINEMA DNG',
     lens: 'ANGENIEUX OPTIMO 28-76mm T2.6',
@@ -64,7 +64,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     brand: 'BLUE TYGA',
     campaign: 'Milind Soman Series',
     talent: 'Starring Milind Soman',
-    video: `${R2}/Blue%20Tyga_DVC_13.4.2026.mp4`,
+    video: `${R2_ACC1_URL}/Blue%20Tyga_DVC_13.4.2026.mp4`,
     logo: '/brands/bluetyga-logo-white.png',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI SIGNATURE PRIME 47mm T1.8',
