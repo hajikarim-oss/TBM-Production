@@ -13,8 +13,7 @@
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 400;
-  src: url('/studio/fonts/PPNeueMontreal-Medium.woff2') format('woff2'),
-       url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -22,8 +21,7 @@
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 600;
-  src: url('/studio/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2'),
-       url('/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2');
+  src: url('/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2');
   font-display: swap;
 }
 

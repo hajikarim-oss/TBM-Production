@@ -5,6 +5,46 @@
   "outputDirectory": "artifacts/videofolio/dist",
   "rewrites": [
     {
+      "source": "/studio/assets/(.*)",
+      "destination": "/assets/$1"
+    },
+    {
+      "source": "/studio/entries/(.*)",
+      "destination": "/entries/$1"
+    },
+    {
+      "source": "/studio/chunks/(.*)",
+      "destination": "/chunks/$1"
+    },
+    {
+      "source": "/studio/brands/(.*)",
+      "destination": "/brands/$1"
+    },
+    {
+      "source": "/studio/fonts/(.*)",
+      "destination": "/fonts/$1"
+    },
+    {
+      "source": "/studio/videos/(.*)",
+      "destination": "/videos/$1"
+    },
+    {
+      "source": "/studio/images/(.*)",
+      "destination": "/images/$1"
+    },
+    {
+      "source": "/studio/favicon.svg",
+      "destination": "/favicon.svg"
+    },
+    {
+      "source": "/studio",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/studio/(.*)",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -12,6 +52,18 @@
   "headers": [
     {
       "source": "/(.*)assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)chunks/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/(.*)entries/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]

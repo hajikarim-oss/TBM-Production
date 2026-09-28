@@ -60,12 +60,39 @@ function videoStreamPlugin() {
   };
 }
 
+function copyStudioPlugin() {
+  return {
+    name: 'copy-studio-dist',
+    closeBundle() {
+      const distDir = path.resolve(import.meta.dirname, 'dist');
+      const studioDir = path.resolve(distDir, 'studio');
+      if (fs.existsSync(distDir)) {
+        if (!fs.existsSync(studioDir)) {
+          fs.mkdirSync(studioDir, { recursive: true });
+        }
+        const items = fs.readdirSync(distDir);
+        for (const item of items) {
+          if (item === 'studio') continue;
+          const srcPath = path.join(distDir, item);
+          const destPath = path.join(studioDir, item);
+          try {
+            fs.cpSync(srcPath, destPath, { recursive: true, force: true });
+          } catch (e) {
+            // Ignore copy conflicts if any
+          }
+        }
+      }
+    },
+  };
+}
+
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/studio/',
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [
     videoStreamPlugin(),
+    copyStudioPlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
