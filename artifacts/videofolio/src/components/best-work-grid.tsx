@@ -1,122 +1,136 @@
-import { useRef, useState, useEffect } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-
-const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
+import { useRef, useState, useEffect, useCallback } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 export interface WorkItem {
   id: string;
+  brand: string;
   title: string;
+  format: 'Vertical AD Film' | 'DVC ADS';
   client: string;
   services: string[];
-  image: string;
+  logo: string;
   video: string;
+  aspectRatio: '9:16' | '16:9';
 }
 
-const WORK_ITEMS: WorkItem[] = [
+const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
+
+export const WORK_ITEMS: WorkItem[] = [
   {
-    id: 'atomberg-cpj',
-    title: 'ATOMBERG CPJ',
-    client: 'Atomberg Technologies',
-    services: ['PRODUCTION', 'COMMERCIAL', 'COLOR GRADE'],
-    image: '/brands/Atomberg.jpg',
-    video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    id: 'bombay-sweet-shop',
+    brand: 'Bombay Sweet Shop',
+    title: 'BOMBAY SWEET SHOP',
+    format: 'Vertical AD Film',
+    client: 'Mithai & Confectionery Campaign',
+    services: ['VERTICAL 9:16', 'PERFORMANCE CREATIVE', '4K MASTER'],
+    logo: '/brands/bombay-sweet-shop-logo.svg',
+    video: '/videos/they-already-know-your-order.mp4',
+    aspectRatio: '9:16',
   },
   {
-    id: 'blue-tyga',
-    title: 'BLUE TYGA',
-    client: 'Starring Milind Soman',
-    services: ['DIRECTION', 'AD FILM', 'ATHLEISURE'],
-    image: '/brands/bluetyga-logo-white.png',
-    video: `${R2}/Blue%20Tyga_DVC_13.4.2026.mp4`,
+    id: 'fiona-diamonds',
+    brand: 'Fiona',
+    title: 'FIONA DIAMONDS',
+    format: 'Vertical AD Film',
+    client: 'Festive Sparkle & Lab-Grown Diamonds',
+    services: ['VERTICAL 9:16', 'E-COMMERCE DVC', 'COLOR GRADE'],
+    logo: '/brands/fiona-logo.svg',
+    video: '/videos/gifting-hook-01.mp4',
+    aspectRatio: '9:16',
   },
   {
-    id: 'zoff-khadey-masale',
-    title: 'ZOFF KHADEY MASALE',
-    client: 'Shark Tank India Winner',
-    services: ['HIGH-SPEED 4K', 'FOOD CINEMATOGRAPHY', 'COMMERCIAL'],
-    image: '/brands/zoff-logo-white.png',
-    video: '/videos/zoff-khadey-masale.mp4',
-  },
-  {
-    id: 'happi-planet-home',
+    id: 'happi-planet',
+    brand: 'Happi Planet',
     title: 'HAPPI PLANET',
-    client: 'Plant-Powered Home Care',
-    services: ['COMMERCIAL', '4K DIRECTION', 'POST PRODUCTION'],
-    image: '/brands/happi-planet-white.svg',
+    format: 'DVC ADS',
+    client: 'Plant-Powered Eco Home Care',
+    services: ['4K PRORES', 'COMMERCIAL DVC', 'POST PIPELINE'],
+    logo: '/brands/happi-planet-white.svg',
     video: '/videos/happi-planet.mp4',
+    aspectRatio: '16:9',
   },
   {
-    id: 'vibhor-rupali-oil',
+    id: 'vibhor-cooking-oil',
+    brand: 'Vibhor Cooking oil',
     title: 'VIBHOR COOKING OIL',
-    client: 'Starring Rupali Ganguly',
+    format: 'DVC ADS',
+    client: 'Starring Rupali Ganguly · Saasu Maa Campaign',
     services: ['CELEBRITY DVC', 'TV COMMERCIAL', 'DIRECTION'],
-    image: '/brands/vibhor-logo-white.png',
+    logo: '/brands/vibhor-logo-white.png',
     video: '/videos/vibhor-rupali-cooking-oil.mp4',
-  },
-  {
-    id: 'zoff-revolution',
-    title: 'ZOFF SPICE REVOLUTION',
-    client: 'High-Speed Commercial',
-    services: ['4K RAW HIGH-SPEED', 'CINEMATOGRAPHY', 'COLOR'],
-    image: '/brands/zoff-logo-white.png',
-    video: `${R2}/Zoff.mp4`,
+    aspectRatio: '16:9',
   },
   {
     id: 'cheq-pay',
+    brand: 'Cheq',
     title: 'CHEQ PAY',
+    format: 'Vertical AD Film',
     client: 'Fintech Bill Payment Platform',
-    services: ['COMMERCIAL', 'SCRIPT & DIRECTION', '4K MASTER'],
-    image: '/brands/cheq-logo-white.png',
+    services: ['VERTICAL 9:16', 'SCRIPT & DIRECTION', 'MOTION VFX'],
+    logo: '/brands/cheq-logo-white.png',
     video: '/videos/script-2-hook-3.mp4',
+    aspectRatio: '9:16',
   },
   {
-    id: 'jordans-mama-penguin',
-    title: "JORDAN'S ORAL CARE",
-    client: 'Mama Penguin Series · Rabitat',
-    services: ['D2C AD FILM', 'PRODUCT STORY', 'POST'],
-    image: '/brands/Rabitat.webp',
+    id: 'jordan-oral-care',
+    brand: 'Jordan',
+    title: 'JORDAN ORAL CARE',
+    format: 'DVC ADS',
+    client: 'Mama Penguin Series · Rabitat Kids Care',
+    services: ['COMMERCIAL DVC', 'PRODUCT STORY', 'SOUND DESIGN'],
+    logo: '/brands/jordan-logo.svg',
     video: '/videos/jordans-brush-mama-penguin.mp4',
+    aspectRatio: '16:9',
   },
   {
-    id: 'thursday-order',
-    title: 'THURSDAY ORDER',
-    client: 'High-Velocity D2C Ad Film',
-    services: ['VERTICAL 9:16', 'PERFORMANCE CREATIVE', 'EDIT'],
-    image: '/brands/eatanytime-logo-white.png',
+    id: 'setu-nutrition',
+    brand: 'Setu',
+    title: 'SETU NUTRITION',
+    format: 'Vertical AD Film',
+    client: 'Daily Wellness & Nutrition Campaign',
+    services: ['VERTICAL 9:16', 'D2C AD FILM', 'CONVERSION EDIT'],
+    logo: '/brands/setu-logo.svg',
     video: '/videos/thursday-order-9-16.mp4',
+    aspectRatio: '9:16',
   },
   {
-    id: 'they-know-your-order',
-    title: 'THEY KNOW YOUR ORDER',
-    client: 'Middle-Of-Funnel Campaign',
-    services: ['CONVERSION DVC', 'CINEMATOGRAPHY', 'VFX'],
-    image: '/brands/wakefit-logo-white.png',
-    video: '/videos/they-already-know-your-order.mp4',
+    id: 'zoff-spices',
+    brand: 'ZOFF',
+    title: 'ZOFF KHADEY MASALE',
+    format: 'DVC ADS',
+    client: 'Shark Tank India · Pinch Packed with Power',
+    services: ['4K HIGH-SPEED', 'FOOD CINEMATOGRAPHY', 'DVC AD'],
+    logo: '/brands/zoff-logo-white.png',
+    video: '/videos/zoff-khadey-masale.mp4',
+    aspectRatio: '16:9',
   },
   {
-    id: 'gifting-series',
-    title: 'GIFTING CAMPAIGN',
-    client: 'Festive Brand Gifting Ad',
-    services: ['HOOK VARIATIONS', 'COMMERCIAL', 'COLOR'],
-    image: '/brands/reequil-logo-white.png',
-    video: '/videos/gifting-hook-01.mp4',
-  },
-  {
-    id: 'atomberg-factory',
-    title: 'ATOMBERG FACTORY',
-    client: 'Automated Robotics Docu',
-    services: ['CORPORATE DOCU', 'MOTION GRAPHICS', 'EDIT'],
-    image: '/brands/atomberg-logo-white.svg',
-    video: `${R2}/Atomberg%20Factory%20Edit_With%20Map%20Animation%20V2.mp4`,
+    id: 'atomberg-cpj',
+    brand: 'Atomberg',
+    title: 'ATOMBERG CPJ',
+    format: 'DVC ADS',
+    client: 'Atomberg Technologies · Commercial Ad Film',
+    services: ['COMMERCIAL DVC', '4K PRORES', 'COLOR GRADE'],
+    logo: '/brands/atomberg-logo-white.svg',
+    video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    aspectRatio: '16:9',
   },
 ];
 
-// Split dynamically into 3 balanced columns for Kookie Kollective 3-column parallax layout
-const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0);
-const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1);
-const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2);
+// Balanced 3-column parallax distribution: exactly 3 items per column
+const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0); // Bombay, Vibhor, Setu
+const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1); // Fiona, Cheq, ZOFF
+const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2); // Happi Planet, Jordan, Atomberg
 
-function WorkCard({ item }: { item: WorkItem }) {
+function WorkCard({
+  item,
+  isAnyModalOpen,
+  onSelect,
+}: {
+  item: WorkItem;
+  isAnyModalOpen: boolean;
+  onSelect: (item: WorkItem) => void;
+}) {
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
@@ -129,7 +143,7 @@ function WorkCard({ item }: { item: WorkItem }) {
       ([entry]) => {
         setIsInView(entry.isIntersecting);
         if (videoRef.current) {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !isAnyModalOpen) {
             videoRef.current.play().catch(() => {});
           } else {
             videoRef.current.pause();
@@ -141,72 +155,259 @@ function WorkCard({ item }: { item: WorkItem }) {
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, []);
+  }, [isAnyModalOpen]);
+
+  // Pause card video when modal is open
+  useEffect(() => {
+    if (isAnyModalOpen && videoRef.current) {
+      videoRef.current.pause();
+    } else if (!isAnyModalOpen && isInView && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  }, [isAnyModalOpen, isInView]);
+
+  const isVertical = item.aspectRatio === '9:16';
 
   return (
     <div className="work-content-item" ref={cardRef}>
-      <div className="work-content-item-card-wrap">
-        <div className="work-content-content">
-          <div className="work-content-image">
-            {/* Viewport-optimized video stream: plays only when in or near viewport */}
-            <div className="bg-video">
-              {isInView ? (
-                <video
-                  ref={videoRef}
-                  playsInline
-                  loop
-                  muted
-                  autoPlay
-                  preload="metadata"
-                  src={item.video}
-                />
-              ) : (
-                <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    backgroundColor: '#121216',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    style={{
-                      maxWidth: '55%',
-                      maxHeight: '55%',
-                      objectFit: 'contain',
-                      opacity: 0.65,
-                      filter: 'brightness(0) invert(1)',
-                    }}
-                    loading="lazy"
-                  />
-                </div>
-              )}
-            </div>
+      <div
+        className="work-content-item-card-wrap"
+        onClick={() => onSelect(item)}
+        role="button"
+        tabIndex={0}
+        aria-label={`Watch ${item.title} (${item.format})`}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(item);
+          }
+        }}
+      >
+        {/* Video Canvas at the top of card */}
+        <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
+          <div className="bg-video">
+            {isInView ? (
+              <video
+                ref={videoRef}
+                playsInline
+                loop
+                muted
+                autoPlay
+                preload="metadata"
+                src={item.video}
+              />
+            ) : (
+              <div className="work-card-placeholder" />
+            )}
           </div>
-          <div className="work-content-title">
-            <div className="cards-headline">{item.title}</div>
+
+          {/* Interactive Play Button on Hover */}
+          <div className="work-card-play-overlay">
+            <div className="work-card-play-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span>WATCH FILM</span>
+            </div>
           </div>
         </div>
 
-        <div className="work-content-services">
-          {item.services.map((svc) => (
-            <div key={svc} className="work-content-single-service">
-              <div className="work-content-service-line is-hp-card" />
-              <div className="work-content-service-text is-hp-card">{svc}</div>
+        {/* Content inside the tile: Logo & Headline, Client, Format & Services */}
+        <div className="work-content-body">
+          <div className="work-card-headline-row">
+            <div className="cards-headline">{item.title}</div>
+            <div className="work-card-logo-container" title={item.brand}>
+              <img
+                src={item.logo}
+                alt={item.brand}
+                className="work-card-tile-logo"
+                loading="lazy"
+              />
             </div>
-          ))}
+          </div>
+
+          <div className="cards-client">{item.client}</div>
+
+          <div className="work-content-services">
+            <div className={`format-tag-badge format-tag--${isVertical ? 'vertical' : 'dvc'}`}>
+              <span className="format-tag-dot" aria-hidden="true" />
+              <span>{item.format}</span>
+            </div>
+            {item.services.map((svc) => (
+              <div key={svc} className="work-content-single-service">
+                <div className="work-content-service-line is-hp-card" />
+                <div className="work-content-service-text is-hp-card">{svc}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
+/* ── Cinema Fullscreen Modal Popup (Designed per runwayml & apple design-md) ── */
+function WorkModal({
+  item,
+  onClose,
+}: {
+  item: WorkItem;
+  onClose: () => void;
+}) {
+  const modalVideoRef = useRef<HTMLVideoElement>(null);
+  const [isAudioMuted, setIsAudioMuted] = useState(false);
+
+  // Esc key closes modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  // Lock body scroll
+  useEffect(() => {
+    const origOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = origOverflow;
+    };
+  }, []);
+
+  const isVertical = item.aspectRatio === '9:16';
+
+  const toggleMute = useCallback(() => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.muted = !modalVideoRef.current.muted;
+      setIsAudioMuted(modalVideoRef.current.muted);
+    }
+  }, []);
+
+  return (
+    <motion.div
+      className="cinema-overlay"
+      role="dialog"
+      aria-modal="true"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.28, ease: [0.23, 1, 0.32, 1] }}
+    >
+      {/* Background Dimmer */}
+      <div className="cinema-backdrop" onClick={onClose} />
+
+      {/* Floating Top Header Bar (Fixed & spacious with zero overlapping text) */}
+      <header className="cinema-header">
+        <div className="cinema-brand-block">
+          <div className="cinema-logo-box">
+            <img src={item.logo} alt={item.brand} className="cinema-brand-logo" />
+          </div>
+          <div className="cinema-brand-divider" />
+          <div className="cinema-title-group">
+            <span className="cinema-project-title">{item.title}</span>
+            <span className="cinema-client-subtitle">{item.client}</span>
+          </div>
+        </div>
+
+        <div className="cinema-header-controls">
+          <div className={`cinema-format-pill format-pill--${isVertical ? 'vertical' : 'dvc'}`}>
+            <span className="cinema-live-pulse" />
+            <span>{item.format}</span>
+          </div>
+
+          <button
+            type="button"
+            className="cinema-audio-toggle"
+            onClick={toggleMute}
+            title={isAudioMuted ? 'Unmute Audio' : 'Mute Sound'}
+          >
+            {isAudioMuted ? (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />
+              </svg>
+            ) : (
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+            )}
+            <span>{isAudioMuted ? 'UNMUTE AUDIO' : 'AUDIO ACTIVE'}</span>
+          </button>
+
+          <button
+            type="button"
+            className="cinema-close-btn"
+            onClick={onClose}
+            aria-label="Close cinema viewer"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+            <span className="cinema-close-esc">ESC</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Cinema Stage Video */}
+      <main
+        className="cinema-stage"
+        onClick={(e) => {
+          if (e.target === e.currentTarget) onClose();
+        }}
+      >
+        <motion.div
+          className={`cinema-viewport ${isVertical ? 'viewport--vertical' : 'viewport--dvc'}`}
+          initial={{ scale: 0.94, opacity: 0, y: 20 }}
+          animate={{ scale: 1, opacity: 1, y: 0 }}
+          exit={{ scale: 0.96, opacity: 0, y: 15 }}
+          transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
+        >
+          <video
+            ref={modalVideoRef}
+            src={item.video}
+            className="cinema-video"
+            autoPlay
+            playsInline
+            controls
+          />
+
+          {isAudioMuted && (
+            <button
+              type="button"
+              className="cinema-unmute-prompt"
+              onClick={toggleMute}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
+              </svg>
+              <span>CLICK TO UNMUTE AUDIO</span>
+            </button>
+          )}
+        </motion.div>
+      </main>
+
+      {/* Cinema Footer Bar */}
+      <footer className="cinema-footer">
+        <div className="cinema-footer-brand">
+          <span className="cinema-footer-dot" />
+          <span>THEBOREDMONKEY STUDIOS · 4K MASTER CINEMA DELIVERY</span>
+        </div>
+        <div className="cinema-footer-services">
+          {item.services.map((svc) => (
+            <span key={svc} className="cinema-service-tag">{svc}</span>
+          ))}
+        </div>
+      </footer>
+    </motion.div>
+  );
+}
+
 export function BestWorkGrid() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
 
   // Parallax scroll driver mapping Kookie Kollective GSAP speeds
   const { scrollYProgress } = useScroll({
@@ -218,6 +419,14 @@ export function BestWorkGrid() {
   const col1Y = useTransform(scrollYProgress, [0, 1], ['5%', '-25%']);
   const col2Y = useTransform(scrollYProgress, [0, 1], ['18%', '-48%']);
   const col3Y = useTransform(scrollYProgress, [0, 1], ['10%', '-35%']);
+
+  const handleSelectWork = useCallback((item: WorkItem) => {
+    setSelectedItem(item);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setSelectedItem(null);
+  }, []);
 
   return (
     <section id="work" className="section-work" ref={sectionRef}>
@@ -279,32 +488,54 @@ export function BestWorkGrid() {
           </div>
         </div>
 
-        {/* Moving Tiles Grid Container */}
+        {/* Moving Tiles Grid Container: 3 Symmetrical Columns of 3 items each */}
         <div className="work-content-wrap">
           <div className="work-content-columns">
-            {/* Column 1 */}
+            {/* Column 1 (3 items) */}
             <motion.div className="work-column" style={{ y: col1Y }}>
               {COL_1.map((item) => (
-                <WorkCard key={item.id} item={item} />
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
               ))}
             </motion.div>
 
-            {/* Column 2 (Offset down, faster scrub) */}
+            {/* Column 2 (3 items, offset down) */}
             <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
               {COL_2.map((item) => (
-                <WorkCard key={item.id} item={item} />
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
               ))}
             </motion.div>
 
-            {/* Column 3 */}
+            {/* Column 3 (3 items, perfectly filling the bottom right) */}
             <motion.div className="work-column" style={{ y: col3Y }}>
               {COL_3.map((item) => (
-                <WorkCard key={item.id} item={item} />
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
               ))}
             </motion.div>
           </div>
         </div>
       </div>
+
+      {/* Cinema Fullscreen Modal Popup */}
+      <AnimatePresence>
+        {selectedItem && (
+          <WorkModal item={selectedItem} onClose={handleCloseModal} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
