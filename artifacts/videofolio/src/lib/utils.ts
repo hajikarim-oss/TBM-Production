@@ -32,5 +32,20 @@ export function assetUrl(path: string): string {
 
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   const cleanBase = base.endsWith('/') ? base : `${base}/`;
-  return `${cleanBase}${cleanPath}`;
+  const url = `${cleanBase}${cleanPath}`;
+
+  // Cache-busting query param for brand logos and static images to bust any stale browser 404 cache
+  if (
+    cleanPath.includes('brands/') ||
+    cleanPath.endsWith('.png') ||
+    cleanPath.endsWith('.svg') ||
+    cleanPath.endsWith('.jpg') ||
+    cleanPath.endsWith('.jpeg') ||
+    cleanPath.endsWith('.webp')
+  ) {
+    const sep = url.includes('?') ? '&' : '?';
+    return `${url}${sep}v=3`;
+  }
+
+  return url;
 }
