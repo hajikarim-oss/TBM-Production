@@ -32,7 +32,7 @@ export const STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Plant-Powered Commercial',
     talent: 'Eco-Clean Ad Film',
     video: '/videos/happi-planet.mp4',
-    logo: '/brands/happi-planet-white.svg',
+    logo: '/brands/happi-planet-brand-color.png',
     format: '4K PRORES 422 HQ',
     lens: 'LEICA SUMMICRON-C 50mm T2.0',
     iso: 'ISO 500',

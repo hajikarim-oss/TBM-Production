@@ -11,7 +11,7 @@ const ROW_1: BrandItem[] = [
   { name: 'BEATXP', logo: '/brands/beatxp-logo-white.png' },
   { name: 'VIBHOR', logo: '/brands/vibhor-logo-new.png' },
   { name: 'BIOPEAK', logo: '/brands/biopeak-logo-white.svg' },
-  { name: 'HAPPI PLANET', logo: '/brands/happi-planet-white.svg' },
+  { name: 'HAPPI PLANET', logo: '/brands/happi-planet-brand-color.png' },
   { name: 'CHEQ', logo: '/brands/cheq-logo-white.png' },
 ];
 

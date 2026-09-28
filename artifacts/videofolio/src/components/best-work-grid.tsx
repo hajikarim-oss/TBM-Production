@@ -41,7 +41,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Plant-Powered Clean DVC',
     format: 'DVC ADS',
     client: 'DVC ADS',
-    logo: '/brands/happi-planet-white.svg',
+    logo: '/brands/happi-planet-brand-color.png',
     video: '/videos/happi-planet.mp4',
     aspectRatio: '16:9',
   },

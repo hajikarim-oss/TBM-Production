@@ -25,7 +25,7 @@ const CREW: CrewMember[] = [
       'Orra Jewellery',
       'Nova AI+',
       'Jordan Toothpaste',
-      'Yousta (Reliance Retail)',
+      'Yousta',
     ],
   },
   {
@@ -35,11 +35,11 @@ const CREW: CrewMember[] = [
     portrait: '/suraj.jpeg',
     bio: 'Commanding high-tempo physical production, complex multi-location commercial logistics, and rapid post-production pipeline execution across Mumbai, Goa, and pan-India shoots.',
     brands: [
-      'Blue Tyga (Milind Soman)',
+      'Blue Tyga',
       'Atomberg Technologies',
-      'Adidas India',
+      'Adidas',
       'Shopaarel Cosmetics',
-      'Straex Footwear',
+      'Straex',
       'Bombay Sweet Shop',
       'Happi Planet (Home Care)',
     ],
@@ -108,7 +108,7 @@ function ProducerCard({ member, index }: { member: CrewMember; index: number }) 
 
           <div className="tbm-producerDossier__credits">
             <div className="tbm-creditsHeader">
-              <span>COMMERCIAL FILMOGRAPHY ({member.brands.length} CLIENTS)</span>
+              <span>COMMERCIAL FILMOGRAPHY</span>
             </div>
             <div className="tbm-creditsList">
               {member.brands.map((b) => (
