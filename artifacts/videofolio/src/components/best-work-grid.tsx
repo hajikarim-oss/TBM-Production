@@ -191,12 +191,6 @@ function WorkCard({
             )}
           </div>
 
-          {/* Broadcast Recording Indicator */}
-          <div className="work-card-rec-badge" aria-hidden="true">
-            <span className="rec-dot" />
-            <span>REC · 4K</span>
-          </div>
-
           {/* Interactive Play Button on Card Hover */}
           <div className="work-card-play-overlay">
             <div className="work-card-play-btn">

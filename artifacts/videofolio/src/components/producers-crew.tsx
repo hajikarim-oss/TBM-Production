@@ -15,7 +15,7 @@ const CREW: CrewMember[] = [
     name: 'Saurabh Chaubey',
     role: 'Producer & Director',
     experience: '8+ Years Industry Directing',
-    portrait: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&auto=format&fit=crop&q=75',
+    portrait: '/saurabh.jpeg',
     bio: 'Directing cinematic visual narratives with deep emotional pacing. Renowned for high-speed macro food and spice cinematography, commercial TVCs, and large-scale celebrity ad films.',
     brands: [
       'Zoff Spices',
@@ -32,7 +32,7 @@ const CREW: CrewMember[] = [
     name: 'Suraj Adawade',
     role: 'Executive Producer',
     experience: '7+ Years Studio Production',
-    portrait: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&auto=format&fit=crop&q=75',
+    portrait: '/suraj.jpeg',
     bio: 'Commanding high-tempo physical production, complex multi-location commercial logistics, and rapid post-production pipeline execution across Mumbai, Goa, and pan-India shoots.',
     brands: [
       'Blue Tyga (Milind Soman)',
@@ -46,15 +46,15 @@ const CREW: CrewMember[] = [
   },
 ];
 
-function ProducerCard({ member }: { member: CrewMember }) {
+function ProducerCard({ member, index }: { member: CrewMember; index: number }) {
   const cardRef = useRef<HTMLDivElement>(null);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { stiffness: 150, damping: 20 });
-  const springY = useSpring(mouseY, { stiffness: 150, damping: 20 });
-  const rotateX = useTransform(springY, [-150, 150], [8, -8]);
-  const rotateY = useTransform(springX, [-150, 150], [-8, 8]);
+  const springX = useSpring(mouseX, { stiffness: 220, damping: 25 });
+  const springY = useSpring(mouseY, { stiffness: 220, damping: 25 });
+  const rotateX = useTransform(springY, [-120, 120], [5, -5]);
+  const rotateY = useTransform(springX, [-120, 120], [-5, 5]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
@@ -75,6 +75,10 @@ function ProducerCard({ member }: { member: CrewMember }) {
       ref={cardRef}
       className="tbm-producerDossier"
       style={{ rotateX, rotateY, transformPerspective: 900 }}
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ duration: 0.55, delay: index * 0.14, ease: [0.23, 1, 0.32, 1] }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -142,8 +146,8 @@ export function ProducersCrew() {
         </div>
 
         <div className="tbm-producers__grid">
-          {CREW.map((member) => (
-            <ProducerCard key={member.name} member={member} />
+          {CREW.map((member, idx) => (
+            <ProducerCard key={member.name} member={member} index={idx} />
           ))}
         </div>
       </div>
