@@ -42,16 +42,31 @@ export function StorySection() {
         <div className="tbm-story__manifesto">
           <div className="tbm-story__eyebrow">
             <span className="tbm-story__dot" aria-hidden="true" />
-            <span>WHO WE ARE · STUDIO MANIFESTO</span>
+            <span>WHO WE ARE · EST. 2020</span>
           </div>
 
-          <blockquote className="tbm-story__quote">
-            Founded in 2020, <strong className="tbm-text-white">TheBoredMonkey Studios</strong> is the dedicated production and post-production wing of TheBoredMonkey. We work with a{' '}
-            <span className="tbm-nowrap"><em className="tbm-text-highlight">"Whatever It Takes Mindset"</em></span> — full pipeline in-house. One team, one brief, one standard, from the first creative conversation to final delivery.
-          </blockquote>
+          {/* 1: Origin & Identity */}
+          <p className="tbm-story__intro">
+            Founded in 2020, <strong className="tbm-text-white">TheBoredMonkey Studios</strong> is the dedicated production and post-production wing of TheBoredMonkey.
+          </p>
 
-          <p className="tbm-story__subcopy">
-            No fragmented vendors. No miscommunicated briefs. We operate our own camera packages, lighting trucks, studio soundstages, and post-production suites to guarantee broadcast-grade execution for every brand partner.
+          {/* 2: The Core Ethos (Bold Hero Display) */}
+          <h2 className="tbm-story__headline">
+            We work with a <span className="tbm-text-highlight">"Whatever It Takes Mindset"</span>
+            <span className="tbm-story__headline-sub">full pipeline in-house.</span>
+          </h2>
+
+          {/* The Creed: Rhythmic Scannable Pillar */}
+          <div className="tbm-story__creed">
+            <span className="tbm-creed-item">ONE TEAM</span>
+            <span className="tbm-creed-sep">/</span>
+            <span className="tbm-creed-item">ONE BRIEF</span>
+            <span className="tbm-creed-sep">/</span>
+            <span className="tbm-creed-item">ONE STANDARD</span>
+          </div>
+
+          <p className="tbm-story__delivery">
+            From the first creative conversation to final delivery.
           </p>
         </div>
 
