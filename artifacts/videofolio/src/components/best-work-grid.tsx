@@ -81,7 +81,7 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'Daily Nutrition Boost',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
-    logo: '/brands/setu.webp',
+    logo: '/brands/setu-white.png',
     video: '/videos/setu-campaign.mp4',
     aspectRatio: '9:16',
   },

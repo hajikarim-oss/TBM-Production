@@ -16,7 +16,7 @@ const ROW_1: BrandItem[] = [
 ];
 
 const ROW_2: BrandItem[] = [
-  { name: 'SETU', logo: '/brands/setu.webp' },
+  { name: 'SETU', logo: '/brands/setu-white.png' },
   { name: 'PILGRIM', logo: '/brands/pilgrim-logo-white.png' },
   { name: 'EAT ANYTIME', logo: '/brands/eatanytime-logo-white.png' },
   { name: 'WAKEFIT', logo: '/brands/wakefit-logo-white.png' },
