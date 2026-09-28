@@ -75,28 +75,10 @@ function BtsSlideCard({
   item: BtsItem;
   onSelect: (item: BtsItem) => void;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const isVertical = item.aspectRatio === '9:16';
-
-  const handleMouseEnter = () => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {});
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = 0;
-    }
-  };
-
   return (
     <div
       className="project-image-splide-wrap"
       onClick={() => onSelect(item)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       role="button"
       tabIndex={0}
       aria-label={`Watch ${item.title} (${item.brand} BTS)`}
@@ -107,16 +89,12 @@ function BtsSlideCard({
         }
       }}
     >
-      {/* Background Video Preview on hover with fallback Poster */}
-      <video
-        ref={videoRef}
-        src={item.video}
-        poster={item.poster}
-        playsInline
-        muted
-        loop
-        preload="none"
+      <img
+        src={item.poster}
+        alt={`${item.brand} Behind The Scenes - ${item.title}`}
         className="project-image-splide"
+        loading="lazy"
+        draggable={false}
       />
 
       {/* Minimal Play Hover Overlay */}
@@ -143,6 +121,24 @@ function BtsModal({
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [, setIsPlaying] = useState(true);
+
+  // Autoplay handler with audio fallback
+  useEffect(() => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.currentTime = 0;
+      const playPromise = modalVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // If browser blocks unmuted autoplay, mute and resume automatically
+          if (modalVideoRef.current) {
+            modalVideoRef.current.muted = true;
+            setIsAudioMuted(true);
+            modalVideoRef.current.play().catch(() => {});
+          }
+        });
+      }
+    }
+  }, [item]);
 
   // Esc and keyboard shortcuts
   useEffect(() => {
@@ -282,6 +278,8 @@ function BtsModal({
             autoPlay
             playsInline
             controls
+            preload="auto"
+            muted={isAudioMuted}
             onClick={handleVideoClick}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
