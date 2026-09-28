@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
 
 export interface CrewMember {
   name: string;
@@ -85,7 +86,7 @@ function ProducerCard({ member, index }: { member: CrewMember; index: number }) 
       <div className="tbm-producerDossier__top">
         <div className="tbm-producerDossier__imgWrap">
           <img
-            src={member.portrait}
+            src={assetUrl(member.portrait)}
             alt={member.name}
             className="tbm-producerDossier__img"
             loading="lazy"

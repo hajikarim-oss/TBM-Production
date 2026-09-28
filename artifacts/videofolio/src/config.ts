@@ -8,7 +8,7 @@
  */
 export const R2_BASE_URL =
   import.meta.env.VITE_R2_URL ||
-  'https://pub-1ad682700e73410b958dd10d131d07d5.r2.dev';
+  'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
 
 export function getR2VideoUrl(filename: string): string {
   if (!filename) return '';
