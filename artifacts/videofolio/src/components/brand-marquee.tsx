@@ -5,18 +5,18 @@ export interface BrandItem {
 }
 
 const ROW_1: BrandItem[] = [
-  { name: 'ATOMBERG', logo: '/brands/atomberg-white-new.png' },
+  { name: 'ATOMBERG', logo: '/brands/atomberg-logo-new.png' },
   { name: 'ZOFF SPICES', logo: '/brands/zoff-logo-white.png' },
   { name: 'BLUE TYGA', logo: '/brands/bluetyga-logo-white.png' },
   { name: 'BEATXP', logo: '/brands/beatxp-logo-white.png' },
-  { name: 'VIBHOR', logo: '/brands/vibhor-white-new.png' },
+  { name: 'VIBHOR', logo: '/brands/vibhor-logo-new.png' },
   { name: 'BIOPEAK', logo: '/brands/biopeak-logo-white.svg' },
   { name: 'HAPPI PLANET', logo: '/brands/happi-planet-white.svg' },
   { name: 'CHEQ', logo: '/brands/cheq-logo-white.png' },
 ];
 
 const ROW_2: BrandItem[] = [
-  { name: 'SETU', logo: '/brands/setu-white.png' },
+  { name: 'SETU', logo: '/brands/setu.webp' },
   { name: 'PILGRIM', logo: '/brands/pilgrim-logo-white.png' },
   { name: 'EAT ANYTIME', logo: '/brands/eatanytime-logo-white.png' },
   { name: 'WAKEFIT', logo: '/brands/wakefit-logo-white.png' },

@@ -35,38 +35,38 @@ export function ContactSection() {
             {/* Quick Action Badges */}
             <div className="tbm-contact__channels">
               <a
-                href="mailto:production@theboredmonkey.com"
+                href="mailto:bd@theboredmonkey.com"
                 className="tbm-channelBtn"
                 title="Send Email"
               >
                 <span className="tbm-channelIcon">✉</span>
-                <span>production@theboredmonkey.com</span>
+                <span>bd@theboredmonkey.com</span>
               </a>
 
               <a
-                href="tel:+919876543210"
+                href="tel:+919004254057"
                 className="tbm-channelBtn"
                 title="Call Studio"
               >
                 <span className="tbm-channelIcon">✆</span>
-                <span>+91 98200 00000</span>
+                <span>+91 90042 54057</span>
               </a>
 
               <a
-                href="https://wa.me/919820000000"
+                href="https://wa.me/919004254057"
                 target="_blank"
                 rel="noreferrer"
                 className="tbm-channelBtn"
                 title="WhatsApp Direct"
               >
                 <span className="tbm-channelIcon">💬</span>
-                <span>WhatsApp Production Desk</span>
+                <span>WhatsApp Production Desk (+91 90042 54057)</span>
               </a>
             </div>
 
             <div className="tbm-contact__address">
               <span className="tbm-addressLabel">STUDIO HEADQUARTERS</span>
-              <p>TheBoredMonkey Studios, Film City Link Rd, Goregaon East, Mumbai, Maharashtra 400065</p>
+              <p>Mathuradas Mills Compound, 2nd floor, Todi building, NM Joshi Marg, near kearla quarters, Lower Parel, Mumbai, Maharashtra 400013</p>
             </div>
           </div>
 
@@ -121,7 +121,7 @@ export function ContactSection() {
                     id="contact-mobile"
                     type="tel"
                     required
-                    placeholder="+91 98765 43210"
+                    placeholder="+91 90042 54057"
                     value={formData.mobile}
                     onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
                   />
@@ -152,7 +152,7 @@ export function ContactSection() {
       {/* ─── High-Fashion / Cinematic Studio Footer (Kookie Kollective Style) ─── */}
       <footer className="tbm-footer">
         <div className="tbm-container">
-          {/* Large Studio Name Monolith with Official Logo */}
+          {/* Centered Studio Logo (Clean without large monolith text) */}
           <div className="tbm-footer__monolith">
             <div className="tbm-footer__logoWrap">
               <img
@@ -161,8 +161,6 @@ export function ContactSection() {
                 className="tbm-footer__logo"
               />
             </div>
-            <span className="tbm-footer__brandName">THEBOREDMONKEY</span>
-            <span className="tbm-footer__brandSub">STUDIOS · PRODUCTION & POST · MUMBAI</span>
           </div>
 
 
@@ -185,7 +183,7 @@ export function ContactSection() {
               <ul className="tbm-footer__list">
                 <li>
                   <span className="tbm-dimLabel">New Business:</span>
-                  <a href="mailto:production@theboredmonkey.com">production@theboredmonkey.com</a>
+                  <a href="mailto:bd@theboredmonkey.com">bd@theboredmonkey.com</a>
                 </li>
                 <li>
                   <span className="tbm-dimLabel">Careers & Crew:</span>
@@ -202,7 +200,7 @@ export function ContactSection() {
             <div className="tbm-footer__col">
               <span className="tbm-footer__colHeader">FOLLOW</span>
               <ul className="tbm-footer__list">
-                <li><a href="https://instagram.com" target="_blank" rel="noreferrer">Instagram ↗</a></li>
+                <li><a href="https://www.instagram.com/theboredmonkeyofficial/?hl=en" target="_blank" rel="noreferrer">Instagram ↗</a></li>
                 <li><a href="https://linkedin.com" target="_blank" rel="noreferrer">LinkedIn ↗</a></li>
                 <li><a href="https://vimeo.com" target="_blank" rel="noreferrer">Vimeo ↗</a></li>
                 <li><a href="https://youtube.com" target="_blank" rel="noreferrer">YouTube ↗</a></li>
@@ -213,8 +211,7 @@ export function ContactSection() {
             <div className="tbm-footer__col">
               <span className="tbm-footer__colHeader">LOCATIONS</span>
               <p className="tbm-footer__text">
-                Mumbai Studio & Soundstage<br />
-                Pan-India & International Production Network
+                Mathuradas Mills Compound, 2nd floor, Todi building, NM Joshi Marg, near kearla quarters, Lower Parel, Mumbai, Maharashtra 400013
               </p>
               <div className="tbm-footer__localTime">
                 <span className="tbm-footer__timeDot" />

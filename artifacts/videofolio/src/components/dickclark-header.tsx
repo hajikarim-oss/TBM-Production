@@ -159,7 +159,7 @@ export function DickClarkHeader() {
             aria-label="Navigation Menu"
           >
             <div className="dcp-menuOverlay__top">
-              <img src="/logo.png" alt="TheBoredMonkey" style={{ height: '32px' }} />
+              <img src="/tbm-logo.png" alt="TheBoredMonkey Studios" style={{ height: '32px' }} />
               <button
                 type="button"
                 className="dcp-menuOverlay__close"
