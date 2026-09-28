@@ -1395,14 +1395,34 @@
   flex-shrink: 0;
 }
 
+.bts-section-subhead {
+  font-family: var(--dcp-font, sans-serif);
+  font-size: clamp(14px, 1.1vw, 16px);
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 12px;
+  max-width: 580px;
+  text-align: center;
+  line-height: 1.55;
+}
+
 .project-image-splide-wrap {
-  width: clamp(280px, 22vw, 440px);
-  aspect-ratio: 4 / 5;
+  width: clamp(280px, 22vw, 400px);
+  aspect-ratio: 4 / 5.2;
   overflow: hidden;
   position: relative;
-  background-color: #121216;
-  border-radius: 2px;
+  background-color: #0c0c10;
+  border-radius: 8px;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), border-color 0.35s ease, box-shadow 0.4s ease;
+  outline: none;
+}
+
+.project-image-splide-wrap:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.75), 0 0 32px rgba(214, 48, 50, 0.18);
 }
 
 .project-image-splide {
@@ -1410,12 +1430,119 @@
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
-  filter: grayscale(18%) contrast(1.04);
+  filter: grayscale(12%) contrast(1.05);
 }
 
 .project-image-splide-wrap:hover .project-image-splide {
-  transform: scale(1.05);
+  transform: scale(1.04);
   filter: grayscale(0%) contrast(1.08);
+}
+
+/* BTS Live On-Set Badge */
+.bts-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(10, 10, 14, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  font-family: ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #fff;
+  pointer-events: none;
+}
+
+.bts-badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #d63032;
+  box-shadow: 0 0 6px #d63032;
+  animation: dcpBlink 1.4s ease-in-out infinite;
+}
+
+/* Hover Watch BTS Button Overlay */
+.bts-card-play-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8, 8, 11, 0.32);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.project-image-splide-wrap:hover .bts-card-play-overlay {
+  opacity: 1;
+}
+
+.bts-card-play-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 16px;
+  background: rgba(14, 14, 18, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: var(--dcp-font, sans-serif);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6), 0 0 16px rgba(214, 48, 50, 0.25);
+  transform: scale(0.92);
+  transition: transform 0.35s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.project-image-splide-wrap:hover .bts-card-play-btn {
+  transform: scale(1);
+}
+
+/* Bottom Caption Overlay */
+.bts-card-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 48px 16px 16px 16px;
+  background: linear-gradient(180deg, transparent 0%, rgba(8, 8, 12, 0.92) 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.bts-card-brand {
+  font-family: ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--dcp-red);
+  text-transform: uppercase;
+}
+
+.bts-card-title {
+  font-family: var(--dcp-font, sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.25;
 }
 
 
