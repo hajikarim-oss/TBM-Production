@@ -26,32 +26,32 @@ const WORK_ITEMS: WorkItem[] = [
     title: 'BLUE TYGA',
     client: 'Starring Milind Soman',
     services: ['DIRECTION', 'AD FILM', 'ATHLEISURE'],
-    image: '/brands/Blue%20Tyga.png',
+    image: '/brands/bluetyga-logo-white.png',
     video: `${R2}/Blue%20Tyga_DVC_13.4.2026.mp4`,
   },
   {
-    id: 'zoff-spices',
-    title: 'ZOFF SPICES',
+    id: 'zoff-khadey-masale',
+    title: 'ZOFF KHADEY MASALE',
     client: 'Shark Tank India Winner',
-    services: ['HIGH-SPEED 4K', 'PRODUCTION', 'COMMERCIAL'],
-    image: '/brands/ZOFF%20Logo%202195.png',
-    video: `${R2}/Zoff.mp4`,
+    services: ['HIGH-SPEED 4K', 'FOOD CINEMATOGRAPHY', 'COMMERCIAL'],
+    image: '/brands/zoff-logo-white.png',
+    video: '/videos/zoff-khadey-masale.mp4',
   },
   {
     id: 'happi-planet-home',
     title: 'HAPPI PLANET',
-    client: 'Eco Home Revolution',
+    client: 'Plant-Powered Home Care',
     services: ['COMMERCIAL', '4K DIRECTION', 'POST PRODUCTION'],
     image: '/brands/happi-planet-white.svg',
     video: '/videos/happi-planet.mp4',
   },
   {
-    id: 'vibhor-oils',
-    title: 'VIBHOR OILS',
-    client: 'Vibhor Heritage Foods',
-    services: ['BRAND FILM', 'DIRECTION', 'DOCUMENTARY'],
-    image: '/brands/Vibhor.png',
-    video: `${R2}/Vibhor.mp4`,
+    id: 'vibhor-rupali-oil',
+    title: 'VIBHOR COOKING OIL',
+    client: 'Starring Rupali Ganguly',
+    services: ['CELEBRITY DVC', 'TV COMMERCIAL', 'DIRECTION'],
+    image: '/brands/vibhor-logo-white.png',
+    video: '/videos/vibhor-rupali-cooking-oil.mp4',
   },
   {
     id: 'setu-nutrition',
@@ -62,35 +62,59 @@ const WORK_ITEMS: WorkItem[] = [
     video: `${R2}/Script%203_2%20min_Version_20%20Nov_1.mp4`,
   },
   {
-    id: 'happi-planet',
-    title: 'HAPPI PLANET',
-    client: 'Eco-Living Series',
-    services: ['DIGITAL CAMPAIGN', 'CUSTOMER POV', 'DIRECTION'],
-    image: '/brands/happy%20planet.png',
-    video: `${R2}/CUSTOMER%20POV.mp4`,
+    id: 'cheq-pay',
+    title: 'CHEQ PAY',
+    client: 'Fintech Bill Payment Platform',
+    services: ['COMMERCIAL', 'SCRIPT & DIRECTION', '4K MASTER'],
+    image: '/brands/cheq-logo-white.png',
+    video: '/videos/script-2-hook-3.mp4',
+  },
+  {
+    id: 'jordans-mama-penguin',
+    title: "JORDAN'S ORAL CARE",
+    client: 'Mama Penguin Series · Rabitat',
+    services: ['D2C AD FILM', 'PRODUCT STORY', 'POST'],
+    image: '/brands/Rabitat.webp',
+    video: '/videos/jordans-brush-mama-penguin.mp4',
+  },
+  {
+    id: 'thursday-order',
+    title: 'THURSDAY ORDER',
+    client: 'High-Velocity D2C Ad Film',
+    services: ['VERTICAL 9:16', 'PERFORMANCE CREATIVE', 'EDIT'],
+    image: '/brands/eatanytime-logo-white.png',
+    video: '/videos/thursday-order-9-16.mp4',
+  },
+  {
+    id: 'they-know-your-order',
+    title: 'THEY KNOW YOUR ORDER',
+    client: 'Middle-Of-Funnel Campaign',
+    services: ['CONVERSION DVC', 'CINEMATOGRAPHY', 'VFX'],
+    image: '/brands/wakefit-logo-white.png',
+    video: '/videos/they-already-know-your-order.mp4',
+  },
+  {
+    id: 'gifting-series',
+    title: 'GIFTING CAMPAIGN',
+    client: 'Festive Brand Gifting Ad',
+    services: ['HOOK VARIATIONS', 'COMMERCIAL', 'COLOR'],
+    image: '/brands/reequil-logo-white.png',
+    video: '/videos/gifting-hook-01.mp4',
   },
   {
     id: 'atomberg-factory',
     title: 'ATOMBERG FACTORY',
     client: 'Automated Robotics Docu',
     services: ['CORPORATE DOCU', 'MOTION GRAPHICS', 'EDIT'],
-    image: '/brands/Atomberg.png',
+    image: '/brands/atomberg-logo-white.svg',
     video: `${R2}/Atomberg%20Factory%20Edit_With%20Map%20Animation%20V2.mp4`,
-  },
-  {
-    id: 'cheq-pay',
-    title: 'CHEQ PAY',
-    client: 'Fintech Series',
-    services: ['PRODUCTION', 'COMMERCIAL', '4K MASTER'],
-    image: '/brands/cheq.svg',
-    video: `${R2}/CUSTOMER%20POV.mp4`,
   },
 ];
 
-// Split into 3 columns for Kookie Kollective 3-column parallax layout
-const COL_1 = [WORK_ITEMS[0], WORK_ITEMS[3], WORK_ITEMS[6]];
-const COL_2 = [WORK_ITEMS[1], WORK_ITEMS[4], WORK_ITEMS[7]];
-const COL_3 = [WORK_ITEMS[2], WORK_ITEMS[5], WORK_ITEMS[8]];
+// Split dynamically into 3 balanced columns for Kookie Kollective 3-column parallax layout
+const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0);
+const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1);
+const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2);
 
 function WorkCard({ item }: { item: WorkItem }) {
   const cardRef = useRef<HTMLDivElement>(null);
