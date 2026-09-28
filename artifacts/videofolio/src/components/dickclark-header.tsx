@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
 
 /* ──────────────────────────────────────────────────────────────────
    HEADER — Refined with Design Motion Principles
@@ -92,7 +93,7 @@ export function DickClarkHeader() {
             title="theboredmonkey.com"
           >
             <img
-              src="/tbm-logo.png"
+              src={assetUrl('/tbm-logo.png')}
               alt="TheBoredMonkey Studios"
               className="dcp-header__logo-img"
             />
@@ -156,7 +157,7 @@ export function DickClarkHeader() {
             aria-label="Navigation Menu"
           >
             <div className="dcp-menuOverlay__top">
-              <img src="/tbm-logo.png" alt="TheBoredMonkey Studios" style={{ height: '32px' }} />
+              <img src={assetUrl('/tbm-logo.png')} alt="TheBoredMonkey Studios" style={{ height: '32px' }} />
               <button
                 type="button"
                 className="dcp-menuOverlay__close"

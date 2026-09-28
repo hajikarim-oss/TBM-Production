@@ -1,3 +1,5 @@
+import { assetUrl } from '@/lib/utils';
+
 export interface BrandItem {
   name: string;
   logo: string;
@@ -44,7 +46,7 @@ export function BrandMarquee() {
             {[...ROW_1, ...ROW_1, ...ROW_1].map((brand, i) => (
               <div key={`${brand.name}-r1-${i}`} className="tbm-brands__card" title={brand.name}>
                 <img
-                  src={brand.logo}
+                  src={assetUrl(brand.logo)}
                   alt={brand.name}
                   className="tbm-brands__logo"
                   loading="lazy"
@@ -61,7 +63,7 @@ export function BrandMarquee() {
             {[...ROW_2, ...ROW_2, ...ROW_2].map((brand, i) => (
               <div key={`${brand.name}-r2-${i}`} className="tbm-brands__card" title={brand.name}>
                 <img
-                  src={brand.logo}
+                  src={assetUrl(brand.logo)}
                   alt={brand.name}
                   className="tbm-brands__logo"
                   loading="lazy"

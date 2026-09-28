@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
-
-const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
+import { assetUrl } from '@/lib/utils';
+import { R2_BASE_URL as R2 } from '@/config';
 
 export interface HeroSlide {
   brand: string;
@@ -15,7 +15,7 @@ export interface HeroSlide {
   fps: string;
 }
 
-export const STUDIO_SLIDES: HeroSlide[] = [
+const RAW_STUDIO_SLIDES: HeroSlide[] = [
   {
     brand: 'ATOMBERG',
     campaign: 'Cold Press Juicer Commercial',
@@ -31,7 +31,7 @@ export const STUDIO_SLIDES: HeroSlide[] = [
     brand: 'HAPPI PLANET',
     campaign: 'Plant-Powered Commercial',
     talent: 'Eco-Clean Ad Film',
-    video: '/videos/happi-planet.mp4',
+    video: `${R2}/happi-planet.mp4`,
     logo: '/brands/happi-planet-brand-color.png',
     format: '4K PRORES 422 HQ',
     lens: 'LEICA SUMMICRON-C 50mm T2.0',
@@ -73,6 +73,12 @@ export const STUDIO_SLIDES: HeroSlide[] = [
   },
 ];
 
+export const STUDIO_SLIDES: HeroSlide[] = RAW_STUDIO_SLIDES.map((slide) => ({
+  ...slide,
+  logo: assetUrl(slide.logo),
+  video: assetUrl(slide.video),
+}));
+
 const AUTOPLAY_DURATION = 8000;
 const springSubtle = { type: 'spring' as const, duration: 0.45, bounce: 0 };
 
@@ -81,10 +87,10 @@ export function DickClarkHero() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const reduceMotion = useReducedMotion();
 
-  // Dual video crossfade buffers
-  const [video1Src, setVideo1Src] = useState<string>(slides[0].video);
-  const [video2Src, setVideo2Src] = useState<string>(slides[1 % slides.length].video);
+  // Dual video crossfade buffers with warm ping-pong pre-buffering
   const [activeBuffer, setActiveBuffer] = useState<1 | 2>(1);
+  const [video1Src, setVideo1Src] = useState<string>(slides[0]?.video || '');
+  const [video2Src, setVideo2Src] = useState<string>(slides[1]?.video || '');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [isMuted] = useState(true);
@@ -115,54 +121,86 @@ export function DickClarkHero() {
       if (busy.current || toIndex === currentIdx) return;
       busy.current = true;
 
-      const nextSlide = slides[toIndex];
+      const targetSlide = slides[toIndex];
+      const nextUpcomingSlide = slides[(toIndex + 1) % slides.length];
       const crossfadeDuration = reduceMotion ? 0 : 500;
 
       if (activeBuffer === 1) {
-        setVideo2Src(nextSlide.video);
-        setTimeout(() => {
-          const v2 = video2Ref.current;
-          if (v2) {
-            v2.muted = isMuted;
-            v2.load();
-            v2.play()
-              .catch(() => { })
-              .finally(() => {
-                setIsTransitioning(true);
-                setTimeout(() => {
-                  setActiveBuffer(2);
-                  setCurrentIdx(toIndex);
-                  setIsTransitioning(false);
-                  busy.current = false;
-                  if (video1Ref.current) video1Ref.current.pause();
-                }, crossfadeDuration);
-              });
+        // Buffer 2 is the target
+        const v2 = video2Ref.current;
+        const v1 = video1Ref.current;
+
+        // Ensure buffer 2 has the correct target video
+        if (v2) {
+          if (video2Src !== targetSlide.video) {
+            v2.src = targetSlide.video;
           }
-        }, 30);
+          v2.muted = isMuted;
+          const playPromise = v2.play();
+
+          const executeCrossfade = () => {
+            setIsTransitioning(true);
+            setTimeout(() => {
+              setActiveBuffer(2);
+              setCurrentIdx(toIndex);
+              setIsTransitioning(false);
+              busy.current = false;
+              if (v1) v1.pause();
+
+              // Warm up buffer 1 with the NEXT upcoming slide
+              if (nextUpcomingSlide) {
+                setVideo1Src(nextUpcomingSlide.video);
+              }
+            }, crossfadeDuration);
+          };
+
+          if (playPromise !== undefined) {
+            playPromise.then(executeCrossfade).catch(() => {
+              executeCrossfade();
+            });
+          } else {
+            executeCrossfade();
+          }
+        }
       } else {
-        setVideo1Src(nextSlide.video);
-        setTimeout(() => {
-          const v1 = video1Ref.current;
-          if (v1) {
-            v1.muted = isMuted;
-            v1.load();
-            v1.play()
-              .catch(() => { })
-              .finally(() => {
-                setIsTransitioning(true);
-                setTimeout(() => {
-                  setActiveBuffer(1);
-                  setCurrentIdx(toIndex);
-                  setIsTransitioning(false);
-                  busy.current = false;
-                  if (video2Ref.current) video2Ref.current.pause();
-                }, crossfadeDuration);
-              });
+        // Buffer 1 is the target
+        const v1 = video1Ref.current;
+        const v2 = video2Ref.current;
+
+        if (v1) {
+          if (video1Src !== targetSlide.video) {
+            v1.src = targetSlide.video;
           }
-        }, 30);
+          v1.muted = isMuted;
+          const playPromise = v1.play();
+
+          const executeCrossfade = () => {
+            setIsTransitioning(true);
+            setTimeout(() => {
+              setActiveBuffer(1);
+              setCurrentIdx(toIndex);
+              setIsTransitioning(false);
+              busy.current = false;
+              if (v2) v2.pause();
+
+              // Warm up buffer 2 with the NEXT upcoming slide
+              if (nextUpcomingSlide) {
+                setVideo2Src(nextUpcomingSlide.video);
+              }
+            }, crossfadeDuration);
+          };
+
+          if (playPromise !== undefined) {
+            playPromise.then(executeCrossfade).catch(() => {
+              executeCrossfade();
+            });
+          } else {
+            executeCrossfade();
+          }
+        }
       }
     },
-    [activeBuffer, currentIdx, slides, reduceMotion, isMuted]
+    [activeBuffer, currentIdx, slides, reduceMotion, isMuted, video1Src, video2Src]
   );
 
   const goNext = useCallback(() => {
@@ -223,6 +261,7 @@ export function DickClarkHero() {
               loop
               playsInline
               autoPlay
+              preload="auto"
               style={{
                 opacity: activeBuffer === 1 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
                 zIndex: activeBuffer === 1 ? 2 : 1,
@@ -231,11 +270,12 @@ export function DickClarkHero() {
             />
             <video
               ref={video2Ref}
-              src={video2Src}
+              src={video2Src || undefined}
               className="dcp-hero__video"
               muted={isMuted}
               loop
               playsInline
+              preload="auto"
               style={{
                 opacity: activeBuffer === 2 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
                 zIndex: activeBuffer === 2 ? 2 : 1,
@@ -320,4 +360,3 @@ export function DickClarkHero() {
 }
 
 export const TbmHero = DickClarkHero;
-

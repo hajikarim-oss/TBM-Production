@@ -63,6 +63,7 @@ function videoStreamPlugin() {
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 export default defineConfig({
+  base: process.env.VITE_BASE_PATH || '/studio/',
   plugins: [
     videoStreamPlugin(),
     react(),
@@ -99,13 +100,18 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     target: 'es2022',
-    cssMinify: true,
+    cssMinify: 'lightningcss',
+    reportCompressedSize: true,
     rollupOptions: {
       output: {
         manualChunks: {
           'vendor-react': ['react', 'react-dom'],
           'vendor-motion': ['framer-motion'],
         },
+        // Deterministic hashed names for immutable caching
+        assetFileNames: 'assets/[name]-[hash][extname]',
+        chunkFileNames: 'chunks/[name]-[hash].js',
+        entryFileNames: 'entries/[name]-[hash].js',
       },
     },
   },

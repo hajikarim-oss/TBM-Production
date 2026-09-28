@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -156,7 +157,7 @@ export function ContactSection() {
           <div className="tbm-footer__monolith">
             <div className="tbm-footer__logoWrap">
               <img
-                src="/tbm-logo.png"
+                src={assetUrl('/tbm-logo.png')}
                 alt="TheBoredMonkey Studios"
                 className="tbm-footer__logo"
               />

@@ -1,5 +1,7 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useRef, useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
+import { R2_BASE_URL as R2 } from '@/config';
 
 export interface WorkItem {
   id: string;
@@ -12,9 +14,7 @@ export interface WorkItem {
   aspectRatio: '9:16' | '16:9';
 }
 
-const R2 = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
-
-export const WORK_ITEMS: WorkItem[] = [
+const RAW_WORK_ITEMS: WorkItem[] = [
   {
     id: 'bombay-sweet-shop',
     brand: 'Bombay Sweet Shop',
@@ -22,7 +22,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-logo.svg',
-    video: '/videos/thursday-order-9-16.mp4',
+    video: `${R2}/thursday-order-9-16.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -32,7 +32,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
-    video: '/videos/gifting-hook-01.mp4',
+    video: `${R2}/gifting-hook-01.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -42,7 +42,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/happi-planet-brand-color.png',
-    video: '/videos/happi-planet.mp4',
+    video: `${R2}/happi-planet.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -52,7 +52,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/vibhor-logo-new.png',
-    video: '/videos/vibhor-rupali-cooking-oil.mp4',
+    video: `${R2}/vibhor-rupali-cooking-oil.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -62,7 +62,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
-    video: '/videos/script-2-hook-3.mp4',
+    video: `${R2}/script-2-hook-3.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -72,7 +72,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
-    video: '/videos/jordans-brush-mama-penguin.mp4',
+    video: `${R2}/jordans-brush-mama-penguin.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -82,7 +82,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/setu-white.png',
-    video: '/videos/setu-campaign.mp4',
+    video: `${R2}/setu-campaign.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -92,7 +92,7 @@ export const WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
-    video: '/videos/zoff-khadey-masale.mp4',
+    video: `${R2}/zoff-khadey-masale.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -107,10 +107,61 @@ export const WORK_ITEMS: WorkItem[] = [
   },
 ];
 
+export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
+  ...item,
+  logo: assetUrl(item.logo),
+  video: assetUrl(item.video),
+}));
+
 // Balanced 3-column parallax distribution: exactly 3 items per column
 const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0); // Bombay, Vibhor, Setu
 const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1); // Fiona, Cheq, ZOFF
 const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2); // Happi Planet, Jordan, Atomberg
+
+/* ── Concurrent Video Playback Limiter ── */
+const MAX_CONCURRENT_VIDEOS = 3;
+
+interface VideoSlotManager {
+  request: (id: string, videoEl: HTMLVideoElement) => boolean;
+  release: (id: string) => void;
+}
+
+const VideoSlotContext = createContext<VideoSlotManager>({
+  request: () => false,
+  release: () => {},
+});
+
+function VideoSlotProvider({ children }: { children: React.ReactNode }) {
+  const activeVideos = useRef<Map<string, HTMLVideoElement>>(new Map());
+
+  const request = useCallback((id: string, videoEl: HTMLVideoElement): boolean => {
+    // Already playing this one
+    if (activeVideos.current.has(id)) return true;
+
+    // Slot available
+    if (activeVideos.current.size < MAX_CONCURRENT_VIDEOS) {
+      activeVideos.current.set(id, videoEl);
+      return true;
+    }
+
+    // No slot — find and evict the least recently added
+    return false;
+  }, []);
+
+  const release = useCallback((id: string) => {
+    const video = activeVideos.current.get(id);
+    if (video) {
+      video.pause();
+      activeVideos.current.delete(id);
+    }
+  }, []);
+
+  return (
+    <VideoSlotContext.Provider value={{ request, release }}>
+      {children}
+    </VideoSlotContext.Provider>
+  );
+}
 
 function WorkCard({
   item,
@@ -124,6 +175,7 @@ function WorkCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const slots = useContext(VideoSlotContext);
 
   useEffect(() => {
     const el = cardRef.current;
@@ -132,12 +184,13 @@ function WorkCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
-        if (videoRef.current) {
-          if (entry.isIntersecting && !isAnyModalOpen) {
+        if (entry.isIntersecting && !isAnyModalOpen && videoRef.current) {
+          if (slots.request(item.id, videoRef.current)) {
             videoRef.current.play().catch(() => {});
-          } else {
-            videoRef.current.pause();
           }
+        } else if (!entry.isIntersecting) {
+          slots.release(item.id);
+          if (videoRef.current) videoRef.current.pause();
         }
       },
       { rootMargin: '120px 0px', threshold: 0.05 }
@@ -145,16 +198,19 @@ function WorkCard({
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [isAnyModalOpen]);
+  }, [isAnyModalOpen, item.id, slots]);
 
   // Pause card video when modal is open
   useEffect(() => {
     if (isAnyModalOpen && videoRef.current) {
       videoRef.current.pause();
+      slots.release(item.id);
     } else if (!isAnyModalOpen && isInView && videoRef.current) {
-      videoRef.current.play().catch(() => {});
+      if (slots.request(item.id, videoRef.current)) {
+        videoRef.current.play().catch(() => {});
+      }
     }
-  }, [isAnyModalOpen, isInView]);
+  }, [isAnyModalOpen, isInView, item.id, slots]);
 
   const isVertical = item.aspectRatio === '9:16';
 
@@ -182,7 +238,6 @@ function WorkCard({
                 playsInline
                 loop
                 muted
-                autoPlay
                 preload="metadata"
                 src={item.video}
               />
@@ -381,6 +436,7 @@ function WorkModal({
             autoPlay
             playsInline
             controls
+            preload="metadata"
             onClick={handleVideoClick}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
@@ -441,113 +497,115 @@ export function BestWorkGrid() {
   }, []);
 
   return (
-    <section id="work" className="section-work" ref={sectionRef}>
-      <div className="work-wrapper">
-        {/* Sticky Background Wrap */}
-        <div className="work-sticky-wrap">
-          <div className="section-work-heading-wrap">
-            <div className="work-heading-wrapper">
-              {/* Half blurred OUR WORK title */}
-              <div className="our-work-image">
-                <span className="our-work-title-back">OUR WORK</span>
-                <span className="our-work-title-front">OUR WORK</span>
-              </div>
+    <VideoSlotProvider>
+      <section id="work" className="section-work" ref={sectionRef}>
+        <div className="work-wrapper">
+          {/* Sticky Background Wrap */}
+          <div className="work-sticky-wrap">
+            <div className="section-work-heading-wrap">
+              <div className="work-heading-wrapper">
+                {/* Half blurred OUR WORK title */}
+                <div className="our-work-image">
+                  <span className="our-work-title-back">OUR WORK</span>
+                  <span className="our-work-title-front">OUR WORK</span>
+                </div>
 
-              {/* Framing Corners (Kookie Kollective wtl, wtr, wbl, wbr) */}
-              <div className="work-corners-wrap" aria-hidden="true">
-                <div className="work-corners">
-                  <div className="wtl" />
-                  <div className="wtr" />
+                {/* Framing Corners (Kookie Kollective wtl, wtr, wbl, wbr) */}
+                <div className="work-corners-wrap" aria-hidden="true">
+                  <div className="work-corners">
+                    <div className="wtl" />
+                    <div className="wtr" />
+                  </div>
+                  <div className="work-corners">
+                    <div className="wbl" />
+                    <div className="wbr" />
+                  </div>
                 </div>
-                <div className="work-corners">
-                  <div className="wbl" />
-                  <div className="wbr" />
-                </div>
-              </div>
 
-              {/* Framing Crosshairs (Kookie Kollective SVG crosses) */}
-              <div className="work-cross-wrap" aria-hidden="true">
-                <div className="work-cros">
-                  <div className="work-cross-icon">
-                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                      <path d="M20 10H10V0" stroke="#595959" />
-                      <path d="M0 10H10V20" stroke="#595959" />
-                    </svg>
+                {/* Framing Crosshairs (Kookie Kollective SVG crosses) */}
+                <div className="work-cross-wrap" aria-hidden="true">
+                  <div className="work-cros">
+                    <div className="work-cross-icon">
+                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                        <path d="M20 10H10V0" stroke="#595959" />
+                        <path d="M0 10H10V20" stroke="#595959" />
+                      </svg>
+                    </div>
+                    <div className="work-cross-icon">
+                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                        <path d="M20 10H10V0" stroke="#595959" />
+                        <path d="M0 10H10V20" stroke="#595959" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="work-cross-icon">
-                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                      <path d="M20 10H10V0" stroke="#595959" />
-                      <path d="M0 10H10V20" stroke="#595959" />
-                    </svg>
-                  </div>
-                </div>
-                <div className="work-cros">
-                  <div className="work-cross-icon">
-                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                      <path d="M20 10H10V0" stroke="#595959" />
-                      <path d="M0 10H10V20" stroke="#595959" />
-                    </svg>
-                  </div>
-                  <div className="work-cross-icon">
-                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                      <path d="M20 10H10V0" stroke="#595959" />
-                      <path d="M0 10H10V20" stroke="#595959" />
-                    </svg>
+                  <div className="work-cros">
+                    <div className="work-cross-icon">
+                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                        <path d="M20 10H10V0" stroke="#595959" />
+                        <path d="M0 10H10V20" stroke="#595959" />
+                      </svg>
+                    </div>
+                    <div className="work-cross-icon">
+                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                        <path d="M20 10H10V0" stroke="#595959" />
+                        <path d="M0 10H10V20" stroke="#595959" />
+                      </svg>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Moving Tiles Grid Container: 3 Symmetrical Columns of 3 items each */}
-        <div className="work-content-wrap">
-          <div className="work-content-columns">
-            {/* Column 1 (3 items) */}
-            <motion.div className="work-column" style={{ y: col1Y }}>
-              {COL_1.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
+          {/* Moving Tiles Grid Container: 3 Symmetrical Columns of 3 items each */}
+          <div className="work-content-wrap">
+            <div className="work-content-columns">
+              {/* Column 1 (3 items) */}
+              <motion.div className="work-column" style={{ y: col1Y }}>
+                {COL_1.map((item) => (
+                  <WorkCard
+                    key={item.id}
+                    item={item}
+                    isAnyModalOpen={Boolean(selectedItem)}
+                    onSelect={handleSelectWork}
+                  />
+                ))}
+              </motion.div>
 
-            {/* Column 2 (3 items, offset down) */}
-            <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
-              {COL_2.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
+              {/* Column 2 (3 items, offset down) */}
+              <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
+                {COL_2.map((item) => (
+                  <WorkCard
+                    key={item.id}
+                    item={item}
+                    isAnyModalOpen={Boolean(selectedItem)}
+                    onSelect={handleSelectWork}
+                  />
+                ))}
+              </motion.div>
 
-            {/* Column 3 (3 items, perfectly filling the bottom right) */}
-            <motion.div className="work-column" style={{ y: col3Y }}>
-              {COL_3.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
+              {/* Column 3 (3 items, perfectly filling the bottom right) */}
+              <motion.div className="work-column" style={{ y: col3Y }}>
+                {COL_3.map((item) => (
+                  <WorkCard
+                    key={item.id}
+                    item={item}
+                    isAnyModalOpen={Boolean(selectedItem)}
+                    onSelect={handleSelectWork}
+                  />
+                ))}
+              </motion.div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Cinema Fullscreen Modal Popup */}
-      <AnimatePresence>
-        {selectedItem && (
-          <WorkModal item={selectedItem} onClose={handleCloseModal} />
-        )}
-      </AnimatePresence>
-    </section>
+        {/* Cinema Fullscreen Modal Popup */}
+        <AnimatePresence>
+          {selectedItem && (
+            <WorkModal item={selectedItem} onClose={handleCloseModal} />
+          )}
+        </AnimatePresence>
+      </section>
+    </VideoSlotProvider>
   );
 }

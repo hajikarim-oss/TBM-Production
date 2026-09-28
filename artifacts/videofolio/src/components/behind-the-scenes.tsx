@@ -1,5 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { assetUrl } from '@/lib/utils';
+import { R2_BASE_URL as R2 } from '@/config';
 
 export interface BtsItem {
   id: string;
@@ -11,13 +13,13 @@ export interface BtsItem {
   aspectRatio: '16:9' | '9:16';
 }
 
-export const BTS_ITEMS: BtsItem[] = [
+const RAW_BTS_ITEMS: BtsItem[] = [
   {
     id: 'milind-soman-bts',
     title: 'Milind Soman × Sunscreen Jacket',
     brand: 'BLUE TYGA',
     role: 'Celebrity DVC On-Set Shoot',
-    video: '/videos/bts/milind-soman-bts.mp4',
+    video: `${R2}/milind-soman-bts.mp4`,
     poster: '/images/bts/milind-soman-bts.jpg',
     aspectRatio: '9:16',
   },
@@ -26,7 +28,7 @@ export const BTS_ITEMS: BtsItem[] = [
     title: 'Streax Professional Campaign',
     brand: 'STREAX',
     role: 'Camera Rigging & Studio Set',
-    video: '/videos/bts/streax-bts.mp4',
+    video: `${R2}/streax-bts.mp4`,
     poster: '/images/bts/streax-bts.jpg',
     aspectRatio: '16:9',
   },
@@ -35,7 +37,7 @@ export const BTS_ITEMS: BtsItem[] = [
     title: 'Atomberg Factory Floor Tracking',
     brand: 'ATOMBERG',
     role: 'Ronin 4K Cinema Cinematography',
-    video: '/videos/bts/atomberg-bts-v04.mp4',
+    video: `${R2}/atomberg-bts-v04.mp4`,
     poster: '/images/bts/atomberg-bts.jpg',
     aspectRatio: '16:9',
   },
@@ -44,7 +46,7 @@ export const BTS_ITEMS: BtsItem[] = [
     title: 'Milind Soman Look Reveal',
     brand: 'BLUE TYGA',
     role: 'Wardrobe & Stunt Framing',
-    video: '/videos/bts/bts-face-reveal.mp4',
+    video: `${R2}/bts-face-reveal.mp4`,
     poster: '/images/bts/bts-face-reveal.jpg',
     aspectRatio: '9:16',
   },
@@ -53,7 +55,7 @@ export const BTS_ITEMS: BtsItem[] = [
     title: 'Atomberg Culinary Kitchen DVC',
     brand: 'ATOMBERG',
     role: 'Saasu Maa Commercial Lighting',
-    video: '/videos/bts/atomberg-podcast-bts.mp4',
+    video: `${R2}/atomberg-podcast-bts.mp4`,
     poster: '/images/bts/atomberg-podcast.jpg',
     aspectRatio: '9:16',
   },
@@ -62,11 +64,17 @@ export const BTS_ITEMS: BtsItem[] = [
     title: 'Zeenova Mixer Grinder Commercial',
     brand: 'ZEENOVA',
     role: 'Kitchen Set Production & High-Speed',
-    video: '/videos/bts/zeenova-bts.mp4',
+    video: `${R2}/zeenova-bts.mp4`,
     poster: '/images/bts/zeenova-bts.jpg',
     aspectRatio: '9:16',
   },
 ];
+
+export const BTS_ITEMS: BtsItem[] = RAW_BTS_ITEMS.map((item) => ({
+  ...item,
+  poster: assetUrl(item.poster),
+  video: assetUrl(item.video),
+}));
 
 function BtsSlideCard({
   item,
@@ -278,7 +286,7 @@ function BtsModal({
             autoPlay
             playsInline
             controls
-            preload="auto"
+            preload="metadata"
             muted={isAudioMuted}
             onClick={handleVideoClick}
             onPlay={() => setIsPlaying(true)}

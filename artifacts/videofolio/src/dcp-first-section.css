@@ -13,7 +13,8 @@
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+  src: url('/studio/fonts/PPNeueMontreal-Medium.woff2') format('woff2'),
+       url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -21,7 +22,8 @@
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 600;
-  src: url('/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2');
+  src: url('/studio/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2'),
+       url('/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -52,6 +54,8 @@
   color: var(--dcp-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* GPU compositing & layout containment for scroll performance */
+  contain: style;
 }
 
 .dcp-container {
@@ -365,6 +369,21 @@
   width: 100%;
   height: 100%;
   z-index: 0;
+  /* Cinematic shimmer while video loads */
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a22 50%, #0a0a0a 100%);
+  background-size: 400% 400%;
+  animation: heroShimmer 2.5s ease-in-out infinite;
+}
+
+@keyframes heroShimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Stop shimmer once video is playing */
+.dcp-hero__videoCanvas:has(video[src]:not([src=''])) {
+  animation: none;
+  background: #0a0a0a;
 }
 
 .dcp-hero__video {
@@ -374,6 +393,9 @@
   height: 100%;
   object-fit: cover;
   will-change: opacity;
+  /* GPU compositing for smooth crossfade */
+  contain: layout paint;
+  backface-visibility: hidden;
 }
 
 /* Triple atmospheric scrim: cinematic depth + readability */

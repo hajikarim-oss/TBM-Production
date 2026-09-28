@@ -1,11 +1,14 @@
+import { lazy, Suspense } from 'react';
 import { TbmHeader } from './components/dickclark-header';
 import { TbmHero } from './components/dickclark-hero';
-import { BrandMarquee } from './components/brand-marquee';
-import { StorySection } from './components/story-section';
-import { BestWorkGrid } from './components/best-work-grid';
-import { ProducersCrew } from './components/producers-crew';
-import { BehindTheScenes } from './components/behind-the-scenes';
-import { ContactSection } from './components/contact-section';
+
+// Lazy-load below-the-fold sections — only fetched when React renders them
+const StorySection = lazy(() => import('./components/story-section').then(m => ({ default: m.StorySection })));
+const BrandMarquee = lazy(() => import('./components/brand-marquee').then(m => ({ default: m.BrandMarquee })));
+const BestWorkGrid = lazy(() => import('./components/best-work-grid').then(m => ({ default: m.BestWorkGrid })));
+const ProducersCrew = lazy(() => import('./components/producers-crew').then(m => ({ default: m.ProducersCrew })));
+const BehindTheScenes = lazy(() => import('./components/behind-the-scenes').then(m => ({ default: m.BehindTheScenes })));
+const ContactSection = lazy(() => import('./components/contact-section').then(m => ({ default: m.ContactSection })));
 
 import './dcp-first-section.css';
 import './tbm-sections.css';
@@ -20,23 +23,26 @@ function App() {
       {/* ─── SECTION 1: Hero with scroll-driven video morph (fullscreen → portrait) ─── */}
       <TbmHero />
 
-      {/* ─── SECTION 2: Studio Manifesto & Stats ─── */}
-      <StorySection />
+      {/* ─── Below-the-fold: code-split and lazy-loaded ─── */}
+      <Suspense fallback={null}>
+        {/* ─── SECTION 2: Studio Manifesto & Stats ─── */}
+        <StorySection />
 
-      {/* ─── SECTION 3: Brand Partners Grid ─── */}
-      <BrandMarquee />
+        {/* ─── SECTION 3: Brand Partners Grid ─── */}
+        <BrandMarquee />
 
-      {/* ─── SECTION 4: Best Work Grid (Parallax Masonry) ─── */}
-      <BestWorkGrid />
+        {/* ─── SECTION 4: Best Work Grid (Parallax Masonry) ─── */}
+        <BestWorkGrid />
 
-      {/* ─── SECTION 5: Meet The Crew / Our Producers ─── */}
-      <ProducersCrew />
+        {/* ─── SECTION 5: Meet The Crew / Our Producers ─── */}
+        <ProducersCrew />
 
-      {/* ─── SECTION 6: Behind The Scenes ─── */}
-      <BehindTheScenes />
+        {/* ─── SECTION 6: Behind The Scenes ─── */}
+        <BehindTheScenes />
 
-      {/* ─── SECTION 7: Contact Us + Footer ─── */}
-      <ContactSection />
+        {/* ─── SECTION 7: Contact Us + Footer ─── */}
+        <ContactSection />
+      </Suspense>
     </main>
   );
 }
