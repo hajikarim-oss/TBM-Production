@@ -7,7 +7,6 @@ export interface WorkItem {
   title: string;
   format: 'Vertical AD Film' | 'DVC ADS';
   client: string;
-  services: string[];
   logo: string;
   video: string;
   aspectRatio: '9:16' | '16:9';
@@ -22,7 +21,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'BOMBAY SWEET SHOP',
     format: 'Vertical AD Film',
     client: 'Mithai & Confectionery Campaign',
-    services: ['VERTICAL 9:16', 'PERFORMANCE CREATIVE', '4K MASTER'],
     logo: '/brands/bombay-sweet-shop-logo.svg',
     video: '/videos/they-already-know-your-order.mp4',
     aspectRatio: '9:16',
@@ -33,7 +31,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'FIONA DIAMONDS',
     format: 'Vertical AD Film',
     client: 'Festive Sparkle & Lab-Grown Diamonds',
-    services: ['VERTICAL 9:16', 'E-COMMERCE DVC', 'COLOR GRADE'],
     logo: '/brands/fiona-logo.svg',
     video: '/videos/gifting-hook-01.mp4',
     aspectRatio: '9:16',
@@ -44,7 +41,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'HAPPI PLANET',
     format: 'DVC ADS',
     client: 'Plant-Powered Eco Home Care',
-    services: ['4K PRORES', 'COMMERCIAL DVC', 'POST PIPELINE'],
     logo: '/brands/happi-planet-white.svg',
     video: '/videos/happi-planet.mp4',
     aspectRatio: '16:9',
@@ -55,7 +51,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'VIBHOR COOKING OIL',
     format: 'DVC ADS',
     client: 'Starring Rupali Ganguly · Saasu Maa Campaign',
-    services: ['CELEBRITY DVC', 'TV COMMERCIAL', 'DIRECTION'],
     logo: '/brands/vibhor-logo-white.png',
     video: '/videos/vibhor-rupali-cooking-oil.mp4',
     aspectRatio: '16:9',
@@ -66,7 +61,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'CHEQ PAY',
     format: 'Vertical AD Film',
     client: 'Fintech Bill Payment Platform',
-    services: ['VERTICAL 9:16', 'SCRIPT & DIRECTION', 'MOTION VFX'],
     logo: '/brands/cheq-logo-white.png',
     video: '/videos/script-2-hook-3.mp4',
     aspectRatio: '9:16',
@@ -77,7 +71,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'JORDAN ORAL CARE',
     format: 'DVC ADS',
     client: 'Mama Penguin Series · Rabitat Kids Care',
-    services: ['COMMERCIAL DVC', 'PRODUCT STORY', 'SOUND DESIGN'],
     logo: '/brands/jordan-logo.svg',
     video: '/videos/jordans-brush-mama-penguin.mp4',
     aspectRatio: '16:9',
@@ -88,7 +81,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'SETU NUTRITION',
     format: 'Vertical AD Film',
     client: 'Daily Wellness & Nutrition Campaign',
-    services: ['VERTICAL 9:16', 'D2C AD FILM', 'CONVERSION EDIT'],
     logo: '/brands/setu-logo.svg',
     video: '/videos/thursday-order-9-16.mp4',
     aspectRatio: '9:16',
@@ -99,7 +91,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'ZOFF KHADEY MASALE',
     format: 'DVC ADS',
     client: 'Shark Tank India · Pinch Packed with Power',
-    services: ['4K HIGH-SPEED', 'FOOD CINEMATOGRAPHY', 'DVC AD'],
     logo: '/brands/zoff-logo-white.png',
     video: '/videos/zoff-khadey-masale.mp4',
     aspectRatio: '16:9',
@@ -110,7 +101,6 @@ export const WORK_ITEMS: WorkItem[] = [
     title: 'ATOMBERG CPJ',
     format: 'DVC ADS',
     client: 'Atomberg Technologies · Commercial Ad Film',
-    services: ['COMMERCIAL DVC', '4K PRORES', 'COLOR GRADE'],
     logo: '/brands/atomberg-logo-white.svg',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     aspectRatio: '16:9',
@@ -183,7 +173,7 @@ function WorkCard({
           }
         }}
       >
-        {/* Video Canvas at the top of card */}
+        {/* Video Canvas at the top of the card */}
         <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
           <div className="bg-video">
             {isInView ? (
@@ -201,10 +191,16 @@ function WorkCard({
             )}
           </div>
 
-          {/* Interactive Play Button on Hover */}
+          {/* Broadcast Recording Indicator */}
+          <div className="work-card-rec-badge" aria-hidden="true">
+            <span className="rec-dot" />
+            <span>REC · 4K</span>
+          </div>
+
+          {/* Interactive Play Button on Card Hover */}
           <div className="work-card-play-overlay">
             <div className="work-card-play-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
               <span>WATCH FILM</span>
@@ -212,10 +208,10 @@ function WorkCard({
           </div>
         </div>
 
-        {/* Content inside the tile: Logo & Headline, Client, Format & Services */}
+        {/* Content inside the tile: Logo & Headline, Client & Format (Zero extra clutter) */}
         <div className="work-content-body">
           <div className="work-card-headline-row">
-            <div className="cards-headline">{item.title}</div>
+            <h3 className="cards-headline">{item.title}</h3>
             <div className="work-card-logo-container" title={item.brand}>
               <img
                 src={item.logo}
@@ -226,19 +222,12 @@ function WorkCard({
             </div>
           </div>
 
-          <div className="cards-client">{item.client}</div>
-
-          <div className="work-content-services">
+          <div className="work-card-meta-row">
+            <span className="cards-client">{item.client}</span>
             <div className={`format-tag-badge format-tag--${isVertical ? 'vertical' : 'dvc'}`}>
               <span className="format-tag-dot" aria-hidden="true" />
               <span>{item.format}</span>
             </div>
-            {item.services.map((svc) => (
-              <div key={svc} className="work-content-single-service">
-                <div className="work-content-service-line is-hp-card" />
-                <div className="work-content-service-text is-hp-card">{svc}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
@@ -256,11 +245,27 @@ function WorkModal({
 }) {
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
+  const [, setIsPlaying] = useState(true);
 
-  // Esc key closes modal
+  // Esc and keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === ' ' && e.target === document.body) {
+        e.preventDefault();
+        if (modalVideoRef.current) {
+          if (modalVideoRef.current.paused) {
+            modalVideoRef.current.play();
+            setIsPlaying(true);
+          } else {
+            modalVideoRef.current.pause();
+            setIsPlaying(false);
+          }
+        }
+      } else if (e.key === 'm' || e.key === 'M') {
+        toggleMute();
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -284,6 +289,18 @@ function WorkModal({
     }
   }, []);
 
+  const handleVideoClick = useCallback(() => {
+    if (modalVideoRef.current) {
+      if (modalVideoRef.current.paused) {
+        modalVideoRef.current.play();
+        setIsPlaying(true);
+      } else {
+        modalVideoRef.current.pause();
+        setIsPlaying(false);
+      }
+    }
+  }, []);
+
   return (
     <motion.div
       className="cinema-overlay"
@@ -297,7 +314,7 @@ function WorkModal({
       {/* Background Dimmer */}
       <div className="cinema-backdrop" onClick={onClose} />
 
-      {/* Floating Top Header Bar (Fixed & spacious with zero overlapping text) */}
+      {/* Floating Top Header Bar */}
       <header className="cinema-header">
         <div className="cinema-brand-block">
           <div className="cinema-logo-box">
@@ -320,7 +337,7 @@ function WorkModal({
             type="button"
             className="cinema-audio-toggle"
             onClick={toggleMute}
-            title={isAudioMuted ? 'Unmute Audio' : 'Mute Sound'}
+            title={isAudioMuted ? 'Click to Unmute (M)' : 'Mute Sound (M)'}
           >
             {isAudioMuted ? (
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -332,7 +349,7 @@ function WorkModal({
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             )}
-            <span>{isAudioMuted ? 'UNMUTE AUDIO' : 'AUDIO ACTIVE'}</span>
+            <span>{isAudioMuted ? 'UNMUTE AUDIO' : 'AUDIO ON'}</span>
           </button>
 
           <button
@@ -371,6 +388,9 @@ function WorkModal({
             autoPlay
             playsInline
             controls
+            onClick={handleVideoClick}
+            onPlay={() => setIsPlaying(true)}
+            onPause={() => setIsPlaying(false)}
           />
 
           {isAudioMuted && (
@@ -393,12 +413,12 @@ function WorkModal({
       <footer className="cinema-footer">
         <div className="cinema-footer-brand">
           <span className="cinema-footer-dot" />
-          <span>THEBOREDMONKEY STUDIOS · 4K MASTER CINEMA DELIVERY</span>
+          <span>THEBOREDMONKEY STUDIOS · 4K MASTER CINEMA ARCHIVE</span>
         </div>
-        <div className="cinema-footer-services">
-          {item.services.map((svc) => (
-            <span key={svc} className="cinema-service-tag">{svc}</span>
-          ))}
+        <div className="cinema-footer-meta">
+          <span>{item.brand}</span>
+          <span className="cinema-meta-sep">·</span>
+          <span>{item.format}</span>
         </div>
       </footer>
     </motion.div>
@@ -409,16 +429,15 @@ export function BestWorkGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
 
-  // Parallax scroll driver mapping Kookie Kollective GSAP speeds
+  // Calibrated, smooth parallax travel speeds (Jakub Krehel subtle polish)
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
   });
 
-  // 3 Staggered columns with distinct travel speeds
-  const col1Y = useTransform(scrollYProgress, [0, 1], ['5%', '-25%']);
-  const col2Y = useTransform(scrollYProgress, [0, 1], ['18%', '-48%']);
-  const col3Y = useTransform(scrollYProgress, [0, 1], ['10%', '-35%']);
+  const col1Y = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
+  const col2Y = useTransform(scrollYProgress, [0, 1], ['6%', '-22%']);
+  const col3Y = useTransform(scrollYProgress, [0, 1], ['3%', '-15%']);
 
   const handleSelectWork = useCallback((item: WorkItem) => {
     setSelectedItem(item);
