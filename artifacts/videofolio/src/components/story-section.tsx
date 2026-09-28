@@ -43,7 +43,7 @@ export function StorySection() {
 
           {/* 1: Origin & Identity */}
           <p className="tbm-story__intro">
-            Founded in 2020, <strong className="tbm-text-white">TheBoredMonkey Studios</strong> is the dedicated production and post-production wing of TheBoredMonkey.
+            <strong className="tbm-text-white">TheBoredMonkey Studios</strong>, founded in 2020, is our dedicated production and post-production unit.
           </p>
 
           {/* 2: The Core Ethos (Bold Hero Display) */}

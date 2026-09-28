@@ -17,7 +17,7 @@ const CREW: CrewMember[] = [
     role: 'Producer & Director',
     experience: '8+ Years Industry Directing',
     portrait: '/saurabh.jpeg',
-    bio: 'Directing cinematic visual narratives with deep emotional pacing. Renowned for high-speed macro food and spice cinematography, commercial TVCs, and large-scale celebrity ad films.',
+    bio: 'A director who shoots for feeling first. Known for high-speed macro food and spice cinematography, big-brand commercials, and large-scale celebrity ad films.',
     brands: [
       'Zoff Spices',
       'Blue Stone Jewellery',
@@ -34,7 +34,7 @@ const CREW: CrewMember[] = [
     role: 'Executive Producer',
     experience: '7+ Years Studio Production',
     portrait: '/suraj.jpeg',
-    bio: 'Commanding high-tempo physical production, complex multi-location commercial logistics, and rapid post-production pipeline execution across Mumbai, Goa, and pan-India shoots.',
+    bio: 'Runs the engine room of every shoot. Commands high-tempo production, multi-location logistics, and a fast post pipeline across Mumbai, Goa, and pan-India.',
     brands: [
       'Blue Tyga',
       'Atomberg Technologies',

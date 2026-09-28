@@ -11,6 +11,7 @@ export interface WorkItem {
   client: string;
   logo: string;
   video: string;
+  fallbackVideo?: string;
   aspectRatio: '9:16' | '16:9';
 }
 
@@ -23,6 +24,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-logo.svg',
     video: `${R2_ACC2_URL}/Thursday%20order_9_16.mp4`,
+    fallbackVideo: '/videos/thursday-order-9-16.mp4',
     aspectRatio: '9:16',
   },
   {
@@ -32,7 +34,8 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
-    video: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
+    video: '/videos/gifting-hook-01.mp4',
+    fallbackVideo: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -43,6 +46,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/happi-planet-brand-color.png',
     video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
+    fallbackVideo: '/videos/happi-planet.mp4',
     aspectRatio: '16:9',
   },
   {
@@ -53,6 +57,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/vibhor-logo-white.png',
     video: `${R2_ACC1_URL}/Vibhor.mp4`,
+    fallbackVideo: '/videos/vibhor-rupali-cooking-oil.mp4',
     aspectRatio: '16:9',
   },
   {
@@ -63,6 +68,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
     video: `${R2_ACC2_URL}/Script%202-%20Hook%203_3%20Oct25.mp4`,
+    fallbackVideo: '/videos/script-2-hook-3.mp4',
     aspectRatio: '9:16',
   },
   {
@@ -72,7 +78,8 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
-    video: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
+    video: '/videos/jordans-brush-mama-penguin.mp4',
+    fallbackVideo: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
     aspectRatio: '16:9',
   },
   {
@@ -82,7 +89,8 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/setu-white.png',
-    video: `${R2_ACC2_URL}/setu-campaign.mp4`,
+    video: '/videos/setu-campaign.mp4',
+    fallbackVideo: `${R2_ACC2_URL}/setu-campaign.mp4`,
     aspectRatio: '9:16',
   },
   {
@@ -93,6 +101,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
     video: `${R2_ACC1_URL}/Zoff.mp4`,
+    fallbackVideo: '/videos/zoff-khadey-masale.mp4',
     aspectRatio: '16:9',
   },
   {
@@ -111,6 +120,7 @@ export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   ...item,
   logo: assetUrl(item.logo),
   video: assetUrl(item.video),
+  fallbackVideo: item.fallbackVideo ? assetUrl(item.fallbackVideo) : undefined,
 }));
 
 // Balanced 3-column parallax distribution: exactly 3 items per column
@@ -198,8 +208,19 @@ function WorkCard({
                 playsInline
                 loop
                 muted
-                preload="metadata"
+                preload="auto"
                 src={item.video}
+                onError={(e) => {
+                  if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
+                    e.currentTarget.src = item.fallbackVideo;
+                    e.currentTarget.load();
+                  }
+                }}
+                onLoadedMetadata={(e) => {
+                  if (e.currentTarget.currentTime === 0) {
+                    e.currentTarget.currentTime = 0.05;
+                  }
+                }}
               />
             ) : (
               <div className="work-card-placeholder" />
@@ -388,7 +409,14 @@ function WorkModal({
             autoPlay
             playsInline
             controls
-            preload="metadata"
+            preload="auto"
+            onError={(e) => {
+              if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
+                e.currentTarget.src = item.fallbackVideo;
+                e.currentTarget.load();
+                e.currentTarget.play().catch(() => {});
+              }
+            }}
             onClick={handleVideoClick}
             onPlay={() => setIsPlaying(true)}
             onPause={() => setIsPlaying(false)}
@@ -449,8 +477,7 @@ export function BestWorkGrid() {
   }, []);
 
   return (
-    <VideoSlotProvider>
-      <section id="work" className="section-work" ref={sectionRef}>
+    <section id="work" className="section-work" ref={sectionRef}>
         <div className="work-wrapper">
           {/* Sticky Background Wrap */}
           <div className="work-sticky-wrap">
@@ -558,6 +585,5 @@ export function BestWorkGrid() {
           )}
         </AnimatePresence>
       </section>
-    </VideoSlotProvider>
   );
 }

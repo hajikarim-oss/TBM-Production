@@ -301,7 +301,7 @@ export function DickClarkHero() {
               {/* Right Column */}
               <div className="dcp-hero__right">
                 <p className="dcp-hero__description">
-                  The dedicated production and post-production wing of TheBoredMonkey. We craft cinematic commercials, high-velocity brand films, and culture-defining visual campaigns with a full in-house pipeline.
+                  The in-house production and post-production unit of TheBoredMonkey. From cinematic commercials to brand films and full campaigns, we take an idea from the first frame to the final cut under one roof.
                 </p>
               </div>
             </div>
