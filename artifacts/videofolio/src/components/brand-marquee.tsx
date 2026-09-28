@@ -8,7 +8,7 @@ const ROW_1: BrandItem[] = [
   { name: 'ATOMBERG', logo: '/brands/atomberg-logo-white.svg' },
   { name: 'ZOFF SPICES', logo: '/brands/zoff-logo-white.png' },
   { name: 'BLUE TYGA', logo: '/brands/bluetyga-logo-white.png' },
-  { name: 'SETU', logo: '/brands/setu-logo-white.svg' },
+  { name: 'BEATXP', logo: '/brands/beatxp-logo-white.png' },
   { name: 'VIBHOR', logo: '/brands/vibhor-logo-white.png' },
   { name: 'BIOPEAK', logo: '/brands/biopeak-logo-white.svg' },
   { name: 'HAPPI PLANET', logo: '/brands/happi-planet-white.svg' },

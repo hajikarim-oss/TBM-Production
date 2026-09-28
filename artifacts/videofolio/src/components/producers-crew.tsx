@@ -41,7 +41,7 @@ const CREW: CrewMember[] = [
       'Shopaarel Cosmetics',
       'Straex Footwear',
       'Bombay Sweet Shop',
-      'Setu Nutrition (Ankita Raina)',
+      'Happi Planet (Home Care)',
     ],
   },
 ];

@@ -71,17 +71,6 @@ export const STUDIO_SLIDES: HeroSlide[] = [
     iso: 'ISO 800',
     fps: '24.000 FPS',
   },
-  {
-    brand: 'SETU',
-    campaign: 'Ankita Raina Series',
-    talent: 'Starring Ankita Raina',
-    video: `${R2}/Script%203_2%20min_Version_20%20Nov_1.mp4`,
-    logo: '/brands/setu-logo-white.svg',
-    format: '4K PRORES 4444 XQ',
-    lens: 'COOKE ANAMORPHIC /i 50mm T2.3',
-    iso: 'ISO 640',
-    fps: '24.000 FPS',
-  },
 ];
 
 const AUTOPLAY_DURATION = 8000;

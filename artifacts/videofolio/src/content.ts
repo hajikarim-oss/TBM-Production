@@ -6,7 +6,7 @@ export const media = {
   workA: `${R2}/Biopeak%20Script%202.mp4`,
   workB: `${R2}/Blue%20Tyga_DVC_13.4.2026.mp4`,
   workC: `${R2}/CUSTOMER%20POV.mp4`,
-  workD: `${R2}/Script%203_2%20min_Version_20%20Nov_1.mp4`,
+  workD: '/videos/happi-planet.mp4',
   workE: `${R2}/Technician%20POV%20.mp4`,
   workF: `${R2}/Atomberg%20Podcast%20Teaser.mp4`,
 };
@@ -62,7 +62,7 @@ export const content = {
       { year: '©2026', title: 'BIOPEAK SCRIPT', categories: ['Commercial', 'Product'], media: media.workA },
       { year: '©2026', title: 'BLUE TYGA', categories: ['Ad Film', 'Brand Film'], media: media.workB },
       { year: '©2026', title: 'CUSTOMER POV', categories: ['Testimonial', 'Social Media'], media: media.workC },
-      { year: '©2026', title: 'SCRIPT 3', categories: ['Commercial', 'Short Film'], media: media.workD },
+      { year: '©2026', title: 'HAPPI PLANET', categories: ['Commercial', 'D2C Ad Film'], media: media.workD },
       { year: '©2026', title: 'TECHNICIAN POV', categories: ['Documentary', 'Corporate'], media: media.workE },
       { year: '©2026', title: 'PODCAST TEASER', categories: ['Podcast', 'Social Media'], media: media.workF },
     ],

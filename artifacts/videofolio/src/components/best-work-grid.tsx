@@ -54,12 +54,12 @@ const WORK_ITEMS: WorkItem[] = [
     video: '/videos/vibhor-rupali-cooking-oil.mp4',
   },
   {
-    id: 'setu-nutrition',
-    title: 'SETU NUTRITION',
-    client: 'Starring Ankita Raina',
-    services: ['PRODUCTION', 'CELEBRITY DVC', 'POST'],
-    image: '/brands/setu-logo-white.svg',
-    video: `${R2}/Script%203_2%20min_Version_20%20Nov_1.mp4`,
+    id: 'zoff-revolution',
+    title: 'ZOFF SPICE REVOLUTION',
+    client: 'High-Speed Commercial',
+    services: ['4K RAW HIGH-SPEED', 'CINEMATOGRAPHY', 'COLOR'],
+    image: '/brands/zoff-logo-white.png',
+    video: `${R2}/Zoff.mp4`,
   },
   {
     id: 'cheq-pay',
