@@ -88,7 +88,8 @@ export function DickClarkHeader() {
           <a
             href="#home"
             className="dcp-header__logo"
-            aria-label="TheBoredMonkey Studios — Home"
+            aria-label="TheBoredMonkey Studios — theboredmonkey.com"
+            title="theboredmonkey.com"
           >
             <img
               src="/tbm-logo.png"
@@ -188,3 +189,6 @@ export function DickClarkHeader() {
     </>
   );
 }
+
+export const TbmHeader = DickClarkHeader;
+

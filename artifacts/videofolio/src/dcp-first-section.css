@@ -8,13 +8,12 @@
    └── Accessibility   → prefers-reduced-motion everywhere
    ========================================================================== */
 
-/* ─── FONTS ─── */
+/* ─── FONTS (Hosted locally at theboredmonkey.com) ─── */
 @font-face {
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 400;
-  src: url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/medium/PPNeueMontreal-Medium.woff2') format('woff2'),
-       url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/medium/PPNeueMontreal-Medium.woff') format('woff');
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -22,8 +21,7 @@
   font-family: 'PP Neue Montreal';
   font-style: normal;
   font-weight: 600;
-  src: url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/semi-bold/PPNeueMontreal-SemiBold.woff2') format('woff2'),
-       url('https://www.dickclark.com/wp-content/themes/toybox/static/fonts/semi-bold/PPNeueMontreal-SemiBold.woff') format('woff');
+  src: url('/fonts/PPNeueMontreal-SemiBold.woff2') format('woff2');
   font-display: swap;
 }
 
@@ -326,7 +324,7 @@
 
 /* ==========================================================================
    2. HERO SECTION (SCROLL-DRIVEN MORPH: FULLSCREEN → PORTRAIT)
-   Inspired by DickClark.com — video morphs from fullscreen to centered
+   TheBoredMonkey.com — video morphs from fullscreen to centered
    portrait as user scrolls. GPU-composited via transform/will-change.
    ========================================================================== */
 

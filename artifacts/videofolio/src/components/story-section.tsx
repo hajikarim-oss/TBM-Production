@@ -48,13 +48,10 @@ export function StorySection() {
 
           {/* 2: The Core Ethos (Bold Hero Display) */}
           <h2 className="tbm-story__headline">
-            We work with a <span className="tbm-text-highlight">"Whatever It Takes Mindset"</span>
+            <span className="tbm-story__headline-lead">We work with a</span>
+            <span className="tbm-story__headline-emphasis tbm-text-highlight">"Whatever It Takes Mindset"</span>
             <span className="tbm-story__headline-sub">full pipeline in-house.</span>
           </h2>
-
-          <p className="tbm-story__delivery">
-            From the first creative conversation to final delivery.
-          </p>
         </div>
 
         {/* Studio Production Metric Counters */}

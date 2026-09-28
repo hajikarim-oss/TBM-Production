@@ -1,5 +1,5 @@
-import { DickClarkHeader } from './components/dickclark-header';
-import { DickClarkHero } from './components/dickclark-hero';
+import { TbmHeader } from './components/dickclark-header';
+import { TbmHero } from './components/dickclark-hero';
 import { BrandMarquee } from './components/brand-marquee';
 import { StorySection } from './components/story-section';
 import { BestWorkGrid } from './components/best-work-grid';
@@ -15,10 +15,10 @@ function App() {
   return (
     <main className="vf-app dcp-root">
       {/* ─── Navigation Header ─── */}
-      <DickClarkHeader />
+      <TbmHeader />
 
       {/* ─── SECTION 1: Hero with scroll-driven video morph (fullscreen → portrait) ─── */}
-      <DickClarkHero />
+      <TbmHero />
 
       {/* ─── SECTION 2: Studio Manifesto & Stats ─── */}
       <StorySection />

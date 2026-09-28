@@ -318,3 +318,6 @@ export function DickClarkHero() {
     </div>
   );
 }
+
+export const TbmHero = DickClarkHero;
+
