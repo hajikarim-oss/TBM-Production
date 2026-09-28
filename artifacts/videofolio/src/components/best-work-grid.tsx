@@ -18,7 +18,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'bombay-sweet-shop',
     brand: 'Bombay Sweet Shop',
-    title: 'Bombay Sweet Shop',
+    title: 'Thursday Order Delivery',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-logo.svg',
@@ -28,7 +28,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'fiona-diamonds',
     brand: 'Fiona',
-    title: 'Fiona',
+    title: 'Solitaire Gifting Hook',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
@@ -38,7 +38,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'happi-planet',
     brand: 'Happi Planet',
-    title: 'Happi Planet',
+    title: 'Plant-Powered Clean DVC',
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/happi-planet-white.svg',
@@ -47,8 +47,8 @@ export const WORK_ITEMS: WorkItem[] = [
   },
   {
     id: 'vibhor-cooking-oil',
-    brand: 'Vibhor Cooking oil',
-    title: 'Vibhor Cooking oil',
+    brand: 'Vibhor',
+    title: 'Heritage Mustard Taste',
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/vibhor-logo-new.png',
@@ -58,7 +58,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'cheq-pay',
     brand: 'Cheq',
-    title: 'Cheq',
+    title: 'Smart Credit Rewards',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
@@ -68,7 +68,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'jordan-oral-care',
     brand: 'Jordan',
-    title: 'Jordan',
+    title: 'Mama Penguin Oral Care',
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
@@ -78,7 +78,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'setu-nutrition',
     brand: 'Setu',
-    title: 'Setu',
+    title: 'Daily Nutrition Boost',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/setu.webp',
@@ -88,7 +88,7 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'zoff-spices',
     brand: 'ZOFF',
-    title: 'ZOFF',
+    title: 'Khade Masale Revolution',
     format: 'DVC ADS',
     client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
@@ -98,10 +98,10 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'atomberg-cpj',
     brand: 'Atomberg',
-    title: 'Atomberg Cold Press Juicer',
+    title: 'Cold Press Juicer Launch',
     format: 'DVC ADS',
     client: 'DVC ADS',
-    logo: '/brands/64bc9e84eb4c5b6cc701d034d9d1ce61.w5223.h3409.png',
+    logo: '/brands/atomberg-logo-new.png',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     aspectRatio: '16:9',
   },
