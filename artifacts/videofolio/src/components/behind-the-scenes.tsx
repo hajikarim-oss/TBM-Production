@@ -339,17 +339,7 @@ export function BehindTheScenes() {
 
         <h2 className="bts-nav-title">BEHIND THE SCENES</h2>
 
-        <button
-          type="button"
-          className="bts-nav-exit"
-          onClick={() => {
-            document.getElementById('work')?.scrollIntoView({ behavior: 'smooth' });
-          }}
-          aria-label="Exit Behind the scenes"
-        >
-          <span>EXIT</span>
-          <span className="bts-nav-close-icon">✕</span>
-        </button>
+        <div className="bts-nav-spacer" aria-hidden="true" />
       </div>
 
       {/* Continuously Horizontally Scrolling Splide Container (Pauses on Cursor Hover) */}

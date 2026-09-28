@@ -5,24 +5,24 @@ export interface BrandItem {
 }
 
 const ROW_1: BrandItem[] = [
-  { name: 'ATOMBERG', logo: '/brands/atomberg-logo-white.svg' },
+  { name: 'ATOMBERG', logo: '/brands/atomberg-white-new.png' },
   { name: 'ZOFF SPICES', logo: '/brands/zoff-logo-white.png' },
   { name: 'BLUE TYGA', logo: '/brands/bluetyga-logo-white.png' },
   { name: 'BEATXP', logo: '/brands/beatxp-logo-white.png' },
-  { name: 'VIBHOR', logo: '/brands/vibhor-logo-white.png' },
+  { name: 'VIBHOR', logo: '/brands/vibhor-white-new.png' },
   { name: 'BIOPEAK', logo: '/brands/biopeak-logo-white.svg' },
   { name: 'HAPPI PLANET', logo: '/brands/happi-planet-white.svg' },
   { name: 'CHEQ', logo: '/brands/cheq-logo-white.png' },
 ];
 
 const ROW_2: BrandItem[] = [
+  { name: 'SETU', logo: '/brands/setu-white.png' },
   { name: 'PILGRIM', logo: '/brands/pilgrim-logo-white.png' },
   { name: 'EAT ANYTIME', logo: '/brands/eatanytime-logo-white.png' },
   { name: 'WAKEFIT', logo: '/brands/wakefit-logo-white.png' },
   { name: 'TOOTHSI', logo: '/brands/toothsi-logo-white.png' },
   { name: 'RENTOMOJO', logo: '/brands/rentomojo-logo-white.png' },
   { name: "RE'EQUIL", logo: '/brands/reequil-logo-white.png' },
-  { name: 'PIZZA HUT', logo: '/brands/pizzahut-logo-white.png' },
   { name: 'ONECARD', logo: '/brands/onecard-logo-white.png' },
 ];
 

@@ -678,50 +678,50 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  margin-bottom: 0.25rem;
+  width: 100%;
+}
+
+.work-card-brand-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex: 1;
 }
 
 .cards-headline {
   color: #0c0c10;
   font-family: var(--dcp-font, sans-serif);
-  font-size: clamp(1.1rem, 1.4vw, 1.35rem);
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .work-card-logo-container {
-  height: 24px;
-  max-width: 110px;
+  height: 28px;
+  max-width: 80px;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   flex-shrink: 0;
 }
 
 .work-card-tile-logo {
-  max-height: 22px;
-  max-width: 105px;
+  max-height: 26px;
+  max-width: 75px;
   object-fit: contain;
-  filter: brightness(0);
-  opacity: 0.85;
+  opacity: 0.95;
   transition: opacity 0.3s, transform 0.3s;
-  color: #0c0c10;
 }
 
 .work-content-item-card-wrap:hover .work-card-tile-logo {
   opacity: 1;
-  transform: scale(1.04);
-}
-
-.work-card-meta-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-top: 0.25rem;
+  transform: scale(1.05);
 }
 
 .cards-client {
@@ -1376,34 +1376,8 @@
   white-space: nowrap;
 }
 
-.bts-nav-exit {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
+.bts-nav-spacer {
   flex: 1;
-  background: none;
-  border: none;
-  color: #ffffff;
-  font-family: var(--dcp-font, sans-serif);
-  font-size: clamp(11px, 0.9vw, 13px);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 8px 0;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-}
-
-.bts-nav-exit:hover {
-  opacity: 0.7;
-  transform: translateX(2px);
-}
-
-.bts-nav-close-icon {
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
 }
 
 @media (max-width: 768px) {

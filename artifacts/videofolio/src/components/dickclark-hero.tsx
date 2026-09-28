@@ -18,10 +18,10 @@ export interface HeroSlide {
 export const STUDIO_SLIDES: HeroSlide[] = [
   {
     brand: 'ATOMBERG',
-    campaign: 'CPJ Commercial',
-    talent: 'Commercial Ad Film',
+    campaign: 'Cold Press Juicer Commercial',
+    talent: 'Cold Press Juicer Film',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
-    logo: '/brands/atomberg-logo-white.svg',
+    logo: '/brands/atomberg-white-new.png',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI MASTER ANAMORPHIC 40mm T1.9',
     iso: 'ISO 800',
@@ -54,7 +54,7 @@ export const STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Heritage Taste',
     talent: 'Brand Film Series',
     video: `${R2}/Vibhor.mp4`,
-    logo: '/brands/vibhor-logo-white.png',
+    logo: '/brands/vibhor-white-new.png',
     format: '4K CINEMA DNG',
     lens: 'ANGENIEUX OPTIMO 28-76mm T2.6',
     iso: 'ISO 800',

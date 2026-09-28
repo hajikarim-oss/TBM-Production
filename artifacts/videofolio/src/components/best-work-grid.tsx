@@ -18,19 +18,19 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'bombay-sweet-shop',
     brand: 'Bombay Sweet Shop',
-    title: 'BOMBAY SWEET SHOP',
+    title: 'Bombay Sweet Shop',
     format: 'Vertical AD Film',
-    client: 'Mithai & Confectionery Campaign',
+    client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-logo.svg',
-    video: '/videos/they-already-know-your-order.mp4',
+    video: '/videos/thursday-order-9-16.mp4',
     aspectRatio: '9:16',
   },
   {
     id: 'fiona-diamonds',
     brand: 'Fiona',
-    title: 'FIONA DIAMONDS',
+    title: 'Fiona',
     format: 'Vertical AD Film',
-    client: 'Festive Sparkle & Lab-Grown Diamonds',
+    client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
     video: '/videos/gifting-hook-01.mp4',
     aspectRatio: '9:16',
@@ -38,9 +38,9 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'happi-planet',
     brand: 'Happi Planet',
-    title: 'HAPPI PLANET',
+    title: 'Happi Planet',
     format: 'DVC ADS',
-    client: 'Plant-Powered Eco Home Care',
+    client: 'DVC ADS',
     logo: '/brands/happi-planet-white.svg',
     video: '/videos/happi-planet.mp4',
     aspectRatio: '16:9',
@@ -48,19 +48,19 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'vibhor-cooking-oil',
     brand: 'Vibhor Cooking oil',
-    title: 'VIBHOR COOKING OIL',
+    title: 'Vibhor Cooking oil',
     format: 'DVC ADS',
-    client: 'Starring Rupali Ganguly · Saasu Maa Campaign',
-    logo: '/brands/vibhor-logo-white.png',
+    client: 'DVC ADS',
+    logo: '/brands/vibhor-logo-new.png',
     video: '/videos/vibhor-rupali-cooking-oil.mp4',
     aspectRatio: '16:9',
   },
   {
     id: 'cheq-pay',
     brand: 'Cheq',
-    title: 'CHEQ PAY',
+    title: 'Cheq',
     format: 'Vertical AD Film',
-    client: 'Fintech Bill Payment Platform',
+    client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
     video: '/videos/script-2-hook-3.mp4',
     aspectRatio: '9:16',
@@ -68,9 +68,9 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'jordan-oral-care',
     brand: 'Jordan',
-    title: 'JORDAN ORAL CARE',
+    title: 'Jordan',
     format: 'DVC ADS',
-    client: 'Mama Penguin Series · Rabitat Kids Care',
+    client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
     video: '/videos/jordans-brush-mama-penguin.mp4',
     aspectRatio: '16:9',
@@ -78,19 +78,19 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'setu-nutrition',
     brand: 'Setu',
-    title: 'SETU NUTRITION',
+    title: 'Setu',
     format: 'Vertical AD Film',
-    client: 'Daily Wellness & Nutrition Campaign',
-    logo: '/brands/setu-logo.svg',
-    video: '/videos/thursday-order-9-16.mp4',
+    client: 'Vertical AD Film',
+    logo: '/brands/setu.webp',
+    video: '/videos/setu-campaign.mp4',
     aspectRatio: '9:16',
   },
   {
     id: 'zoff-spices',
     brand: 'ZOFF',
-    title: 'ZOFF KHADEY MASALE',
+    title: 'ZOFF',
     format: 'DVC ADS',
-    client: 'Shark Tank India · Pinch Packed with Power',
+    client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
     video: '/videos/zoff-khadey-masale.mp4',
     aspectRatio: '16:9',
@@ -98,10 +98,10 @@ export const WORK_ITEMS: WorkItem[] = [
   {
     id: 'atomberg-cpj',
     brand: 'Atomberg',
-    title: 'ATOMBERG CPJ',
+    title: 'Atomberg Cold Press Juicer',
     format: 'DVC ADS',
-    client: 'Atomberg Technologies · Commercial Ad Film',
-    logo: '/brands/atomberg-logo-white.svg',
+    client: 'DVC ADS',
+    logo: '/brands/atomberg-logo-new.png',
     video: `${R2}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
     aspectRatio: '16:9',
   },
@@ -202,22 +202,21 @@ function WorkCard({
           </div>
         </div>
 
-        {/* Content inside the tile: Logo & Headline, Client & Format (Zero extra clutter) */}
+        {/* Content inside the tile: Logo & Brand Name on left, Format on right */}
         <div className="work-content-body">
           <div className="work-card-headline-row">
-            <h3 className="cards-headline">{item.title}</h3>
-            <div className="work-card-logo-container" title={item.brand}>
-              <img
-                src={item.logo}
-                alt={item.brand}
-                className="work-card-tile-logo"
-                loading="lazy"
-              />
+            <div className="work-card-brand-group">
+              <div className="work-card-logo-container" title={item.brand}>
+                <img
+                  src={item.logo}
+                  alt={item.brand}
+                  className="work-card-tile-logo"
+                  loading="lazy"
+                />
+              </div>
+              <h3 className="cards-headline">{item.title}</h3>
             </div>
-          </div>
 
-          <div className="work-card-meta-row">
-            <span className="cards-client">{item.client}</span>
             <div className={`format-tag-badge format-tag--${isVertical ? 'vertical' : 'dvc'}`}>
               <span className="format-tag-dot" aria-hidden="true" />
               <span>{item.format}</span>
