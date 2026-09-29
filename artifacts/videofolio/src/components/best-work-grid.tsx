@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
 
@@ -149,8 +149,11 @@ export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   poster: item.poster ? assetUrl(item.poster) : undefined,
 }));
 
-const HORIZONTAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '16:9');
-const VERTICAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '9:16');
+// Balanced 3-column parallax distribution:
+// Top rows contain DVC horizontal films, bottom rows contain vertical films
+const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0);
+const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1);
+const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2);
 
 function WorkCard({
   item,
@@ -500,6 +503,16 @@ export function BestWorkGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
 
+  // Calibrated, smooth parallax travel speeds (Jakub Krehel subtle polish)
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const col1Y = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
+  const col2Y = useTransform(scrollYProgress, [0, 1], ['6%', '-22%']);
+  const col3Y = useTransform(scrollYProgress, [0, 1], ['3%', '-15%']);
+
   const handleSelectWork = useCallback((item: WorkItem) => {
     if (item.video) {
       setSelectedItem(item);
@@ -570,19 +583,12 @@ export function BestWorkGrid() {
           </div>
         </div>
 
-        {/* Content Container: DVC Films Top, Vertical Works Below */}
+        {/* Moving Tiles Grid Container: 3 Symmetrical Columns with horizontal films top, vertical below */}
         <div className="work-content-wrap">
-          {/* Top Section: Commercials & DVC Ads (Horizontal 16:9) */}
-          <div className="work-group-container">
-            <div className="work-group-header">
-              <div className="work-group-badge">
-                <span className="work-group-badge-dot" />
-                <span>COMMERCIALS &amp; DVC FILMS</span>
-              </div>
-              <span className="work-group-meta">6 FILMS · 16:9 DVC</span>
-            </div>
-            <div className="work-grid-horizontal">
-              {HORIZONTAL_ITEMS.map((item) => (
+          <div className="work-content-columns">
+            {/* Column 1 */}
+            <motion.div className="work-column" style={{ y: col1Y }}>
+              {COL_1.map((item) => (
                 <WorkCard
                   key={item.id}
                   item={item}
@@ -590,20 +596,11 @@ export function BestWorkGrid() {
                   onSelect={handleSelectWork}
                 />
               ))}
-            </div>
-          </div>
+            </motion.div>
 
-          {/* Bottom Section: Vertical Works (9:16) */}
-          <div className="work-group-container work-group-container--vertical">
-            <div className="work-group-header">
-              <div className="work-group-badge">
-                <span className="work-group-badge-dot" />
-                <span>VERTICAL AD FILMS &amp; REELS</span>
-              </div>
-              <span className="work-group-meta">5 WORKS · 9:16 VERTICAL</span>
-            </div>
-            <div className="work-grid-vertical">
-              {VERTICAL_ITEMS.map((item) => (
+            {/* Column 2 (offset down) */}
+            <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
+              {COL_2.map((item) => (
                 <WorkCard
                   key={item.id}
                   item={item}
@@ -611,7 +608,19 @@ export function BestWorkGrid() {
                   onSelect={handleSelectWork}
                 />
               ))}
-            </div>
+            </motion.div>
+
+            {/* Column 3 */}
+            <motion.div className="work-column" style={{ y: col3Y }}>
+              {COL_3.map((item) => (
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
+              ))}
+            </motion.div>
           </div>
         </div>
       </div>

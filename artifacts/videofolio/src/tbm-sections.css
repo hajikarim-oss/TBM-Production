@@ -527,109 +527,51 @@
   height: 1.125rem;
 }
 
-/* Work Section Container: DVC Films Top, Vertical Ad Films Below */
+/* Moving Tiles 3-Column Parallax Container */
 .work-content-wrap {
   z-index: 2;
   pointer-events: auto;
   width: 100%;
-  max-width: 1480px;
+  max-width: 1440px;
   margin: 0 auto;
-  padding: 0 clamp(1.25rem, 3.5vw, 3rem);
+  padding: 0 clamp(1.5rem, 4vw, 3.5rem);
   position: relative;
-  margin-top: -80vh;
+  margin-top: -85vh;
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: clamp(48px, 7vw, 96px);
 }
 
-.work-group-container {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(20px, 2.5vw, 32px);
-  width: 100%;
-}
-
-.work-group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
-}
-
-.work-group-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--dcp-font, sans-serif);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.92);
-}
-
-.work-group-badge-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #d63032;
-  box-shadow: 0 0 10px rgba(214, 48, 50, 0.85);
-}
-
-.work-group-meta {
-  font-family: var(--dcp-font, sans-serif);
-  font-size: 0.6875rem;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.45);
-  text-transform: uppercase;
-}
-
-/* 1. Horizontal 16:9 DVC Films Grid (Top - 6 films) */
-.work-grid-horizontal {
+.work-content-columns {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: clamp(20px, 2.5vw, 36px);
-  width: 100%;
+  gap: clamp(24px, 3.5vw, 54px);
+  align-items: flex-start;
 }
 
-/* 2. Vertical 9:16 Ad Films Grid (Below - 5 films) */
-.work-grid-vertical {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: clamp(14px, 1.8vw, 24px);
-  width: 100%;
-}
-
-@media (max-width: 1200px) {
-  .work-grid-vertical {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 960px) {
+@media (max-width: 900px) {
   .work-content-wrap {
     margin-top: -60vh;
   }
-  .work-grid-horizontal {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .work-grid-vertical {
+  .work-content-columns {
     grid-template-columns: repeat(2, 1fr);
   }
 }
-
 @media (max-width: 600px) {
   .work-content-wrap {
     margin-top: -45vh;
   }
-  .work-grid-horizontal {
+  .work-content-columns {
     grid-template-columns: 1fr;
   }
-  .work-grid-vertical {
-    grid-template-columns: 1fr;
-  }
+}
+
+.work-column {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(36px, 5vw, 68px);
+}
+
+.work-column--middle {
+  padding-top: clamp(80px, 12vw, 160px);
 }
 
 /* Obsidian Dark Cinema Card Component (Linear / RunwayML / Apple aesthetic) */
@@ -681,11 +623,11 @@
 }
 
 .work-content-image.is-dvc-aspect {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16 / 10;
 }
 
 .work-content-image.is-vertical-aspect {
-  aspect-ratio: 9 / 16;
+  aspect-ratio: 4 / 5.2;
 }
 
 .bg-video {
@@ -853,20 +795,21 @@
 .work-card-headline-row {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
 .work-card-logo-container {
-  height: 38px;
-  max-width: 160px;
+  height: 36px;
+  max-width: 150px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  flex-shrink: 0;
 }
 
 .work-card-tile-logo {
-  max-height: 32px;
+  height: 28px;
   width: auto;
   max-width: 140px;
   object-fit: contain;
