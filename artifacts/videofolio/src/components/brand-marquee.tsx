@@ -34,7 +34,7 @@ export function BrandMarquee() {
       {/* Studio Header */}
       <div className="tbm-brands__header">
         <h2 className="tbm-brands__title">
-          Trusted by Market Disrupters & <span className="tbm-text-highlight">Household Names</span>
+          Trusted by Market Leaders & <span className="tbm-text-highlight">Household Names</span>
         </h2>
       </div>
 
