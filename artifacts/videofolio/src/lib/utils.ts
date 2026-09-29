@@ -22,13 +22,8 @@ export function assetUrl(path: string): string {
     return path;
   }
 
-  // 1. Start with Vite's configured base URL
-  let base = import.meta.env.BASE_URL || '/';
-
-  // 2. Runtime safeguard: If hosted at /studio and base was root '/', adapt automatically
-  if (typeof window !== 'undefined' && window.location.pathname.startsWith('/studio') && base === '/') {
-    base = '/studio/';
-  }
+  // 1. Use Vite's configured base URL (defaults to '/')
+  const base = import.meta.env.BASE_URL || '/';
 
   const cleanPath = path.startsWith('/') ? path.slice(1) : path;
   const cleanBase = base.endsWith('/') ? base : `${base}/`;

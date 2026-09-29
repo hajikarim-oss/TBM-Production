@@ -86,6 +86,20 @@ function copyStudioPlugin() {
   };
 }
 
+function devSubpathFallbackPlugin() {
+  return {
+    name: 'dev-subpath-fallback',
+    configureServer(server: any) {
+      server.middlewares.use((req: any, res: any, next: any) => {
+        if (req.url && req.url.startsWith('/studio/')) {
+          req.url = req.url.replace(/^\/studio\//, '/');
+        }
+        next();
+      });
+    },
+  };
+}
+
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 export default defineConfig({
@@ -93,6 +107,7 @@ export default defineConfig({
   plugins: [
     videoStreamPlugin(),
     copyStudioPlugin(),
+    devSubpathFallbackPlugin(),
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
