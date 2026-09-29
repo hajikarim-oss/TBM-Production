@@ -37,8 +37,16 @@
       "destination": "/favicon.svg"
     },
     {
-      "source": "/studio/(.*\\.(?:png|jpg|jpeg|svg|webp|avif|ico|mp4|woff2|woff|css|js|json|txt))",
-      "destination": "/$1"
+      "source": "/studio/tbm-logo.png",
+      "destination": "/tbm-logo.png"
+    },
+    {
+      "source": "/studio/saurabh.jpeg",
+      "destination": "/saurabh.jpeg"
+    },
+    {
+      "source": "/studio/suraj.jpeg",
+      "destination": "/suraj.jpeg"
     },
     {
       "source": "/studio",
@@ -91,12 +99,6 @@
       ]
     },
     {
-      "source": "/(.*)\\.(?:png|jpg|jpeg|svg|webp|avif|ico)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
-      ]
-    },
-    {
       "source": "/(.*)videos/(.*)",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=604800" },
@@ -104,7 +106,7 @@
       ]
     },
     {
-      "source": "/(.*)\\.woff2",
+      "source": "/(.*).woff2",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]
