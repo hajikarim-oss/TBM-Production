@@ -50,7 +50,6 @@ export function StorySection() {
           <h2 className="tbm-story__headline">
             <span className="tbm-story__headline-lead">We work with a</span>
             <span className="tbm-story__headline-emphasis tbm-text-highlight">"Whatever It Takes Mindset"</span>
-            <span className="tbm-story__headline-sub">full pipeline in-house.</span>
           </h2>
         </div>
 

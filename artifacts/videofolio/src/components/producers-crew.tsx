@@ -42,7 +42,7 @@ const CREW: CrewMember[] = [
       'Shopaarel Cosmetics',
       'Straex',
       'Bombay Sweet Shop',
-      'Happi Planet (Home Care)',
+      'Happi Planet',
     ],
   },
 ];
@@ -131,11 +131,10 @@ export function ProducersCrew() {
       <div className="tbm-container">
         <div className="tbm-producers__header">
           <h2 className="tbm-producers__title">
-            The Producers & Directors.<br />
-            <span className="tbm-text-highlight">Behind Every Delivery.</span>
+            The Producers Who Make It Happen.
           </h2>
           <p className="tbm-producers__desc">
-            Directing sets and leading full-pipeline execution from Mumbai to pan-India locations.
+            Every shoot needs someone who can't afford to fail. These are the two for us!!.
           </p>
         </div>
 

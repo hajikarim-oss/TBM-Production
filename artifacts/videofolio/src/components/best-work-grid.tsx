@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
 
@@ -17,15 +17,104 @@ export interface WorkItem {
 }
 
 const RAW_WORK_ITEMS: WorkItem[] = [
+  // ─── 1. DVC ADS & HORIZONTAL FILMS (16:9) ───
+  {
+    id: 'blue-tyga',
+    brand: 'Blue Tyga',
+    title: 'Comfort First Commercial',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/bluetyga-logo-white.png',
+    video: `${R2_ACC1_URL}/Blue%20Tyga_DVC_13.4.2026.mp4`,
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'atomberg-cpj',
+    brand: 'CPJ (Atomberg)',
+    title: 'Cold Press Juicer Launch',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/atomberg-logo-new.png',
+    video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'zoff-spices',
+    brand: 'ZOFF',
+    title: 'Khade Masale Revolution',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/zoff-logo-white.png',
+    video: `${R2_ACC1_URL}/Zoff.mp4`,
+    fallbackVideo: '/videos/zoff-khadey-masale.mp4',
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'vibhor-cooking-oil',
+    brand: 'Vibhor',
+    title: 'Heritage Mustard Taste',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/vibhor-logo-new.png',
+    video: `${R2_ACC1_URL}/Vibhor.mp4`,
+    fallbackVideo: '/videos/vibhor-rupali-cooking-oil.mp4',
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'happi-planet',
+    brand: 'Happi Planet',
+    title: 'Plant-Powered Clean DVC',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/happi-planet-brand-color.png',
+    video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
+    fallbackVideo: '/videos/happi-planet.mp4',
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'jordan-oral-care',
+    brand: 'Jordan',
+    title: 'Mama Penguin Oral Care',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/jordan-logo.svg',
+    video: '/videos/jordans-brush-mama-penguin.mp4',
+    fallbackVideo: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
+    aspectRatio: '16:9',
+  },
+
+  // ─── 2. VERTICAL AD FILMS & REELS (9:16) ───
   {
     id: 'bombay-sweet-shop',
     brand: 'Bombay Sweet Shop',
     title: 'Thursday Order Delivery',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
-    logo: '/brands/bombay-sweet-shop-logo.svg',
+    logo: '/brands/bombay-sweet-shop-new.png',
     video: `${R2_ACC2_URL}/Thursday%20order_9_16.mp4`,
     fallbackVideo: '/videos/thursday-order-9-16.mp4',
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'setu-delhivery',
+    brand: 'Setu',
+    title: 'Setu Delivery Campaign',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/delhivery-white.png',
+    video: '/videos/setu-campaign.mp4',
+    fallbackVideo: `${R2_ACC2_URL}/setu-campaign.mp4`,
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'cheq-pay',
+    brand: 'CheQ',
+    title: 'Smart Credit Rewards',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/cheq-logo-white.png',
+    video: `${R2_ACC2_URL}/Script%202-%20Hook%203_3%20Oct25.mp4`,
+    fallbackVideo: '/videos/script-2-hook-3.mp4',
     aspectRatio: '9:16',
   },
   {
@@ -41,95 +130,27 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     aspectRatio: '9:16',
   },
   {
-    id: 'happi-planet',
-    brand: 'Happi Planet',
-    title: 'Plant-Powered Clean DVC',
-    format: 'DVC ADS',
-    client: 'DVC ADS',
-    logo: '/brands/happi-planet-brand-color.png',
-    video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
-    fallbackVideo: '/videos/happi-planet.mp4',
-    aspectRatio: '16:9',
-  },
-  {
-    id: 'vibhor-cooking-oil',
-    brand: 'Vibhor',
-    title: 'Heritage Mustard Taste',
-    format: 'DVC ADS',
-    client: 'DVC ADS',
-    logo: '/brands/vibhor-logo-new.png',
-    video: `${R2_ACC1_URL}/Vibhor.mp4`,
-    fallbackVideo: '/videos/vibhor-rupali-cooking-oil.mp4',
-    aspectRatio: '16:9',
-  },
-  {
-    id: 'cheq-pay',
-    brand: 'Cheq',
-    title: 'Smart Credit Rewards',
+    id: 'assembly-travel',
+    brand: 'Assembly',
+    title: 'Smart Luggage Campaign',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
-    logo: '/brands/cheq-logo-white.png',
-    video: `${R2_ACC2_URL}/Script%202-%20Hook%203_3%20Oct25.mp4`,
-    fallbackVideo: '/videos/script-2-hook-3.mp4',
+    logo: '/brands/assembly-logo-white.svg',
+    video: '',
     aspectRatio: '9:16',
-  },
-  {
-    id: 'jordan-oral-care',
-    brand: 'Jordan',
-    title: 'Mama Penguin Oral Care',
-    format: 'DVC ADS',
-    client: 'DVC ADS',
-    logo: '/brands/jordan-logo.svg',
-    video: '/videos/jordans-brush-mama-penguin.mp4',
-    fallbackVideo: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
-    aspectRatio: '16:9',
-  },
-  {
-    id: 'setu-nutrition',
-    brand: 'Setu',
-    title: 'Daily Nutrition Boost',
-    format: 'Vertical AD Film',
-    client: 'Vertical AD Film',
-    logo: '/brands/setu-white.png',
-    video: '/videos/setu-campaign.mp4',
-    fallbackVideo: `${R2_ACC2_URL}/setu-campaign.mp4`,
-    aspectRatio: '9:16',
-  },
-  {
-    id: 'zoff-spices',
-    brand: 'ZOFF',
-    title: 'Khade Masale Revolution',
-    format: 'DVC ADS',
-    client: 'DVC ADS',
-    logo: '/brands/zoff-logo-white.png',
-    video: `${R2_ACC1_URL}/Zoff.mp4`,
-    fallbackVideo: '/videos/zoff-khadey-masale.mp4',
-    aspectRatio: '16:9',
-  },
-  {
-    id: 'atomberg-cpj',
-    brand: 'Atomberg',
-    title: 'Cold Press Juicer Launch',
-    format: 'DVC ADS',
-    client: 'DVC ADS',
-    logo: '/brands/atomberg-logo-new.png',
-    video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
-    aspectRatio: '16:9',
   },
 ];
 
 export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   ...item,
   logo: assetUrl(item.logo),
-  video: assetUrl(item.video),
+  video: item.video ? assetUrl(item.video) : '',
   fallbackVideo: item.fallbackVideo ? assetUrl(item.fallbackVideo) : undefined,
   poster: item.poster ? assetUrl(item.poster) : undefined,
 }));
 
-// Balanced 3-column parallax distribution: exactly 3 items per column
-const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0); // Bombay, Vibhor, Setu
-const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1); // Fiona, Cheq, ZOFF
-const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2); // Happi Planet, Jordan, Atomberg
+const HORIZONTAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '16:9');
+const VERTICAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '9:16');
 
 function WorkCard({
   item,
@@ -186,19 +207,22 @@ function WorkCard({
   }, [item.id]);
 
   const isVertical = item.aspectRatio === '9:16';
+  const hasVideo = Boolean(item.video);
 
   return (
     <div className="work-content-item" ref={cardRef}>
       <div
         className="work-content-item-card-wrap"
-        onClick={() => onSelect(item)}
+        onClick={() => {
+          if (hasVideo) onSelect(item);
+        }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        role="button"
-        tabIndex={0}
-        aria-label={`Watch ${item.brand} film`}
+        role={hasVideo ? 'button' : 'article'}
+        tabIndex={hasVideo ? 0 : undefined}
+        aria-label={hasVideo ? `Watch ${item.brand} film` : `${item.brand} campaign releasing soon`}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (hasVideo && (e.key === 'Enter' || e.key === ' ')) {
             e.preventDefault();
             onSelect(item);
           }
@@ -208,21 +232,31 @@ function WorkCard({
         <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
           <div className="bg-video">
             {isInView ? (
-              <video
-                ref={videoRef}
-                playsInline
-                loop
-                muted
-                preload="auto"
-                poster={item.poster}
-                src={item.video}
-                onError={(e) => {
-                  if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
-                    e.currentTarget.src = item.fallbackVideo;
-                    e.currentTarget.load();
-                  }
-                }}
-              />
+              hasVideo ? (
+                <video
+                  ref={videoRef}
+                  playsInline
+                  loop
+                  muted
+                  preload="auto"
+                  poster={item.poster}
+                  src={item.video}
+                  onError={(e) => {
+                    if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
+                      e.currentTarget.src = item.fallbackVideo;
+                      e.currentTarget.load();
+                    }
+                  }}
+                />
+              ) : (
+                <div className="work-card-placeholder-soon">
+                  <div className="work-card-soon-bg" />
+                  <div className="work-card-soon-content">
+                    <span className="work-card-soon-pill">IN POST-PRODUCTION</span>
+                    <span className="work-card-soon-label">Campaign Releasing Soon</span>
+                  </div>
+                </div>
+              )
             ) : (
               <div className="work-card-placeholder" />
             )}
@@ -230,12 +264,19 @@ function WorkCard({
 
           {/* Interactive Play Button on Card Hover */}
           <div className="work-card-play-overlay">
-            <div className="work-card-play-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M8 5v14l11-7z" />
-              </svg>
-              <span>WATCH FILM</span>
-            </div>
+            {hasVideo ? (
+              <div className="work-card-play-btn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                <span>WATCH FILM</span>
+              </div>
+            ) : (
+              <div className="work-card-play-btn work-card-play-btn--soon">
+                <span className="work-card-soon-dot" />
+                <span>RELEASING SOON</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -459,18 +500,10 @@ export function BestWorkGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
 
-  // Calibrated, smooth parallax travel speeds (Jakub Krehel subtle polish)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const col1Y = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
-  const col2Y = useTransform(scrollYProgress, [0, 1], ['6%', '-22%']);
-  const col3Y = useTransform(scrollYProgress, [0, 1], ['3%', '-15%']);
-
   const handleSelectWork = useCallback((item: WorkItem) => {
-    setSelectedItem(item);
+    if (item.video) {
+      setSelectedItem(item);
+    }
   }, []);
 
   const handleCloseModal = useCallback(() => {
@@ -479,105 +512,109 @@ export function BestWorkGrid() {
 
   return (
     <section id="work" className="section-work" ref={sectionRef}>
-        <div className="work-wrapper">
-          {/* Sticky Background Wrap */}
-          <div className="work-sticky-wrap">
-            <div className="section-work-heading-wrap">
-              <div className="work-heading-wrapper">
-                {/* Half blurred OUR WORK title */}
-                <div className="our-work-image">
-                  <span className="our-work-title-back">OUR WORK</span>
-                  <span className="our-work-title-front">OUR WORK</span>
-                </div>
+      <div className="work-wrapper">
+        {/* Sticky Background Wrap */}
+        <div className="work-sticky-wrap">
+          <div className="section-work-heading-wrap">
+            <div className="work-heading-wrapper">
+              {/* Half blurred OUR WORK title */}
+              <div className="our-work-image">
+                <span className="our-work-title-back">OUR WORK</span>
+                <span className="our-work-title-front">OUR WORK</span>
+              </div>
 
-                {/* Framing Corners (Kookie Kollective wtl, wtr, wbl, wbr) */}
-                <div className="work-corners-wrap" aria-hidden="true">
-                  <div className="work-corners">
-                    <div className="wtl" />
-                    <div className="wtr" />
+              {/* Framing Corners (Kookie Kollective wtl, wtr, wbl, wbr) */}
+              <div className="work-corners-wrap" aria-hidden="true">
+                <div className="work-corners">
+                  <div className="wtl" />
+                  <div className="wtr" />
+                </div>
+                <div className="work-corners">
+                  <div className="wbl" />
+                  <div className="wbr" />
+                </div>
+              </div>
+
+              {/* Framing Crosshairs (Kookie Kollective SVG crosses) */}
+              <div className="work-cross-wrap" aria-hidden="true">
+                <div className="work-cros">
+                  <div className="work-cross-icon">
+                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                      <path d="M20 10H10V0" stroke="#595959" />
+                      <path d="M0 10H10V20" stroke="#595959" />
+                    </svg>
                   </div>
-                  <div className="work-corners">
-                    <div className="wbl" />
-                    <div className="wbr" />
+                  <div className="work-cross-icon">
+                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                      <path d="M20 10H10V0" stroke="#595959" />
+                      <path d="M0 10H10V20" stroke="#595959" />
+                    </svg>
                   </div>
                 </div>
-
-                {/* Framing Crosshairs (Kookie Kollective SVG crosses) */}
-                <div className="work-cross-wrap" aria-hidden="true">
-                  <div className="work-cros">
-                    <div className="work-cross-icon">
-                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                        <path d="M20 10H10V0" stroke="#595959" />
-                        <path d="M0 10H10V20" stroke="#595959" />
-                      </svg>
-                    </div>
-                    <div className="work-cross-icon">
-                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                        <path d="M20 10H10V0" stroke="#595959" />
-                        <path d="M0 10H10V20" stroke="#595959" />
-                      </svg>
-                    </div>
+                <div className="work-cros">
+                  <div className="work-cross-icon">
+                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                      <path d="M20 10H10V0" stroke="#595959" />
+                      <path d="M0 10H10V20" stroke="#595959" />
+                    </svg>
                   </div>
-                  <div className="work-cros">
-                    <div className="work-cross-icon">
-                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                        <path d="M20 10H10V0" stroke="#595959" />
-                        <path d="M0 10H10V20" stroke="#595959" />
-                      </svg>
-                    </div>
-                    <div className="work-cross-icon">
-                      <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
-                        <path d="M20 10H10V0" stroke="#595959" />
-                        <path d="M0 10H10V20" stroke="#595959" />
-                      </svg>
-                    </div>
+                  <div className="work-cross-icon">
+                    <svg width="100%" height="100%" viewBox="0 0 20 20" fill="none">
+                      <path d="M20 10H10V0" stroke="#595959" />
+                      <path d="M0 10H10V20" stroke="#595959" />
+                    </svg>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Moving Tiles Grid Container: 3 Symmetrical Columns of 3 items each */}
-          <div className="work-content-wrap">
-            <div className="work-content-columns">
-              {/* Column 1 (3 items) */}
-              <motion.div className="work-column" style={{ y: col1Y }}>
-                {COL_1.map((item) => (
-                  <WorkCard
-                    key={item.id}
-                    item={item}
-                    isAnyModalOpen={Boolean(selectedItem)}
-                    onSelect={handleSelectWork}
-                  />
-                ))}
-              </motion.div>
+        {/* Content Container: DVC Films Top, Vertical Works Below */}
+        <div className="work-content-wrap">
+          {/* Top Section: Commercials & DVC Ads (Horizontal 16:9) */}
+          <div className="work-group-container">
+            <div className="work-group-header">
+              <div className="work-group-badge">
+                <span className="work-group-badge-dot" />
+                <span>COMMERCIALS &amp; DVC FILMS</span>
+              </div>
+              <span className="work-group-meta">6 FILMS · 16:9 DVC</span>
+            </div>
+            <div className="work-grid-horizontal">
+              {HORIZONTAL_ITEMS.map((item) => (
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
+              ))}
+            </div>
+          </div>
 
-              {/* Column 2 (3 items, offset down) */}
-              <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
-                {COL_2.map((item) => (
-                  <WorkCard
-                    key={item.id}
-                    item={item}
-                    isAnyModalOpen={Boolean(selectedItem)}
-                    onSelect={handleSelectWork}
-                  />
-                ))}
-              </motion.div>
-
-              {/* Column 3 (3 items, perfectly filling the bottom right) */}
-              <motion.div className="work-column" style={{ y: col3Y }}>
-                {COL_3.map((item) => (
-                  <WorkCard
-                    key={item.id}
-                    item={item}
-                    isAnyModalOpen={Boolean(selectedItem)}
-                    onSelect={handleSelectWork}
-                  />
-                ))}
-              </motion.div>
+          {/* Bottom Section: Vertical Works (9:16) */}
+          <div className="work-group-container work-group-container--vertical">
+            <div className="work-group-header">
+              <div className="work-group-badge">
+                <span className="work-group-badge-dot" />
+                <span>VERTICAL AD FILMS &amp; REELS</span>
+              </div>
+              <span className="work-group-meta">5 WORKS · 9:16 VERTICAL</span>
+            </div>
+            <div className="work-grid-vertical">
+              {VERTICAL_ITEMS.map((item) => (
+                <WorkCard
+                  key={item.id}
+                  item={item}
+                  isAnyModalOpen={Boolean(selectedItem)}
+                  onSelect={handleSelectWork}
+                />
+              ))}
             </div>
           </div>
         </div>
+      </div>
 
         {/* Cinema Fullscreen Modal Popup */}
         <AnimatePresence>

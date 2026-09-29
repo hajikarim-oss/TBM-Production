@@ -36,12 +36,12 @@ export function ContactSection() {
             {/* Quick Action Badges */}
             <div className="tbm-contact__channels">
               <a
-                href="mailto:bd@theboredmonkey.com"
+                href="mailto:monu@theboredmonkey.com"
                 className="tbm-channelBtn"
                 title="Send Email"
               >
                 <span className="tbm-channelIcon">✉</span>
-                <span>bd@theboredmonkey.com</span>
+                <span>monu@theboredmonkey.com</span>
               </a>
 
               <a
@@ -183,16 +183,8 @@ export function ContactSection() {
               <span className="tbm-footer__colHeader">DIRECT INQUIRIES</span>
               <ul className="tbm-footer__list">
                 <li>
-                  <span className="tbm-dimLabel">New Business:</span>
-                  <a href="mailto:bd@theboredmonkey.com">bd@theboredmonkey.com</a>
-                </li>
-                <li>
-                  <span className="tbm-dimLabel">Careers & Crew:</span>
-                  <a href="mailto:crew@theboredmonkey.com">crew@theboredmonkey.com</a>
-                </li>
-                <li>
-                  <span className="tbm-dimLabel">Agency Desk:</span>
-                  <a href="mailto:agency@theboredmonkey.com">agency@theboredmonkey.com</a>
+                  <span className="tbm-dimLabel">Direct Contact:</span>
+                  <a href="mailto:monu@theboredmonkey.com">monu@theboredmonkey.com</a>
                 </li>
               </ul>
             </div>

@@ -293,7 +293,7 @@ export function DickClarkHero() {
               {/* Left Column */}
               <div className="dcp-hero__left">
                 <h1 className="dcp-hero__title">
-                  We Make Videos<br />
+                  We Make Films<br />
                   <span className="tbm-text-highlight">People Remember</span>
                 </h1>
               </div>
