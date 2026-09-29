@@ -131,7 +131,8 @@ export function ProducersCrew() {
       <div className="tbm-container">
         <div className="tbm-producers__header">
           <h2 className="tbm-producers__title">
-            The Producers Who Make It Happen.
+            The Producers<br />
+            <span className="tbm-text-highlight">Who Make It Happen.</span>
           </h2>
           <p className="tbm-producers__desc">
             Every shoot needs someone who can't afford to fail. These are the two for us!!.

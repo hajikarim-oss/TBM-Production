@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
 
@@ -129,31 +129,18 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     poster: '/images/fiona-poster.jpg',
     aspectRatio: '9:16',
   },
-  {
-    id: 'assembly-travel',
-    brand: 'Assembly',
-    title: 'Smart Luggage Campaign',
-    format: 'Vertical AD Film',
-    client: 'Vertical AD Film',
-    logo: '/brands/assembly-logo-white.svg',
-    video: '',
-    aspectRatio: '9:16',
-  },
 ];
 
 export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   ...item,
   logo: assetUrl(item.logo),
-  video: item.video ? assetUrl(item.video) : '',
+  video: assetUrl(item.video),
   fallbackVideo: item.fallbackVideo ? assetUrl(item.fallbackVideo) : undefined,
   poster: item.poster ? assetUrl(item.poster) : undefined,
 }));
 
-// Balanced 3-column parallax distribution:
-// Top rows contain DVC horizontal films, bottom rows contain vertical films
-const COL_1 = WORK_ITEMS.filter((_, i) => i % 3 === 0);
-const COL_2 = WORK_ITEMS.filter((_, i) => i % 3 === 1);
-const COL_3 = WORK_ITEMS.filter((_, i) => i % 3 === 2);
+const HORIZONTAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '16:9');
+const VERTICAL_ITEMS = WORK_ITEMS.filter((item) => item.aspectRatio === '9:16');
 
 function WorkCard({
   item,
@@ -210,22 +197,19 @@ function WorkCard({
   }, [item.id]);
 
   const isVertical = item.aspectRatio === '9:16';
-  const hasVideo = Boolean(item.video);
 
   return (
     <div className="work-content-item" ref={cardRef}>
       <div
         className="work-content-item-card-wrap"
-        onClick={() => {
-          if (hasVideo) onSelect(item);
-        }}
+        onClick={() => onSelect(item)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        role={hasVideo ? 'button' : 'article'}
-        tabIndex={hasVideo ? 0 : undefined}
-        aria-label={hasVideo ? `Watch ${item.brand} film` : `${item.brand} campaign releasing soon`}
+        role="button"
+        tabIndex={0}
+        aria-label={`Watch ${item.brand} film`}
         onKeyDown={(e) => {
-          if (hasVideo && (e.key === 'Enter' || e.key === ' ')) {
+          if (e.key === 'Enter' || e.key === ' ') {
             e.preventDefault();
             onSelect(item);
           }
@@ -235,31 +219,21 @@ function WorkCard({
         <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
           <div className="bg-video">
             {isInView ? (
-              hasVideo ? (
-                <video
-                  ref={videoRef}
-                  playsInline
-                  loop
-                  muted
-                  preload="auto"
-                  poster={item.poster}
-                  src={item.video}
-                  onError={(e) => {
-                    if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
-                      e.currentTarget.src = item.fallbackVideo;
-                      e.currentTarget.load();
-                    }
-                  }}
-                />
-              ) : (
-                <div className="work-card-placeholder-soon">
-                  <div className="work-card-soon-bg" />
-                  <div className="work-card-soon-content">
-                    <span className="work-card-soon-pill">IN POST-PRODUCTION</span>
-                    <span className="work-card-soon-label">Campaign Releasing Soon</span>
-                  </div>
-                </div>
-              )
+              <video
+                ref={videoRef}
+                playsInline
+                loop
+                muted
+                preload="auto"
+                poster={item.poster}
+                src={item.video}
+                onError={(e) => {
+                  if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
+                    e.currentTarget.src = item.fallbackVideo;
+                    e.currentTarget.load();
+                  }
+                }}
+              />
             ) : (
               <div className="work-card-placeholder" />
             )}
@@ -267,19 +241,12 @@ function WorkCard({
 
           {/* Interactive Play Button on Card Hover */}
           <div className="work-card-play-overlay">
-            {hasVideo ? (
-              <div className="work-card-play-btn">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z" />
-                </svg>
-                <span>WATCH FILM</span>
-              </div>
-            ) : (
-              <div className="work-card-play-btn work-card-play-btn--soon">
-                <span className="work-card-soon-dot" />
-                <span>RELEASING SOON</span>
-              </div>
-            )}
+            <div className="work-card-play-btn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+              <span>WATCH FILM</span>
+            </div>
           </div>
         </div>
 
@@ -503,20 +470,8 @@ export function BestWorkGrid() {
   const sectionRef = useRef<HTMLElement>(null);
   const [selectedItem, setSelectedItem] = useState<WorkItem | null>(null);
 
-  // Calibrated, smooth parallax travel speeds (Jakub Krehel subtle polish)
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const col1Y = useTransform(scrollYProgress, [0, 1], ['0%', '-12%']);
-  const col2Y = useTransform(scrollYProgress, [0, 1], ['6%', '-22%']);
-  const col3Y = useTransform(scrollYProgress, [0, 1], ['3%', '-15%']);
-
   const handleSelectWork = useCallback((item: WorkItem) => {
-    if (item.video) {
-      setSelectedItem(item);
-    }
+    setSelectedItem(item);
   }, []);
 
   const handleCloseModal = useCallback(() => {
@@ -583,44 +538,30 @@ export function BestWorkGrid() {
           </div>
         </div>
 
-        {/* Moving Tiles Grid Container: 3 Symmetrical Columns with horizontal films top, vertical below */}
+        {/* Content Container: 6 Horizontal DVC Ads top (3x2), 4 Vertical Works below (4x1) */}
         <div className="work-content-wrap">
-          <div className="work-content-columns">
-            {/* Column 1 */}
-            <motion.div className="work-column" style={{ y: col1Y }}>
-              {COL_1.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
+          {/* Top: 6 DVC Ads / Horizontal Films (3 columns x 2 rows) */}
+          <div className="work-grid-horizontal">
+            {HORIZONTAL_ITEMS.map((item) => (
+              <WorkCard
+                key={item.id}
+                item={item}
+                isAnyModalOpen={Boolean(selectedItem)}
+                onSelect={handleSelectWork}
+              />
+            ))}
+          </div>
 
-            {/* Column 2 (offset down) */}
-            <motion.div className="work-column work-column--middle" style={{ y: col2Y }}>
-              {COL_2.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
-
-            {/* Column 3 */}
-            <motion.div className="work-column" style={{ y: col3Y }}>
-              {COL_3.map((item) => (
-                <WorkCard
-                  key={item.id}
-                  item={item}
-                  isAnyModalOpen={Boolean(selectedItem)}
-                  onSelect={handleSelectWork}
-                />
-              ))}
-            </motion.div>
+          {/* Bottom: 4 Vertical Works (4 columns x 1 row) */}
+          <div className="work-grid-vertical">
+            {VERTICAL_ITEMS.map((item) => (
+              <WorkCard
+                key={item.id}
+                item={item}
+                isAnyModalOpen={Boolean(selectedItem)}
+                onSelect={handleSelectWork}
+              />
+            ))}
           </div>
         </div>
       </div>
