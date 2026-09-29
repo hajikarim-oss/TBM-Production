@@ -49,5 +49,10 @@ Thumbs.db
 .local/
 
 # Large media files
-artifacts/videofolio/public/videos/
+artifacts/videofolio/public/videos/*
+!artifacts/videofolio/public/videos/jordans-brush-mama-penguin.mp4
+!artifacts/videofolio/public/videos/setu-campaign.mp4
 *.mp4
+!artifacts/videofolio/public/videos/jordans-brush-mama-penguin.mp4
+!artifacts/videofolio/public/videos/setu-campaign.mp4
+

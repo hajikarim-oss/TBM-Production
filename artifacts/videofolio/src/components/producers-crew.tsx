@@ -89,7 +89,7 @@ function ProducerCard({ member, index }: { member: CrewMember; index: number }) 
             src={assetUrl(member.portrait)}
             alt={member.name}
             className="tbm-producerDossier__img"
-            loading="lazy"
+            decoding="async"
           />
           <div className="tbm-producerDossier__scrim" />
           

@@ -12,6 +12,7 @@ export interface WorkItem {
   logo: string;
   video: string;
   fallbackVideo?: string;
+  poster?: string;
   aspectRatio: '9:16' | '16:9';
 }
 
@@ -34,8 +35,9 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
     logo: '/brands/fiona-logo.svg',
-    video: '/videos/gifting-hook-01.mp4',
-    fallbackVideo: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
+    video: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
+    fallbackVideo: '/videos/gifting-hook-01.mp4',
+    poster: '/images/fiona-poster.jpg',
     aspectRatio: '9:16',
   },
   {
@@ -121,6 +123,7 @@ export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   logo: assetUrl(item.logo),
   video: assetUrl(item.video),
   fallbackVideo: item.fallbackVideo ? assetUrl(item.fallbackVideo) : undefined,
+  poster: item.poster ? assetUrl(item.poster) : undefined,
 }));
 
 // Balanced 3-column parallax distribution: exactly 3 items per column
@@ -149,11 +152,8 @@ function WorkCard({
     const observer = new IntersectionObserver(
       ([entry]) => {
         setIsInView(entry.isIntersecting);
-        if (!entry.isIntersecting && videoRef.current) {
-          videoRef.current.pause();
-        }
       },
-      { rootMargin: '150px 0px', threshold: 0.05 }
+      { rootMargin: '200px 0px', threshold: 0.05 }
     );
 
     observer.observe(el);
@@ -167,18 +167,23 @@ function WorkCard({
     }
   }, [isAnyModalOpen]);
 
-  // Hover to Play logic: plays on mouse enter, pauses on mouse leave
+  // Hover to Play logic: plays only when user cursor hovers, pauses on leave
   const handleMouseEnter = useCallback(() => {
     if (!isAnyModalOpen && videoRef.current) {
-      videoRef.current.play().catch(() => {});
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {});
+      }
     }
   }, [isAnyModalOpen]);
 
   const handleMouseLeave = useCallback(() => {
     if (videoRef.current) {
       videoRef.current.pause();
+      videoRef.current.currentTime = item.id === 'fiona-diamonds' ? 0.5 : 0;
     }
-  }, []);
+  }, [item.id]);
 
   const isVertical = item.aspectRatio === '9:16';
 
@@ -199,7 +204,7 @@ function WorkCard({
           }
         }}
       >
-        {/* Video Canvas at the top of the card */}
+        {/* Video Canvas at the top of the card: Static Thumbnail until Hover */}
         <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
           <div className="bg-video">
             {isInView ? (
@@ -209,16 +214,12 @@ function WorkCard({
                 loop
                 muted
                 preload="auto"
+                poster={item.poster}
                 src={item.video}
                 onError={(e) => {
                   if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
                     e.currentTarget.src = item.fallbackVideo;
                     e.currentTarget.load();
-                  }
-                }}
-                onLoadedMetadata={(e) => {
-                  if (e.currentTarget.currentTime === 0) {
-                    e.currentTarget.currentTime = 0.05;
                   }
                 }}
               />
@@ -246,7 +247,7 @@ function WorkCard({
                 src={item.logo}
                 alt={item.brand}
                 className="work-card-tile-logo"
-                loading="lazy"
+                decoding="async"
               />
             </div>
           </div>

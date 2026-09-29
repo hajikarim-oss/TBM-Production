@@ -81,6 +81,12 @@ function copyStudioPlugin() {
             // Ignore copy conflicts if any
           }
         }
+        const studioHtml = path.join(studioDir, 'index.html');
+        if (fs.existsSync(studioHtml)) {
+          let content = fs.readFileSync(studioHtml, 'utf-8');
+          content = content.replace(/(src|href)="\/(entries|chunks|assets|fonts|brands|images|videos|favicon\.svg)/g, '$1="/studio/$2');
+          fs.writeFileSync(studioHtml, content, 'utf-8');
+        }
       }
     },
   };

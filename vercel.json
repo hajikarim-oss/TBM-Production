@@ -37,6 +37,10 @@
       "destination": "/favicon.svg"
     },
     {
+      "source": "/studio/(.*\\.(?:png|jpg|jpeg|svg|webp|avif|ico|mp4|woff2|woff|css|js|json|txt))",
+      "destination": "/$1"
+    },
+    {
       "source": "/studio",
       "destination": "/index.html"
     },
@@ -77,7 +81,19 @@
     {
       "source": "/(.*)brands/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=2592000" }
+        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/(.*)images/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/(.*)\\.(?:png|jpg|jpeg|svg|webp|avif|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=2592000, stale-while-revalidate=86400" }
       ]
     },
     {
@@ -88,7 +104,7 @@
       ]
     },
     {
-      "source": "/(.*).woff2",
+      "source": "/(.*)\\.woff2",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
       ]

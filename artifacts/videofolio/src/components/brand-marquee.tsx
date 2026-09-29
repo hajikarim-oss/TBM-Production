@@ -49,7 +49,7 @@ export function BrandMarquee() {
                   src={assetUrl(brand.logo)}
                   alt={brand.name}
                   className="tbm-brands__logo"
-                  loading="lazy"
+                  decoding="async"
                   draggable={false}
                 />
               </div>
@@ -66,7 +66,7 @@ export function BrandMarquee() {
                   src={assetUrl(brand.logo)}
                   alt={brand.name}
                   className="tbm-brands__logo"
-                  loading="lazy"
+                  decoding="async"
                   draggable={false}
                 />
               </div>
