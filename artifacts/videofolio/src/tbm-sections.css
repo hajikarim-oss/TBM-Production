@@ -886,6 +886,7 @@
 /* Video fades in only when frame-ready + playing (no black flash) */
 .bg-video-player.video-visible {
   opacity: 1;
+  z-index: 3;
 }
 
 /* Hover zoom applies to whichever layer is visible */

@@ -9,6 +9,7 @@ export interface HeroSlide {
   campaign: string;
   talent: string;
   video: string;
+  poster: string;
   logo: string;
   format: string;
   lens: string;
@@ -22,6 +23,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Cold Press Juicer Commercial',
     talent: 'Cold Press Juicer Film',
     video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    poster: '/images/posters/atomberg-cpj.webp',
     logo: '/brands/atomberg-logo-new.png',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI MASTER ANAMORPHIC 40mm T1.9',
@@ -33,6 +35,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Plant-Powered Commercial',
     talent: 'Eco-Clean Ad Film',
     video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
+    poster: '/images/posters/happi-planet.webp',
     logo: '/brands/happi-planet-brand-color.png',
     format: '4K PRORES 422 HQ',
     lens: 'LEICA SUMMICRON-C 50mm T2.0',
@@ -44,6 +47,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Spice Revolution',
     talent: 'High-Speed Commercial',
     video: `${R2_ACC1_URL}/Zoff.mp4`,
+    poster: '/images/posters/zoff.webp',
     logo: '/brands/zoff-logo-white.png',
     format: '4K RAW HIGH-SPEED',
     lens: 'ZEISS SUPREME PRIME 35mm T1.5',
@@ -55,6 +59,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Heritage Taste',
     talent: 'Brand Film Series',
     video: `${R2_ACC1_URL}/Vibhor.mp4`,
+    poster: '/images/posters/vibhor.webp',
     logo: '/brands/vibhor-logo-new.png',
     format: '4K CINEMA DNG',
     lens: 'ANGENIEUX OPTIMO 28-76mm T2.6',
@@ -66,6 +71,7 @@ const RAW_STUDIO_SLIDES: HeroSlide[] = [
     campaign: 'Milind Soman Series',
     talent: 'Starring Milind Soman',
     video: `${R2_ACC1_URL}/Blue%20Tyga_DVC_13.4.2026.mp4`,
+    poster: '/images/posters/blue-tyga.webp',
     logo: '/brands/bluetyga-logo-white.png',
     format: '4K PRORES 422 HQ',
     lens: 'ARRI SIGNATURE PRIME 47mm T1.8',
@@ -78,6 +84,7 @@ export const STUDIO_SLIDES: HeroSlide[] = RAW_STUDIO_SLIDES.map((slide) => ({
   ...slide,
   logo: assetUrl(slide.logo),
   video: assetUrl(slide.video),
+  poster: assetUrl(slide.poster),
 }));
 
 const AUTOPLAY_DURATION = 8000;
@@ -102,13 +109,39 @@ export function DickClarkHero() {
   const busy = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Warm up buffer 2 quietly only after initial load
+  // Immediate playback kick for iOS Safari and mobile Chrome
+  useEffect(() => {
+    const v1 = video1Ref.current;
+    if (v1) {
+      v1.defaultMuted = true;
+      v1.muted = true;
+      v1.playsInline = true;
+      const playPromise = v1.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          const kick = () => {
+            if (v1) {
+              v1.defaultMuted = true;
+              v1.muted = true;
+              v1.play().catch(() => {});
+            }
+            window.removeEventListener('touchstart', kick);
+            window.removeEventListener('click', kick);
+          };
+          window.addEventListener('touchstart', kick, { once: true });
+          window.addEventListener('click', kick, { once: true });
+        });
+      }
+    }
+  }, []);
+
+  // Warm up buffer 2 quietly shortly before first slide transition (6s) to avoid initial network congestion
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!video2Src && slides[1]) {
         setVideo2Src(slides[1].video);
       }
-    }, 2000);
+    }, 6000);
     return () => clearTimeout(timer);
   }, [slides, video2Src]);
 
@@ -352,12 +385,13 @@ export function DickClarkHero() {
             <video
               ref={video1Ref}
               src={video1Src}
+              poster={slides[0]?.poster}
               className="dcp-hero__video"
               muted={isMuted}
               loop
               playsInline
               autoPlay
-              preload={activeBuffer === 1 ? 'auto' : 'metadata'}
+              preload="auto"
               style={{
                 opacity: activeBuffer === 1 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
                 zIndex: activeBuffer === 1 ? 2 : 1,
@@ -367,6 +401,7 @@ export function DickClarkHero() {
             <video
               ref={video2Ref}
               src={video2Src || undefined}
+              poster={slides[1]?.poster}
               className="dcp-hero__video"
               muted={isMuted}
               loop

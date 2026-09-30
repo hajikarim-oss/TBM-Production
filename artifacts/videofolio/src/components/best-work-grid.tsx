@@ -165,12 +165,12 @@ function WorkCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [videoReady, setVideoReady] = useState(false);   // Instagram: frame-ready gate
+  const [videoReady, setVideoReady] = useState(false);   // Frame-ready gate
   const [isPlaying, setIsPlaying] = useState(false);       // Track active playback
   const fadeOutTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [isTouchOnly] = useState(() =>
+  const [isTouchDevice] = useState(() =>
     typeof window !== 'undefined' &&
-    window.matchMedia('(hover: none) and (pointer: coarse)').matches
+    ('ontouchstart' in window || navigator.maxTouchPoints > 0 || window.innerWidth <= 880)
   );
 
   // Lazy render the video element when card is near viewport
@@ -206,15 +206,16 @@ function WorkCard({
       },
       play: () => {
         if (videoRef.current) {
+          videoRef.current.defaultMuted = true;
           videoRef.current.muted = true;
           videoRef.current.play().catch(() => {});
           setIsPlaying(true);
         }
       },
     });
-  }, [item.id, isInView]); // Re-register when view state changes
+  }, [item.id, isInView]);
 
-  // Instagram frame-ready gate: detect when video has decoded first frame
+  // Frame-ready gate: detect when video has decoded first frame
   useEffect(() => {
     const vid = videoRef.current;
     if (!vid) return;
@@ -222,31 +223,39 @@ function WorkCard({
     const onCanPlay = () => setVideoReady(true);
     
     // If already ready (cached), set immediately
-    if (vid.readyState >= 3) {
+    if (vid.readyState >= 2) {
       setVideoReady(true);
       return;
     }
 
     vid.addEventListener('canplay', onCanPlay);
     return () => vid.removeEventListener('canplay', onCanPlay);
-  }, [isInView]); // Re-attach when video element mounts
+  }, [isInView]);
 
-  // On pure touch mobile devices: auto-play single centered card
-  // + Instagram-style predictive preloading of next card in scroll direction
+  // On touch/mobile devices: auto-play single centered card smoothly
   useEffect(() => {
-    if (!isTouchOnly || !isInView || isAnyModalOpen) return;
+    if (!isTouchDevice || !isInView || isAnyModalOpen) return;
     const el = cardRef.current;
     const vid = videoRef.current;
     if (!el || !vid) return;
 
     const touchObserver = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !isAnyModalOpen) {
+        if (entry.isIntersecting && !isAnyModalOpen) {
           if (globalVideoManager.requestPlay(`card-${item.id}`)) {
+            vid.defaultMuted = true;
             vid.muted = true;
-            if (vid.readyState === 0) vid.load();
-            vid.play().catch(() => {});
-            setIsPlaying(true);
+            vid.playsInline = true;
+            const p = vid.play();
+            if (p !== undefined) {
+              p.then(() => {
+                setVideoReady(true);
+                setIsPlaying(true);
+              }).catch(() => {});
+            } else {
+              setVideoReady(true);
+              setIsPlaying(true);
+            }
           }
         } else {
           vid.pause();
@@ -254,12 +263,15 @@ function WorkCard({
           globalVideoManager.notifyPause(`card-${item.id}`);
         }
       },
-      { threshold: [0, 0.5, 1.0] }
+      {
+        rootMargin: '-10% 0px -10% 0px',
+        threshold: 0.15,
+      }
     );
 
     touchObserver.observe(el);
     return () => touchObserver.disconnect();
-  }, [isTouchOnly, isInView, isAnyModalOpen, item.id]);
+  }, [isTouchDevice, isInView, isAnyModalOpen, item.id]);
 
   // Pause card video when modal is open
   useEffect(() => {
@@ -380,7 +392,8 @@ function WorkCard({
                 playsInline
                 loop
                 muted
-                preload="none"
+                preload={isTouchDevice ? 'metadata' : 'auto'}
+                poster={item.poster}
                 src={item.previewVideo || item.video}
                 className={`bg-video-player ${showVideo ? 'video-visible' : ''}`}
                 onError={(e) => {
@@ -467,7 +480,25 @@ function WorkModal({
     };
   }, [item.id]);
 
-  // Esc and keyboard shortcuts
+  // Autoplay handler with audio fallback (guarantees instant playback on all mobile devices)
+  useEffect(() => {
+    if (modalVideoRef.current) {
+      modalVideoRef.current.currentTime = 0;
+      modalVideoRef.current.playsInline = true;
+      const playPromise = modalVideoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // If browser blocks unmuted autoplay on mobile, mute and resume instantly
+          if (modalVideoRef.current) {
+            modalVideoRef.current.defaultMuted = true;
+            modalVideoRef.current.muted = true;
+            setIsAudioMuted(true);
+            modalVideoRef.current.play().catch(() => {});
+          }
+        });
+      }
+    }
+  }, [item]);
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -604,6 +635,7 @@ function WorkModal({
           <video
             ref={modalVideoRef}
             src={item.video}
+            poster={item.poster}
             className="cinema-video"
             autoPlay
             playsInline

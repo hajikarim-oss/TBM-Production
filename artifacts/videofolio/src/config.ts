@@ -19,16 +19,12 @@ export const R2_ACC1_URL =
   import.meta.env.VITE_R2_ACC1_URL ||
   (isDev && !forceRemote
     ? '/videos/upload_to_account_1'
-    : isLiveDomain
-    ? '/studio/cdn-1'
     : 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev');
 
 export const R2_ACC2_URL =
   import.meta.env.VITE_R2_ACC2_URL ||
   (isDev && !forceRemote
     ? '/videos/upload_to_account_2'
-    : isLiveDomain
-    ? '/studio/cdn-2'
     : 'https://pub-1ad682700e73410b958dd10d131d07d5.r2.dev');
 
 export const R2_BASE_URL = R2_ACC2_URL;
