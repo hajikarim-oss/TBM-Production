@@ -1,35 +1,55 @@
 <!-- 
   =============================================================================
-  THE BORED MONKEY — HOSTINGER ORIGIN INTERNAL LINKING SNIPPETS (PART 7)
+  THE BORED MONKEY — HOSTINGER ORIGIN INTERNAL LINKING (NAV, MIDDLE CTA, FOOTER)
   =============================================================================
-  Place these links into the Hostinger main site pages so Googlebot and users 
-  naturally crawl and pass maximum PageRank / internal link equity to /studio.
 -->
 
-<!-- 1. MAIN NAVIGATION MENU (Header) -->
-<li class="nav-item">
-  <a href="https://www.theboredmonkey.com/studio" class="nav-link" title="The Bored Monkey Studio — Commercials, DVCs & Brand Films">
-    Studio
-  </a>
-</li>
+<!-- 
+  =============================================================================
+  1. MENU OVERLAY (Directly below "Home")
+  File to edit in Hostinger: public_html/index.php (or public_html/header.php)
+  =============================================================================
+-->
+<li class="menu-item"><a href="./index.php">Home</a></li>
+<li class="menu-item"><a href="https://www.theboredmonkey.com/studio">Studio</a></li>
+<li class="menu-item"><a href="./about.php">About Us</a></li>
+<li class="menu-item"><a href="./our-services.php">Services</a></li>
+<li class="menu-item"><a href="./contact.php">Contact</a></li>
 
-<!-- 2. HERO / CALL TO ACTION SECTION (Homepage Body) -->
-<div class="cta-studio-feature">
-  <h3>Explore The Bored Monkey Studio</h3>
-  <p>Our in-house creative production and post-production pipeline crafting cinematic commercials, DVCs, and brand films.</p>
-  <a href="https://www.theboredmonkey.com/studio" class="btn btn-primary" title="Visit The Bored Monkey Studio">
-    Launch Studio ↗
+
+<!-- 
+  =============================================================================
+  2. MIDDLE OF PAGE (Hero / Middle CTA Button)
+  Place anywhere in the middle of public_html/index.php (e.g. after the Hero,
+  above the portfolio, or between services).
+  =============================================================================
+-->
+<div style="display: flex; justify-content: center; align-items: center; margin: 60px 0; text-align: center;">
+  <a href="https://www.theboredmonkey.com/studio" 
+     class="studio-cta-btn"
+     style="display: inline-flex; align-items: center; gap: 14px; background: #000000; color: #ffffff; padding: 16px 36px; border-radius: 9999px; text-decoration: none; font-family: inherit; font-size: 17px; font-weight: 700; letter-spacing: -0.2px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); transition: all 0.25s ease;"
+     onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 14px 35px rgba(0,0,0,0.2)';" 
+     onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 30px rgba(0,0,0,0.12)';">
+    <span>Explore The Bored Monkey Studio</span>
+    <span style="background: #F4C430; color: #000000; width: 30px; height: 30px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900;">
+      ↗
+    </span>
   </a>
 </div>
 
-<!-- 3. FOOTER NAVIGATION (Site-Wide Footer) -->
-<div class="footer-links-group">
-  <span class="footer-heading">CREATIVE ARMS</span>
-  <ul>
-    <li>
-      <a href="https://www.theboredmonkey.com/studio" title="The Bored Monkey Studio">
-        The Bored Monkey Studio
-      </a>
-    </li>
-  </ul>
+
+<!-- 
+  =============================================================================
+  3. FOOTER LINK
+  Place in the footer area in public_html/index.php (or public_html/footer.php)
+  inside one of the footer columns/widgets.
+  =============================================================================
+-->
+<div class="c-col-4 footer-widget footer_menu">
+  <div class="big-button sym">
+    <h4 class="h4email">Creative Production:</h4>
+    <a class="email1" href="https://www.theboredmonkey.com/studio" style="font-size: 18px; font-weight: 700; color: #000000; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;">
+      The Bored Monkey Studio <span style="font-size: 14px;">↗</span>
+    </a>
+  </div>
 </div>
