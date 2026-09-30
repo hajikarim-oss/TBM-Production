@@ -1,8 +1,29 @@
 User-agent: *
 Allow: /
+Disallow: /24_boredmonkey/
+Disallow: /dfkg456_7hfdk12D___MFJHDFSH/jfdkgSD__UUECV_PIOU123/
+Disallow: /oldwebsite/
 
-# Do not block the studio path or its assets
+User-agent: Googlebot
 Disallow:
 
-# Sitemap
+User-agent: googlebot-image
+Disallow:
+
+User-agent: googlebot-mobile
+Disallow:
+
+User-agent: Slurp
+Disallow:
+
+User-agent: baiduspider
+Disallow:
+
+User-agent: yahoo-blogs/v3.9
+Disallow:
+
+User-agent: *
+Disallow:
+
+Crawl-delay: 5
 Sitemap: https://www.theboredmonkey.com/sitemap.xml

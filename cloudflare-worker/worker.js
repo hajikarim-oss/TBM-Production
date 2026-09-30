@@ -30,6 +30,37 @@ const FALLBACK_SITEMAP = `<?xml version="1.0" encoding="UTF-8"?>
   </url>
 </urlset>`;
 
+const MERGED_ROBOTS = `User-agent: *
+Allow: /
+Disallow: /24_boredmonkey/
+Disallow: /dfkg456_7hfdk12D___MFJHDFSH/jfdkgSD__UUECV_PIOU123/
+Disallow: /oldwebsite/
+
+User-agent: Googlebot
+Disallow:
+
+User-agent: googlebot-image
+Disallow:
+
+User-agent: googlebot-mobile
+Disallow:
+
+User-agent: Slurp
+Disallow:
+
+User-agent: baiduspider
+Disallow:
+
+User-agent: yahoo-blogs/v3.9
+Disallow:
+
+User-agent: *
+Disallow:
+
+Crawl-delay: 5
+Sitemap: ${PUBLIC_DOMAIN}/sitemap.xml
+`;
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -37,17 +68,14 @@ export default {
 
     // 1. Direct handler for /studio/robots.txt
     if (pathname === '/studio/robots.txt' || pathname === '/studio/robots.txt/') {
-      return new Response(
-        `User-agent: *\nAllow: /\n\nDisallow:\n\nSitemap: ${PUBLIC_DOMAIN}/sitemap.xml\n`,
-        {
-          status: 200,
-          headers: {
-            'Content-Type': 'text/plain; charset=utf-8',
-            'Cache-Control': 'public, max-age=86400',
-            'X-Robots-Tag': 'index, follow',
-          },
-        }
-      );
+      return new Response(MERGED_ROBOTS, {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'Cache-Control': 'public, max-age=86400',
+          'X-Robots-Tag': 'index, follow',
+        },
+      });
     }
 
     // 2. Direct handler for /studio/sitemap.xml with guaranteed XML fallback
