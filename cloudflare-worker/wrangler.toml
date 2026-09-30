@@ -2,9 +2,11 @@ name = "studio-proxy"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
+# ONLY intercept /studio paths — do NOT intercept /assets/* or /favicon.svg
+# as those would break the old Hostinger site's own assets.
+# Vite builds all studio assets under /studio/assets/*, /studio/chunks/*, etc.
+# which are already covered by the /studio/* wildcard route.
 routes = [
-  "www.theboredmonkey.com/favicon.svg",
-  "www.theboredmonkey.com/assets/*",
-  "www.theboredmonkey.com/studio",
-  "www.theboredmonkey.com/studio/*"
+  { pattern = "www.theboredmonkey.com/studio", zone_name = "theboredmonkey.com" },
+  { pattern = "www.theboredmonkey.com/studio/*", zone_name = "theboredmonkey.com" }
 ]
