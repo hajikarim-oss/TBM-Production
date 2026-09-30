@@ -63,6 +63,20 @@
   padding-right: clamp(2.4rem, 4.5vw, 5.6rem);
 }
 
+@media (max-width: 880px) {
+  .dcp-container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 390px) {
+  .dcp-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
 /* ==========================================================================
    1. HEADER NAVIGATION
    ========================================================================== */
@@ -811,9 +825,9 @@
   .dcp-hero__splitLayout {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
-    margin-top: max(72px, env(safe-area-inset-top, 72px));
-    padding-bottom: 100px;
+    gap: 12px;
+    margin-top: max(60px, env(safe-area-inset-top, 60px));
+    padding-bottom: 96px;
     justify-content: flex-end;
   }
   .dcp-hero__left,
@@ -870,11 +884,16 @@
 
 /* Extra small phones (≤390px, iPhone SE / mini) */
 @media (max-width: 390px) {
+  .dcp-hero__splitLayout {
+    margin-top: max(52px, env(safe-area-inset-top, 52px));
+    padding-bottom: 84px;
+    gap: 10px;
+  }
   .dcp-hero__title {
     font-size: clamp(24px, 7vw, 36px);
   }
   .dcp-hero__description {
-    font-size: 12.5px;
+    font-size: 12px;
     line-height: 1.45;
   }
   .dcp-hero__arrow {
@@ -884,11 +903,11 @@
   }
   .dcp-hero__brandCenter {
     min-width: 100px;
-    max-width: 150px;
+    max-width: 140px;
     height: 40px;
   }
   .dcp-hero__brandLogo {
-    max-height: 30px;
+    max-height: 28px;
   }
 }
 
@@ -1108,10 +1127,16 @@
   background-color: #0b0b0b;
   display: flex;
   flex-direction: column;
-  padding: max(24px, env(safe-area-inset-top, 24px)) 24px max(24px, env(safe-area-inset-bottom, 24px)) 24px;
+  padding: max(20px, env(safe-area-inset-top, 20px)) 20px max(20px, env(safe-area-inset-bottom, 20px)) 20px;
   box-sizing: border-box;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 390px) {
+  .dcp-menuOverlay {
+    padding: max(16px, env(safe-area-inset-top, 16px)) 16px max(16px, env(safe-area-inset-bottom, 16px)) 16px;
+  }
 }
 
 .dcp-menuOverlay__top {
