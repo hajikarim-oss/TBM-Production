@@ -2,7 +2,9 @@ name = "studio-proxy"
 main = "worker.js"
 compatibility_date = "2024-01-01"
 
-# Route pattern:
-# routes = [
-#   { pattern = "www.theboredmonkey.com/studio*", zone_name = "theboredmonkey.com" }
-# ]
+routes = [
+  "www.theboredmonkey.com/favicon.svg",
+  "www.theboredmonkey.com/assets/*",
+  "www.theboredmonkey.com/studio",
+  "www.theboredmonkey.com/studio/*"
+]
