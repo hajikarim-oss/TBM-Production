@@ -154,6 +154,9 @@ function WorkCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
+  const [isTouchDevice] = useState(() =>
+    typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+  );
 
   // Lazy render the video element when card is near viewport
   useEffect(() => {
@@ -171,6 +174,23 @@ function WorkCard({
     return () => observer.disconnect();
   }, []);
 
+  // On touch devices, auto-play video when card is in viewport
+  useEffect(() => {
+    if (!isTouchDevice || !isInView || isAnyModalOpen) return;
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    vid.muted = true;
+    const playPromise = vid.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {});
+    }
+
+    return () => {
+      if (vid) vid.pause();
+    };
+  }, [isTouchDevice, isInView, isAnyModalOpen]);
+
   // Pause card video when modal is open
   useEffect(() => {
     if (isAnyModalOpen && videoRef.current) {
@@ -179,7 +199,9 @@ function WorkCard({
   }, [isAnyModalOpen]);
 
   // Hover to Play logic: plays only when user cursor hovers, pauses on leave
+  // (desktop only — touch devices use viewport-based auto-play above)
   const handleMouseEnter = useCallback(() => {
+    if (isTouchDevice) return; // Skip on touch
     if (!isAnyModalOpen && videoRef.current) {
       videoRef.current.muted = true;
       const playPromise = videoRef.current.play();
@@ -187,14 +209,15 @@ function WorkCard({
         playPromise.catch(() => {});
       }
     }
-  }, [isAnyModalOpen]);
+  }, [isAnyModalOpen, isTouchDevice]);
 
   const handleMouseLeave = useCallback(() => {
+    if (isTouchDevice) return; // Skip on touch
     if (videoRef.current) {
       videoRef.current.pause();
       videoRef.current.currentTime = item.id === 'fiona-diamonds' ? 0.5 : 0;
     }
-  }, [item.id]);
+  }, [item.id, isTouchDevice]);
 
   const isVertical = item.aspectRatio === '9:16';
 
@@ -224,7 +247,7 @@ function WorkCard({
                 playsInline
                 loop
                 muted
-                preload="auto"
+                preload={isTouchDevice ? 'metadata' : 'auto'}
                 poster={item.poster}
                 src={item.video}
                 onError={(e) => {

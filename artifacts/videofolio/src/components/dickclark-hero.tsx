@@ -100,21 +100,63 @@ export function DickClarkHero() {
   const busy = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  /* ─── Scroll-driven morph: fullscreen → portrait ─── */
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const updateSize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    updateSize();
+    window.addEventListener('resize', updateSize, { passive: true });
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  /* ─── Scroll-driven morph: fullscreen → portrait (responsive) ─── */
   const heroWrapRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroWrapRef,
     offset: ['start start', 'end start'],
   });
 
-  // Video container morphs: 100% width → 42% width centered, with border-radius
-  const videoWidth = useTransform(scrollYProgress, [0, 0.55, 1], ['100%', '100%', '42%']);
-  const videoHeight = useTransform(scrollYProgress, [0, 0.55, 1], ['100%', '100%', '75vh']);
+  // Video container morphs: on desktop 100% → 42%, on mobile 100% → 92% centered with 16px radius
+  const videoWidth = useTransform(
+    scrollYProgress,
+    [0, 0.55, 1],
+    isMobile ? ['100%', '100%', '92%'] : ['100%', '100%', '42%']
+  );
+  const videoHeight = useTransform(
+    scrollYProgress,
+    [0, 0.55, 1],
+    isMobile ? ['100%', '100%', '58vh'] : ['100%', '100%', '75vh']
+  );
   const videoBorderRadius = useTransform(scrollYProgress, [0, 0.55, 1], [0, 0, 16]);
 
   // Content fades out as video morphs
   const contentOpacity = useTransform(scrollYProgress, [0, 0.35], [1, 0]);
   const controlsOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0]);
+
+  // Touch swipe support for mobile
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const diffX = touchStartX.current - e.changedTouches[0].clientX;
+    const diffY = touchStartY.current - e.changedTouches[0].clientY;
+    if (Math.abs(diffX) > 45 && Math.abs(diffX) > Math.abs(diffY)) {
+      if (diffX > 0) {
+        handleManualNav('next');
+      } else {
+        handleManualNav('prev');
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+  };
 
   const transitionTo = useCallback(
     (toIndex: number) => {
@@ -242,7 +284,12 @@ export function DickClarkHero() {
 
   return (
     <div className="dcp-heroWrap" ref={heroWrapRef}>
-      <section className="dcp-hero" id="home">
+      <section
+        className="dcp-hero"
+        id="home"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* ─── Video Canvas with scroll-driven morph ─── */}
         <motion.div
           className="dcp-hero__videoMorph"

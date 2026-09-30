@@ -87,3 +87,44 @@ a { text-decoration: none; }
 @media (max-width: 480px) {
   .vf-container { width: calc(100% - 32px); }
 }
+
+/* ─── MOBILE-FIRST GLOBAL REFINEMENTS ─── */
+/* Eliminate 300ms tap delay and blue highlight on touch */
+@media (pointer: coarse) {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* Smooth momentum scrolling on iOS */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+  /* Prevent accidental text selection during scroll/swipe */
+  .dcp-hero,
+  .splide,
+  .work-content-wrap {
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  /* Disable hover effects that cause "sticky hover" on touch */
+  .work-content-item-card-wrap:hover {
+    transform: none;
+  }
+  .tbm-producerDossier:hover {
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+  .tbm-channelBtn:hover {
+    transform: none;
+  }
+  /* Active states for tactile feedback on touch */
+  .work-content-item-card-wrap:active {
+    transform: scale(0.98);
+    transition: transform 0.1s;
+  }
+  .tbm-channelBtn:active {
+    background: rgba(255, 255, 255, 0.12);
+    transform: scale(0.98);
+  }
+  .project-image-splide-wrap:active {
+    transform: scale(0.97);
+  }
+}

@@ -317,10 +317,24 @@
 }
 
 @media (max-width: 920px) {
+  .dcp-header {
+    padding-top: max(1.2rem, env(safe-area-inset-top, 1.2rem));
+    padding-bottom: 1rem;
+  }
+  .dcp-header.is-scrolled {
+    padding-top: max(0.8rem, env(safe-area-inset-top, 0.8rem));
+    padding-bottom: 0.8rem;
+  }
+  .dcp-header__logo-img {
+    height: clamp(26px, 8vw, 34px);
+  }
   .dcp-header__mobileMenuBtn {
     display: flex;
     align-items: center;
     justify-content: center;
+    /* Minimum 44px touch target (WCAG 2.2 AAA) */
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -785,11 +799,22 @@
 
 /* ── Mobile responsive ── */
 @media (max-width: 880px) {
+  .dcp-heroWrap {
+    height: 165vh;
+  }
+  .dcp-hero {
+    min-height: 100svh;
+    height: 100svh;
+    /* Prevent pull-to-refresh interfering with swipe gallery */
+    touch-action: pan-y pinch-zoom;
+  }
   .dcp-hero__splitLayout {
     flex-direction: column;
     align-items: flex-start;
-    gap: 24px;
-    margin-top: 10vh;
+    gap: 14px;
+    margin-top: max(72px, env(safe-area-inset-top, 72px));
+    padding-bottom: 100px;
+    justify-content: flex-end;
   }
   .dcp-hero__left,
   .dcp-hero__right {
@@ -797,12 +822,73 @@
     padding-bottom: 0;
   }
   .dcp-hero__title {
-    font-size: clamp(32px, 8.5vw, 52px);
+    font-size: clamp(28px, 7.8vw, 44px);
+    line-height: 1.08;
+    letter-spacing: -0.025em;
     margin-left: 0;
+    text-wrap: balance;
   }
   .dcp-hero__description {
-    font-size: 14.5px;
-    max-width: 44ch;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.72);
+    max-width: 100%;
+    text-wrap: pretty;
+  }
+  .dcp-hero__controls {
+    bottom: max(18px, env(safe-area-inset-bottom, 18px));
+    gap: 8px;
+  }
+  .dcp-hero__controlsInner {
+    gap: 12px;
+  }
+  .dcp-hero__arrow {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+  .dcp-hero__brandCenter {
+    min-width: clamp(110px, 34vw, 170px);
+    max-width: 180px;
+    height: 44px;
+  }
+  .dcp-hero__brandLogo {
+    max-height: 36px;
+  }
+  /* Hide desktop-only director HUD elements on mobile */
+  .dcp-directorBar {
+    display: none;
+  }
+  .dcp-monitorHud {
+    display: none;
+  }
+  /* Scroll cue is unnecessary on mobile — gestures are intuitive */
+  .dcp-hero__scrollCue {
+    display: none;
+  }
+}
+
+/* Extra small phones (≤390px, iPhone SE / mini) */
+@media (max-width: 390px) {
+  .dcp-hero__title {
+    font-size: clamp(24px, 7vw, 36px);
+  }
+  .dcp-hero__description {
+    font-size: 12.5px;
+    line-height: 1.45;
+  }
+  .dcp-hero__arrow {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+  .dcp-hero__brandCenter {
+    min-width: 100px;
+    max-width: 150px;
+    height: 40px;
+  }
+  .dcp-hero__brandLogo {
+    max-height: 30px;
   }
 }
 
@@ -1022,7 +1108,10 @@
   background-color: #0b0b0b;
   display: flex;
   flex-direction: column;
-  padding: 32px 24px;
+  padding: max(24px, env(safe-area-inset-top, 24px)) 24px max(24px, env(safe-area-inset-bottom, 24px)) 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .dcp-menuOverlay__top {
@@ -1030,27 +1119,68 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  flex-shrink: 0;
 }
 
 .dcp-menuOverlay__nav {
   margin: auto 0;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
+  padding: 32px 0;
 }
 
 .dcp-menuOverlay__link {
   font-family: var(--dcp-font);
-  font-size: clamp(32px, 8vw, 54px);
+  font-size: clamp(28px, 8vw, 54px);
   color: var(--dcp-white);
   text-decoration: none;
   font-weight: 400;
   letter-spacing: -0.02em;
   transition: opacity var(--dcp-duration-fast);
+  /* Larger tap target */
+  padding: 4px 0;
 }
 
 .dcp-menuOverlay__link:hover {
   opacity: 0.7;
+}
+
+/* Mobile menu bottom CTA */
+.dcp-menuOverlay__cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  background: var(--dcp-white, #fff);
+  color: #111;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  font-family: var(--dcp-font);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: auto;
+  transition: transform 0.2s var(--dcp-ease), background-color 0.2s;
+}
+
+.dcp-menuOverlay__cta:active {
+  transform: scale(0.97);
+  background: #e5e5e5;
+}
+
+.dcp-menuOverlay__ctaDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--dcp-red, #d63032);
+  flex-shrink: 0;
 }
 
 .dcp-menuOverlay__close {
@@ -1058,12 +1188,16 @@
   border: 1px solid rgba(255, 255, 255, 0.35);
   color: #fff;
   border-radius: 9999px;
-  padding: 8px 18px;
+  padding: 10px 20px;
   font-family: var(--dcp-font);
   font-size: 13px;
   text-transform: uppercase;
   cursor: pointer;
   letter-spacing: 0.04em;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
     background-color var(--dcp-duration-fast),
     border-color var(--dcp-duration-fast);

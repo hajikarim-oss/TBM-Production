@@ -58,6 +58,7 @@ function ProducerCard({ member, index }: { member: CrewMember; index: number }) 
   const rotateY = useTransform(springX, [-120, 120], [-5, 5]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (typeof window !== 'undefined' && !window.matchMedia('(hover: hover)').matches) return;
     if (!cardRef.current) return;
     const rect = cardRef.current.getBoundingClientRect();
     const x = e.clientX - (rect.left + rect.width / 2);

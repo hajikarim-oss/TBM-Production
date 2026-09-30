@@ -184,6 +184,16 @@ export function DickClarkHeader() {
                 </motion.a>
               ))}
             </nav>
+
+            {/* CTA Button at bottom of mobile menu */}
+            <a
+              href="#contact"
+              className="dcp-menuOverlay__cta"
+              onClick={() => setMenuOpen(false)}
+            >
+              <span className="dcp-menuOverlay__ctaDot" />
+              <span>Get In Touch</span>
+            </a>
           </motion.div>
         )}
       </AnimatePresence>
