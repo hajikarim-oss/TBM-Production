@@ -66,7 +66,7 @@
 
                 <!-- Text Box -->
                 <div class="alioth-text-box">
-                    <h5 style="color: rgba(25,27,29,.6)">22, 2nd Floor, Kamat Industrial Estate, Opp Siddhivinayak Mandir, Veer Savarkar, Maharashtra 400025
+                    <h5 style="color: rgba(25,27,29,.6)">Mathuradas Mills Compound, 2nd floor, Todi building, NM Joshi Marg, near kerala quarters, Lower Parel, Mumbai, Maharashtra 400013
                         
                         <style>
                             .ph1{
