@@ -5,6 +5,22 @@
   "outputDirectory": "artifacts/videofolio/dist",
   "rewrites": [
     {
+      "source": "/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
+      "source": "/studio/robots.txt",
+      "destination": "/robots.txt"
+    },
+    {
+      "source": "/studio/sitemap.xml",
+      "destination": "/sitemap.xml"
+    },
+    {
       "source": "/studio/assets/(.*)",
       "destination": "/assets/$1"
     },
@@ -37,6 +53,10 @@
       "destination": "/favicon.svg"
     },
     {
+      "source": "/studio/og-studio.png",
+      "destination": "/assets/og-studio.png"
+    },
+    {
       "source": "/studio/tbm-logo.png",
       "destination": "/tbm-logo.png"
     },
@@ -62,6 +82,58 @@
     }
   ],
   "headers": [
+    {
+      "source": "/robots.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/studio/robots.txt",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
+    {
+      "source": "/studio/sitemap.xml",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/xml; charset=utf-8"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400"
+        }
+      ]
+    },
     {
       "source": "/(.*)assets/(.*)",
       "headers": [
@@ -135,6 +207,32 @@
         {
           "key": "Cache-Control",
           "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/studio",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
+        }
+      ]
+    },
+    {
+      "source": "/index.html",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/html; charset=utf-8"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "index, follow"
         }
       ]
     }

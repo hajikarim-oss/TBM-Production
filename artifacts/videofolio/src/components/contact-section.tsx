@@ -193,7 +193,7 @@ export function ContactSection() {
             <div className="tbm-footer__col">
               <span className="tbm-footer__colHeader">ONLINE &amp; SOCIAL</span>
               <ul className="tbm-footer__list">
-                <li><a href="https://theboredmonkey.com" target="_blank" rel="noreferrer">theboredmonkey.com ↗</a></li>
+                <li><a href="https://www.theboredmonkey.com" target="_blank" rel="noreferrer">theboredmonkey.com ↗</a></li>
                 <li><a href="https://www.instagram.com/theboredmonkeyofficial/?hl=en" target="_blank" rel="noreferrer">Instagram ↗</a></li>
                 <li><a href="https://www.linkedin.com/company/theboredmonkey/" target="_blank" rel="noreferrer">LinkedIn ↗</a></li>
                 <li><a href="https://vimeo.com/theboredmonkey" target="_blank" rel="noreferrer">Vimeo ↗</a></li>
@@ -220,7 +220,7 @@ export function ContactSection() {
               © {new Date().getFullYear()} TheBoredMonkey Studios Pvt. Ltd. All rights reserved.
             </span>
             <div className="tbm-footer__legalLinks">
-              <a href="https://theboredmonkey.com">theboredmonkey.com</a>
+              <a href="https://www.theboredmonkey.com">theboredmonkey.com</a>
               <span>·</span>
               <a href="#home">Back To Top ↑</a>
               <span>·</span>

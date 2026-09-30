@@ -109,7 +109,7 @@ function devSubpathFallbackPlugin() {
 const port = process.env.PORT ? parseInt(process.env.PORT) : 5173;
 
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/',
+  base: process.env.VITE_BASE_PATH || '/studio/',
   plugins: [
     videoStreamPlugin(),
     copyStudioPlugin(),
