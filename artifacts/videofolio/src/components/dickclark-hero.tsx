@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
+import { globalVideoManager } from '@/lib/video-manager';
 
 export interface HeroSlide {
   brand: string;
@@ -87,10 +88,11 @@ export function DickClarkHero() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const reduceMotion = useReducedMotion();
 
-  // Dual video crossfade buffers with warm ping-pong pre-buffering
+  // Dual video crossfade buffers with intelligent warm ping-pong pre-buffering
   const [activeBuffer, setActiveBuffer] = useState<1 | 2>(1);
   const [video1Src, setVideo1Src] = useState<string>(slides[0]?.video || '');
-  const [video2Src, setVideo2Src] = useState<string>(slides[1]?.video || '');
+  // Start buffer 2 empty to avoid consuming bandwidth during critical initial paint
+  const [video2Src, setVideo2Src] = useState<string>('');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const [isMuted] = useState(true);
@@ -99,6 +101,16 @@ export function DickClarkHero() {
   const video2Ref = useRef<HTMLVideoElement>(null);
   const busy = useRef(false);
   const autoplayRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Warm up buffer 2 quietly only after initial load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!video2Src && slides[1]) {
+        setVideo2Src(slides[1].video);
+      }
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [slides, video2Src]);
 
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -116,6 +128,51 @@ export function DickClarkHero() {
     target: heroWrapRef,
     offset: ['start start', 'end start'],
   });
+
+  // Register hero video with Global Video Manager
+  useEffect(() => {
+    const activeVid = activeBuffer === 1 ? video1Ref.current : video2Ref.current;
+    if (!activeVid) return;
+
+    return globalVideoManager.register({
+      id: 'hero-video',
+      element: activeVid,
+      priority: 'hero',
+      pause: () => {
+        if (video1Ref.current) video1Ref.current.pause();
+        if (video2Ref.current) video2Ref.current.pause();
+      },
+      play: () => {
+        const vid = activeBuffer === 1 ? video1Ref.current : video2Ref.current;
+        if (vid) vid.play().catch(() => {});
+      },
+    });
+  }, [activeBuffer]);
+
+  // Pause hero video when scrolled out of viewport to save GPU & network
+  useEffect(() => {
+    const el = heroWrapRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const activeVid = activeBuffer === 1 ? video1Ref.current : video2Ref.current;
+        if (!activeVid) return;
+        if (entry.isIntersecting) {
+          if (globalVideoManager.requestPlay('hero-video')) {
+            activeVid.play().catch(() => {});
+          }
+        } else {
+          activeVid.pause();
+          globalVideoManager.notifyPause('hero-video');
+        }
+      },
+      { threshold: 0.05 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [activeBuffer]);
 
   // Video container morphs: on desktop 100% → 42%, on mobile 100% → 92% centered with 16px radius
   const videoWidth = useTransform(
@@ -167,79 +224,71 @@ export function DickClarkHero() {
       const nextUpcomingSlide = slides[(toIndex + 1) % slides.length];
       const crossfadeDuration = reduceMotion ? 0 : 500;
 
-      if (activeBuffer === 1) {
-        // Buffer 2 is the target
-        const v2 = video2Ref.current;
-        const v1 = video1Ref.current;
+      const isToBuffer2 = activeBuffer === 1;
+      const vTarget = isToBuffer2 ? video2Ref.current : video1Ref.current;
+      const vCurrent = isToBuffer2 ? video1Ref.current : video2Ref.current;
+      const targetBuffer: 1 | 2 = isToBuffer2 ? 2 : 1;
 
-        // Ensure buffer 2 has the correct target video
-        if (v2) {
-          if (video2Src !== targetSlide.video) {
-            v2.src = targetSlide.video;
-          }
-          v2.muted = isMuted;
-          const playPromise = v2.play();
+      if (!vTarget) {
+        busy.current = false;
+        return;
+      }
 
-          const executeCrossfade = () => {
-            setIsTransitioning(true);
-            setTimeout(() => {
-              setActiveBuffer(2);
-              setCurrentIdx(toIndex);
-              setIsTransitioning(false);
-              busy.current = false;
-              if (v1) v1.pause();
-
-              // Warm up buffer 1 with the NEXT upcoming slide
-              if (nextUpcomingSlide) {
-                setVideo1Src(nextUpcomingSlide.video);
-              }
-            }, crossfadeDuration);
-          };
-
-          if (playPromise !== undefined) {
-            playPromise.then(executeCrossfade).catch(() => {
-              executeCrossfade();
-            });
-          } else {
-            executeCrossfade();
-          }
+      // Check if target buffer has the right source
+      const currentTargetSrc = isToBuffer2 ? video2Src : video1Src;
+      if (currentTargetSrc !== targetSlide.video) {
+        if (isToBuffer2) {
+          setVideo2Src(targetSlide.video);
+        } else {
+          setVideo1Src(targetSlide.video);
         }
+        vTarget.src = targetSlide.video;
+        vTarget.load();
+      }
+
+      vTarget.muted = isMuted;
+
+      const finalize = () => {
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setActiveBuffer(targetBuffer);
+          setCurrentIdx(toIndex);
+          setIsTransitioning(false);
+          busy.current = false;
+          if (vCurrent) vCurrent.pause();
+
+          // Warm up the inactive buffer with the NEXT upcoming slide
+          if (nextUpcomingSlide) {
+            if (targetBuffer === 2) {
+              setVideo1Src(nextUpcomingSlide.video);
+            } else {
+              setVideo2Src(nextUpcomingSlide.video);
+            }
+          }
+        }, crossfadeDuration);
+      };
+
+      const playPromise = vTarget.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            // If target video has frame ready, finish smoothly
+            if (vTarget.readyState >= 2) {
+              finalize();
+            } else {
+              const onReady = () => {
+                vTarget.removeEventListener('loadeddata', onReady);
+                finalize();
+              };
+              vTarget.addEventListener('loadeddata', onReady, { once: true });
+              setTimeout(onReady, 350); // Fallback timeout
+            }
+          })
+          .catch(() => {
+            finalize();
+          });
       } else {
-        // Buffer 1 is the target
-        const v1 = video1Ref.current;
-        const v2 = video2Ref.current;
-
-        if (v1) {
-          if (video1Src !== targetSlide.video) {
-            v1.src = targetSlide.video;
-          }
-          v1.muted = isMuted;
-          const playPromise = v1.play();
-
-          const executeCrossfade = () => {
-            setIsTransitioning(true);
-            setTimeout(() => {
-              setActiveBuffer(1);
-              setCurrentIdx(toIndex);
-              setIsTransitioning(false);
-              busy.current = false;
-              if (v2) v2.pause();
-
-              // Warm up buffer 2 with the NEXT upcoming slide
-              if (nextUpcomingSlide) {
-                setVideo2Src(nextUpcomingSlide.video);
-              }
-            }, crossfadeDuration);
-          };
-
-          if (playPromise !== undefined) {
-            playPromise.then(executeCrossfade).catch(() => {
-              executeCrossfade();
-            });
-          } else {
-            executeCrossfade();
-          }
-        }
+        finalize();
       }
     },
     [activeBuffer, currentIdx, slides, reduceMotion, isMuted, video1Src, video2Src]
@@ -308,7 +357,7 @@ export function DickClarkHero() {
               loop
               playsInline
               autoPlay
-              preload="auto"
+              preload={activeBuffer === 1 ? 'auto' : 'metadata'}
               style={{
                 opacity: activeBuffer === 1 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
                 zIndex: activeBuffer === 1 ? 2 : 1,
@@ -322,7 +371,7 @@ export function DickClarkHero() {
               muted={isMuted}
               loop
               playsInline
-              preload="auto"
+              preload={activeBuffer === 2 ? 'auto' : 'metadata'}
               style={{
                 opacity: activeBuffer === 2 ? (isTransitioning ? 0 : 1) : isTransitioning ? 1 : 0,
                 zIndex: activeBuffer === 2 ? 2 : 1,

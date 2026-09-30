@@ -13,6 +13,8 @@
 
 const VERCEL_ORIGIN = 'https://tbm-production-api-server.vercel.app';
 const PUBLIC_DOMAIN = 'https://www.theboredmonkey.com';
+const R2_ACC1_ORIGIN = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
+const R2_ACC2_ORIGIN = 'https://pub-1ad682700e73410b958dd10d131d07d5.r2.dev';
 
 const FALLBACK_SITEMAP = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -108,7 +110,41 @@ export default {
       });
     }
 
-    // 3. Construct target origin URL
+    // 3. Cloudflare Edge Video CDN Proxy for R2 Account 1 & 2
+    // Caches video streams at Cloudflare edge nodes worldwide with HTTP 206 range preservation
+    if (pathname.startsWith('/studio/cdn-1/') || pathname.startsWith('/studio/cdn-2/')) {
+      const isAcc1 = pathname.startsWith('/studio/cdn-1/');
+      const r2Base = isAcc1 ? R2_ACC1_ORIGIN : R2_ACC2_ORIGIN;
+      const r2Path = pathname.replace(isAcc1 ? '/studio/cdn-1/' : '/studio/cdn-2/', '');
+      const r2TargetUrl = `${r2Base}/${r2Path}${url.search}`;
+
+      const r2RequestHeaders = new Headers(request.headers);
+      r2RequestHeaders.set('User-Agent', 'Mozilla/5.0 Cloudflare-Edge-CDN');
+
+      const r2Response = await fetch(r2TargetUrl, {
+        method: request.method,
+        headers: r2RequestHeaders,
+        cf: {
+          cacheEverything: true,
+          cacheTtl: 31536000,
+        },
+      });
+
+      const cdnHeaders = new Headers(r2Response.headers);
+      cdnHeaders.set('Cache-Control', 'public, max-age=31536000, immutable');
+      cdnHeaders.set('Accept-Ranges', 'bytes');
+      cdnHeaders.set('Access-Control-Allow-Origin', '*');
+      cdnHeaders.set('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS');
+      cdnHeaders.set('Access-Control-Expose-Headers', 'Content-Range, Content-Length, Accept-Ranges');
+
+      return new Response(r2Response.body, {
+        status: r2Response.status,
+        statusText: r2Response.statusText,
+        headers: cdnHeaders,
+      });
+    }
+
+    // 4. Construct target origin URL
     const targetUrl = new URL(url.pathname + url.search, VERCEL_ORIGIN);
 
     // Forward original request headers with routing metadata
@@ -118,7 +154,7 @@ export default {
     forwardHeaders.set('X-Forwarded-Proto', 'https');
     forwardHeaders.set('X-Real-IP', request.headers.get('cf-connecting-ip') || '');
 
-    // 4. Fetch from Vercel backend
+    // 5. Fetch from Vercel backend
     const originResponse = await fetch(targetUrl.toString(), {
       method: request.method,
       headers: forwardHeaders,
@@ -126,7 +162,7 @@ export default {
       redirect: 'follow',
     });
 
-    // 5. Clone and sanitize response headers
+    // 6. Clone and sanitize response headers
     const responseHeaders = new Headers(originResponse.headers);
 
     // CRITICAL SEO RULE: Explicitly ensure indexing, NEVER noindex
@@ -166,14 +202,18 @@ export default {
       });
     }
 
-    // Static asset caching: 1 year immutable for hashed assets
+    // Static asset & video media caching: 1 year immutable for hashed assets & videos
     if (
       pathname.includes('/entries/') ||
       pathname.includes('/chunks/') ||
       pathname.includes('/assets/') ||
-      pathname.includes('/fonts/')
+      pathname.includes('/fonts/') ||
+      pathname.includes('/videos/') ||
+      pathname.endsWith('.mp4') ||
+      pathname.endsWith('.webm')
     ) {
       responseHeaders.set('Cache-Control', 'public, max-age=31536000, immutable');
+      responseHeaders.set('Accept-Ranges', 'bytes');
     }
 
     return new Response(originResponse.body, {

@@ -2,6 +2,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
+import { globalVideoManager } from '@/lib/video-manager';
 
 export interface WorkItem {
   id: string;
@@ -11,6 +12,7 @@ export interface WorkItem {
   client: string;
   logo: string;
   video: string;
+  previewVideo?: string;
   fallbackVideo?: string;
   poster?: string;
   aspectRatio: '9:16' | '16:9';
@@ -26,6 +28,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/bluetyga-logo-white.png',
     video: `${R2_ACC1_URL}/Blue%20Tyga_DVC_13.4.2026.mp4`,
+    poster: '/images/posters/blue-tyga.webp',
     aspectRatio: '16:9',
   },
   {
@@ -36,6 +39,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/atomberg-logo-new.png',
     video: `${R2_ACC1_URL}/Atomberg%20CPJ_TheBoredMonkey%20Studios.mp4`,
+    poster: '/images/posters/atomberg-cpj.webp',
     aspectRatio: '16:9',
   },
   {
@@ -46,6 +50,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/zoff-logo-white.png',
     video: `${R2_ACC1_URL}/Zoff.mp4`,
+    poster: '/images/posters/zoff.webp',
     fallbackVideo: '/videos/zoff-khadey-masale.mp4',
     aspectRatio: '16:9',
   },
@@ -57,6 +62,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/vibhor-logo-new.png',
     video: `${R2_ACC1_URL}/Vibhor.mp4`,
+    poster: '/images/posters/vibhor.webp',
     fallbackVideo: '/videos/vibhor-rupali-cooking-oil.mp4',
     aspectRatio: '16:9',
   },
@@ -68,6 +74,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/happi-planet-brand-color.png',
     video: `${R2_ACC2_URL}/Happi%20planet.mp4`,
+    poster: '/images/posters/happi-planet.webp',
     fallbackVideo: '/videos/happi-planet.mp4',
     aspectRatio: '16:9',
   },
@@ -79,6 +86,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'DVC ADS',
     logo: '/brands/jordan-logo.svg',
     video: '/videos/jordans-brush-mama-penguin.mp4',
+    poster: '/images/posters/jordan.webp',
     fallbackVideo: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
     aspectRatio: '16:9',
   },
@@ -92,6 +100,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'Vertical AD Film',
     logo: '/brands/bombay-sweet-shop-new.png',
     video: `${R2_ACC2_URL}/Thursday%20order_9_16.mp4`,
+    poster: '/images/posters/bombay-sweet-shop.webp',
     fallbackVideo: '/videos/thursday-order-9-16.mp4',
     aspectRatio: '9:16',
   },
@@ -103,6 +112,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'Vertical AD Film',
     logo: '/brands/delhivery-white.png',
     video: '/videos/setu-campaign.mp4',
+    poster: '/images/posters/setu.webp',
     fallbackVideo: `${R2_ACC2_URL}/setu-campaign.mp4`,
     aspectRatio: '9:16',
   },
@@ -114,6 +124,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     client: 'Vertical AD Film',
     logo: '/brands/cheq-logo-white.png',
     video: `${R2_ACC2_URL}/Script%202-%20Hook%203_3%20Oct25.mp4`,
+    poster: '/images/posters/cheq.webp',
     fallbackVideo: '/videos/script-2-hook-3.mp4',
     aspectRatio: '9:16',
   },
@@ -126,7 +137,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     logo: '/brands/fiona-logo.svg',
     video: `${R2_ACC2_URL}/Gifting%20(HOOK%2001).mp4`,
     fallbackVideo: '/videos/gifting-hook-01.mp4',
-    poster: '/images/fiona-poster.jpg',
+    poster: '/images/posters/fiona.webp',
     aspectRatio: '9:16',
   },
 ];
@@ -154,8 +165,12 @@ function WorkCard({
   const cardRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isInView, setIsInView] = useState(false);
-  const [isTouchDevice] = useState(() =>
-    typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0)
+  const [videoReady, setVideoReady] = useState(false);   // Instagram: frame-ready gate
+  const [isPlaying, setIsPlaying] = useState(false);       // Track active playback
+  const fadeOutTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [isTouchOnly] = useState(() =>
+    typeof window !== 'undefined' &&
+    window.matchMedia('(hover: none) and (pointer: coarse)').matches
   );
 
   // Lazy render the video element when card is near viewport
@@ -167,62 +182,168 @@ function WorkCard({
       ([entry]) => {
         setIsInView(entry.isIntersecting);
       },
-      { rootMargin: '200px 0px', threshold: 0.05 }
+      { rootMargin: '400px 0px', threshold: 0.01 }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
-  // On touch devices, auto-play video when card is in viewport
+  // Register card video with Global Video Manager
   useEffect(() => {
-    if (!isTouchDevice || !isInView || isAnyModalOpen) return;
     const vid = videoRef.current;
     if (!vid) return;
 
-    vid.muted = true;
-    const playPromise = vid.play();
-    if (playPromise !== undefined) {
-      playPromise.catch(() => {});
+    return globalVideoManager.register({
+      id: `card-${item.id}`,
+      element: vid,
+      priority: 'card',
+      pause: () => {
+        if (videoRef.current) {
+          videoRef.current.pause();
+          setIsPlaying(false);
+        }
+      },
+      play: () => {
+        if (videoRef.current) {
+          videoRef.current.muted = true;
+          videoRef.current.play().catch(() => {});
+          setIsPlaying(true);
+        }
+      },
+    });
+  }, [item.id, isInView]); // Re-register when view state changes
+
+  // Instagram frame-ready gate: detect when video has decoded first frame
+  useEffect(() => {
+    const vid = videoRef.current;
+    if (!vid) return;
+
+    const onCanPlay = () => setVideoReady(true);
+    
+    // If already ready (cached), set immediately
+    if (vid.readyState >= 3) {
+      setVideoReady(true);
+      return;
     }
 
-    return () => {
-      if (vid) vid.pause();
-    };
-  }, [isTouchDevice, isInView, isAnyModalOpen]);
+    vid.addEventListener('canplay', onCanPlay);
+    return () => vid.removeEventListener('canplay', onCanPlay);
+  }, [isInView]); // Re-attach when video element mounts
+
+  // On pure touch mobile devices: auto-play single centered card
+  // + Instagram-style predictive preloading of next card in scroll direction
+  useEffect(() => {
+    if (!isTouchOnly || !isInView || isAnyModalOpen) return;
+    const el = cardRef.current;
+    const vid = videoRef.current;
+    if (!el || !vid) return;
+
+    const touchObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.5 && !isAnyModalOpen) {
+          if (globalVideoManager.requestPlay(`card-${item.id}`)) {
+            vid.muted = true;
+            if (vid.readyState === 0) vid.load();
+            vid.play().catch(() => {});
+            setIsPlaying(true);
+          }
+        } else {
+          vid.pause();
+          setIsPlaying(false);
+          globalVideoManager.notifyPause(`card-${item.id}`);
+        }
+      },
+      { threshold: [0, 0.5, 1.0] }
+    );
+
+    touchObserver.observe(el);
+    return () => touchObserver.disconnect();
+  }, [isTouchOnly, isInView, isAnyModalOpen, item.id]);
 
   // Pause card video when modal is open
   useEffect(() => {
     if (isAnyModalOpen && videoRef.current) {
       videoRef.current.pause();
+      setIsPlaying(false);
     }
   }, [isAnyModalOpen]);
 
-  // Hover to Play logic: plays only when user cursor hovers, pauses on leave
-  // (desktop only — touch devices use viewport-based auto-play above)
-  const handleMouseEnter = useCallback(() => {
-    if (isTouchDevice) return; // Skip on touch
+  // Reset videoReady state when video src changes or unmounts
+  useEffect(() => {
+    if (!isInView) {
+      setVideoReady(false);
+      setIsPlaying(false);
+    }
+  }, [isInView]);
+
+  // ─── Instagram Proximity Preloading ───
+  // When cursor enters the card's outer padding zone (before actual hover),
+  // start loading video metadata so it's ready to play instantly on hover.
+  const handleProximityEnter = useCallback(() => {
     if (!isAnyModalOpen && videoRef.current) {
-      videoRef.current.muted = true;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {});
+      globalVideoManager.requestPreload(`card-${item.id}`);
+    }
+  }, [isAnyModalOpen, item.id]);
+
+  // Hover to Play logic: works for mice, trackpads, and touch-screen laptops
+  // Instagram-style: video only becomes visible after frame is decoded
+  const handleMouseEnter = useCallback(() => {
+    if (fadeOutTimer.current) {
+      clearTimeout(fadeOutTimer.current);
+      fadeOutTimer.current = null;
+    }
+    if (!isAnyModalOpen && videoRef.current) {
+      if (globalVideoManager.requestPlay(`card-${item.id}`)) {
+        const vid = videoRef.current;
+        vid.muted = true;
+        // With preload="none", trigger loading before play
+        if (vid.readyState === 0) {
+          vid.load();
+        }
+        const playPromise = vid.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {});
+        }
+        setIsPlaying(true);
       }
     }
-  }, [isAnyModalOpen, isTouchDevice]);
+  }, [isAnyModalOpen, item.id]);
 
+  // Instagram-style smooth leave: fade out video before pausing
   const handleMouseLeave = useCallback(() => {
-    if (isTouchDevice) return; // Skip on touch
     if (videoRef.current) {
-      videoRef.current.pause();
-      videoRef.current.currentTime = item.id === 'fiona-diamonds' ? 0.5 : 0;
+      setIsPlaying(false);
+      // Delay pause to allow CSS opacity transition to complete
+      fadeOutTimer.current = setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.pause();
+          globalVideoManager.notifyPause(`card-${item.id}`);
+          videoRef.current.currentTime = item.id === 'fiona-diamonds' ? 0.5 : 0;
+        }
+        fadeOutTimer.current = null;
+      }, 280); // Matches CSS transition duration
     }
-  }, [item.id, isTouchDevice]);
+  }, [item.id]);
+
+  // Cleanup fade timer on unmount
+  useEffect(() => {
+    return () => {
+      if (fadeOutTimer.current) clearTimeout(fadeOutTimer.current);
+    };
+  }, []);
 
   const isVertical = item.aspectRatio === '9:16';
 
+  // Instagram video visibility: only show video when it has a frame AND is playing
+  const showVideo = videoReady && isPlaying;
+
   return (
-    <div className="work-content-item" ref={cardRef}>
+    <div
+      className="work-content-item"
+      ref={cardRef}
+      onMouseEnter={handleProximityEnter}  /* Proximity preload zone */
+    >
       <div
         className="work-content-item-card-wrap"
         onClick={() => onSelect(item)}
@@ -238,18 +359,30 @@ function WorkCard({
           }
         }}
       >
-        {/* Video Canvas at the top of the card: Static Thumbnail until Hover */}
+        {/* Video Canvas: Instagram-style poster → video crossfade */}
         <div className={`work-content-image ${isVertical ? 'is-vertical-aspect' : 'is-dvc-aspect'}`}>
           <div className="bg-video">
+            {/* Poster layer: always visible as base, fades out when video is ready */}
+            {item.poster && (
+              <img
+                src={item.poster}
+                alt=""
+                className={`bg-video-poster ${showVideo ? 'poster-hidden' : ''}`}
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+
+            {/* Video layer: fades IN only when frame-ready + playing */}
             {isInView ? (
               <video
                 ref={videoRef}
                 playsInline
                 loop
                 muted
-                preload={isTouchDevice ? 'metadata' : 'auto'}
-                poster={item.poster}
-                src={item.video}
+                preload="none"
+                src={item.previewVideo || item.video}
+                className={`bg-video-player ${showVideo ? 'video-visible' : ''}`}
                 onError={(e) => {
                   if (item.fallbackVideo && e.currentTarget.src !== item.fallbackVideo) {
                     e.currentTarget.src = item.fallbackVideo;
@@ -259,6 +392,11 @@ function WorkCard({
               />
             ) : (
               <div className="work-card-placeholder" />
+            )}
+
+            {/* Instagram-style loading shimmer: shows while video is buffering on hover */}
+            {isPlaying && !videoReady && (
+              <div className="bg-video-loading" />
             )}
           </div>
 
@@ -302,6 +440,32 @@ function WorkModal({
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [, setIsPlaying] = useState(true);
+
+  // Priority registration with Global Video Manager
+  useEffect(() => {
+    globalVideoManager.setModalOpen(true);
+    const vid = modalVideoRef.current;
+    if (vid) {
+      globalVideoManager.register({
+        id: `modal-${item.id}`,
+        element: vid,
+        priority: 'modal',
+        pause: () => {
+          if (modalVideoRef.current) modalVideoRef.current.pause();
+          setIsPlaying(false);
+        },
+        play: () => {
+          if (modalVideoRef.current) modalVideoRef.current.play().catch(() => {});
+          setIsPlaying(true);
+        },
+      });
+      globalVideoManager.requestPlay(`modal-${item.id}`);
+    }
+    return () => {
+      globalVideoManager.setModalOpen(false);
+      globalVideoManager.unregister(`modal-${item.id}`);
+    };
+  }, [item.id]);
 
   // Esc and keyboard shortcuts
   useEffect(() => {

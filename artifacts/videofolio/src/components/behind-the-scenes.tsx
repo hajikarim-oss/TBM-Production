@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
 import { R2_BASE_URL as R2 } from '@/config';
+import { globalVideoManager } from '@/lib/video-manager';
 
 export interface BtsItem {
   id: string;
@@ -129,6 +130,32 @@ function BtsModal({
   const modalVideoRef = useRef<HTMLVideoElement>(null);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [, setIsPlaying] = useState(true);
+
+  // Priority registration with Global Video Manager
+  useEffect(() => {
+    globalVideoManager.setModalOpen(true);
+    const vid = modalVideoRef.current;
+    if (vid) {
+      globalVideoManager.register({
+        id: `bts-modal-${item.id}`,
+        element: vid,
+        priority: 'modal',
+        pause: () => {
+          if (modalVideoRef.current) modalVideoRef.current.pause();
+          setIsPlaying(false);
+        },
+        play: () => {
+          if (modalVideoRef.current) modalVideoRef.current.play().catch(() => {});
+          setIsPlaying(true);
+        },
+      });
+      globalVideoManager.requestPlay(`bts-modal-${item.id}`);
+    }
+    return () => {
+      globalVideoManager.setModalOpen(false);
+      globalVideoManager.unregister(`bts-modal-${item.id}`);
+    };
+  }, [item.id]);
 
   // Autoplay handler with audio fallback
   useEffect(() => {
