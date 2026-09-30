@@ -1,217 +1,187 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
-  <url>
-    <loc>https://www.theboredmonkey.com/</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.00</priority>
-  </url>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
-  <!-- Studio (Vercel App Proxied) -->
-  <url>
-    <loc>https://www.theboredmonkey.com/studio</loc>
-    <lastmod>2026-09-30</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
 
-  <url>
-    <loc>https://www.theboredmonkey.com/index.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/about.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/our-services.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/work.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/contact.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/blob.html</loc>
-    <lastmod>2024-02-24T18:16:19+00:00</lastmod>
-    <priority>0.80</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/arata.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/sery.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/recipes.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/natasha.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/music_video.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/pratilipi_films.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/atomberg.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/meesho.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/molife.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/onecard.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/mobikwik.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/onescore.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/boat.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/boult.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/hammer.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/plum.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/love_earth.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/vilvah.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/nutriburst.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/setu.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/tench.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/agaro.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/emma.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/brand_atomberg.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/brand_setu.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/brand_louis_philippe.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
-
-  <url>
-    <loc>https://www.theboredmonkey.com/brand_parsuma.php</loc>
-    <lastmod>2024-02-27T12:01:21+00:00</lastmod>
-    <priority>0.64</priority>
-  </url>
+<url>
+  <loc>https://theboredmonkey.com/</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/index.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/about.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/our-services.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/work.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/contact.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/blob.html</loc>
+  <lastmod>2024-02-24T18:16:19+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/arata.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/sery.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/recipes.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/natasha.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/music_video.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/pratilipi_films.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/atomberg.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/meesho.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/molife.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/onecard.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/mobikwik.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/onescore.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/boat.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/boult.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/hammer.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/plum.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/love_earth.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/vilvah.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/nutriburst.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/setu.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/tench.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/agaro.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/emma.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/brand_atomberg.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/brand_setu.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/brand_louis_philippe.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://theboredmonkey.com/brand_parsuma.php</loc>
+  <lastmod>2024-02-27T12:01:21+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://www.theboredmonkey.com/studio</loc>
+  <lastmod>2026-09-30</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.90</priority>
+</url>
 
 </urlset>
