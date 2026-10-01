@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { assetUrl } from '@/lib/utils';
-import { R2_ACC1_URL, R2_ACC2_URL } from '@/config';
+import { R2_ACC1_URL, R2_ACC2_URL, R2_ACC1_REMOTE_URL, R2_ACC2_REMOTE_URL } from '@/config';
 import { globalVideoManager } from '@/lib/video-manager';
 
 export interface WorkItem {
@@ -90,6 +90,53 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     fallbackVideo: `${R2_ACC2_URL}/jordans-brush-mama-penguin.mp4`,
     aspectRatio: '16:9',
   },
+  // ─── Fixed: Setu/Delhivery is HORIZONTAL (was wrongly in vertical section) ───
+  {
+    id: 'setu-delhivery',
+    brand: 'Delhivery',
+    title: 'Delhivery Express Network',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/delhivery-white.png',
+    video: '/videos/setu-campaign.mp4',
+    poster: '/images/posters/setu.webp',
+    fallbackVideo: `${R2_ACC2_REMOTE_URL}/setu-campaign.mp4`,
+    aspectRatio: '16:9',
+  },
+  // ─── New: Jordan-2, Vibhor-2, ZOFF Spices (16:9 from R2 Account 2) ───
+  {
+    id: 'jordan-2',
+    brand: 'Jordan',
+    title: 'Oral Care Precision DVC',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/jordan-logo.svg',
+    video: `${R2_ACC2_REMOTE_URL}/Jordan-2.mp4`,
+    poster: '/images/posters/jordan-2.webp',
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'vibhor-2',
+    brand: 'Vibhor',
+    title: 'Pure Quality Cooking Oil',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/vibhor-logo-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Vibhor-2.mp4`,
+    poster: '/images/posters/vibhor-2.webp',
+    aspectRatio: '16:9',
+  },
+  {
+    id: 'zoff-spices-2',
+    brand: 'ZOFF',
+    title: 'ZOFF Spices Brand Commercial',
+    format: 'DVC ADS',
+    client: 'DVC ADS',
+    logo: '/brands/zoff-logo-white.png',
+    video: `${R2_ACC2_REMOTE_URL}/ZOFF%20Spices.mp4`,
+    poster: '/images/posters/zoff-spices-2.webp',
+    aspectRatio: '16:9',
+  },
 
   // ─── 2. VERTICAL AD FILMS & REELS (9:16) ───
   {
@@ -104,16 +151,60 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     fallbackVideo: '/videos/thursday-order-9-16.mp4',
     aspectRatio: '9:16',
   },
+  // ─── New: Bombay Sweet Shop 2-6 (9:16 from R2 Account 2) ───
   {
-    id: 'setu-delhivery',
-    brand: 'Setu',
-    title: 'Setu Delivery Campaign',
+    id: 'bombay-sweet-shop-2',
+    brand: 'Bombay Sweet Shop',
+    title: 'Mithai Magic Campaign',
     format: 'Vertical AD Film',
     client: 'Vertical AD Film',
-    logo: '/brands/delhivery-white.png',
-    video: '/videos/setu-campaign.mp4',
-    poster: '/images/posters/setu.webp',
-    fallbackVideo: `${R2_ACC2_URL}/setu-campaign.mp4`,
+    logo: '/brands/bombay-sweet-shop-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Bombay%20sweet%20shop-2.mp4`,
+    poster: '/images/posters/bombay-sweet-shop-2.webp',
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'bombay-sweet-shop-3',
+    brand: 'Bombay Sweet Shop',
+    title: 'Artisanal Treats Reel',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/bombay-sweet-shop-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Bombay%20sweet%20shop-3.mp4`,
+    poster: '/images/posters/bombay-sweet-shop-3.webp',
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'bombay-sweet-shop-4',
+    brand: 'Bombay Sweet Shop',
+    title: 'Festive Hampers Story',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/bombay-sweet-shop-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Bombay%20sweet%20shop-4.mp4`,
+    poster: '/images/posters/bombay-sweet-shop-4.webp',
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'bombay-sweet-shop-5',
+    brand: 'Bombay Sweet Shop',
+    title: 'Gourmet Delights Film',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/bombay-sweet-shop-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Bombay%20sweet%20shop-5.mp4`,
+    poster: '/images/posters/bombay-sweet-shop-5.webp',
+    aspectRatio: '9:16',
+  },
+  {
+    id: 'bombay-sweet-shop-6',
+    brand: 'Bombay Sweet Shop',
+    title: 'Sweet Traditions Reimagined',
+    format: 'Vertical AD Film',
+    client: 'Vertical AD Film',
+    logo: '/brands/bombay-sweet-shop-new.png',
+    video: `${R2_ACC2_REMOTE_URL}/Bombay%20sweet%20shop-6.mp4`,
+    poster: '/images/posters/bombay-sweet-shop-6.webp',
     aspectRatio: '9:16',
   },
   {
@@ -141,6 +232,7 @@ const RAW_WORK_ITEMS: WorkItem[] = [
     aspectRatio: '9:16',
   },
 ];
+
 
 export const WORK_ITEMS: WorkItem[] = RAW_WORK_ITEMS.map((item) => ({
   ...item,
@@ -347,8 +439,8 @@ function WorkCard({
 
   const isVertical = item.aspectRatio === '9:16';
 
-  // Instagram video visibility: only show video when it has a frame AND is playing
-  const showVideo = videoReady && isPlaying;
+  // Instagram video visibility: poster shows by default, video fades in when ready + playing
+  const showVideo = item.poster ? (videoReady && isPlaying) : (videoReady || isPlaying);
 
   return (
     <div

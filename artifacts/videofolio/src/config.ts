@@ -15,16 +15,20 @@ const isLiveDomain =
 // 1. Local dev: ultra-fast local SSD streaming with HTTP 206
 // 2. Live production domain: cached Cloudflare Edge CDN proxy (/studio/cdn-1)
 // 3. Fallback / staging: direct R2 public endpoints
+export const R2_ACC1_REMOTE_URL = 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev';
+export const R2_ACC2_REMOTE_URL = 'https://pub-1ad682700e73410b958dd10d131d07d5.r2.dev';
+
 export const R2_ACC1_URL =
   import.meta.env.VITE_R2_ACC1_URL ||
   (isDev && !forceRemote
     ? '/videos/upload_to_account_1'
-    : 'https://pub-c3a151aad3544d4297431bb6fef7f945.r2.dev');
+    : R2_ACC1_REMOTE_URL);
 
 export const R2_ACC2_URL =
   import.meta.env.VITE_R2_ACC2_URL ||
   (isDev && !forceRemote
     ? '/videos/upload_to_account_2'
-    : 'https://pub-1ad682700e73410b958dd10d131d07d5.r2.dev');
+    : R2_ACC2_REMOTE_URL);
 
 export const R2_BASE_URL = R2_ACC2_URL;
+

@@ -665,7 +665,7 @@
   align-items: stretch;
 }
 
-/* 4 Vertical works: 4 columns x 1 row */
+/* 4 Vertical works: 4 columns */
 .work-grid-vertical {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -673,6 +673,14 @@
   width: 100%;
   align-items: stretch;
 }
+
+/* Center lone last card in 3-column desktop layout */
+@media (min-width: 1025px) {
+  .work-grid-horizontal > :last-child:nth-child(3n + 1) {
+    grid-column: 2;
+  }
+}
+
 
 @media (max-width: 1024px) {
   .work-grid-horizontal {
